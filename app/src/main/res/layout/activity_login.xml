@@ -51,12 +51,12 @@
         <Button
             android:id="@+id/btn_login"
             style="@style/button_style"
-            android:text="LOGIN" />
+            android:text="@string/login_msg" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/create_account"
             style="@style/textView_style"
-            android:text="Don't have an account ? Sign up here" />
+            android:text="@string/create_account" />
 
         <ProgressBar
             android:id="@+id/login_progressBar"

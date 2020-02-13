@@ -1,19 +1,30 @@
 package com.example.tutoresi;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText userEmail, userPassword;
-    private Button btnLogin;
-    private ProgressBar progressBar;
+    private EditText mUserEmail, mUserPassword;
+    private TextView mCreateAccount;
+    private Button mBtnLogin;
+    private ProgressBar mProgressBar;
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -21,21 +32,59 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userEmail = (EditText) findViewById(R.id.input_email);
-        userPassword = (EditText) findViewById(R.id.input_password);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        progressBar = (ProgressBar) findViewById(R.id.login_progressBar);
+        mUserEmail = (EditText) findViewById(R.id.input_email);
+        mUserPassword = (EditText) findViewById(R.id.input_password);
+        mBtnLogin = (Button) findViewById(R.id.btn_login);
+        mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
+        mCreateAccount = (TextView) findViewById(R.id.create_account);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        mAuth = FirebaseAuth.getInstance();
+
+        mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
+                String email = mUserEmail.getText().toString().trim();
+                String password = mUserPassword.getText().toString().trim();
+
+                if(TextUtils.isEmpty(email)){
+                    mUserEmail.setError("Email is required.");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    mUserPassword.setError("Password is required.");
+                    return;
+                }
+                if(password.length() < 6){
+                    mUserPassword.setError("Password must be >= 6 characters");
+                    return;
+                }
+
+                mProgressBar.setVisibility(View.VISIBLE);
+
+                // Authentication user here
+                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        }else{
+                            Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
             }
         });
 
-    }
+        mCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                Toast.makeText(LoginActivity.this,"calmos",Toast.LENGTH_LONG).show();
+            }
+        });
 
-    private boolean authUser(String email, String password){
-        return false;
     }
 }
