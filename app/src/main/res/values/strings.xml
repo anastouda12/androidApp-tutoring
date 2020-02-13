@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TutorEsi</string>
+    <string name="login_failed">L\'email ou le mots de passe est incorrect.</string>
 </resources>

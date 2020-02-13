@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "111142642171",
+    "firebase_url": "https://tutoresi.firebaseio.com",
+    "project_id": "tutoresi",
+    "storage_bucket": "tutoresi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111142642171:android:0332e203fab8f4ad2fab5e",
+        "android_client_info": {
+          "package_name": "com.example.tutoresi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111142642171-56bs40fh7h36rh8dcj9rdkemr53il16g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tutoresi",
+            "certificate_hash": "24a2ceb68df79eadbe74ce7efbc954d9db82e43b"
+          }
+        },
+        {
+          "client_id": "111142642171-shm000a78d1h73edv6aftdgu72efkhrm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTEMx1FVSV9r3Xo3T1lCNuGfHf1Ie2JM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111142642171-shm000a78d1h73edv6aftdgu72efkhrm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

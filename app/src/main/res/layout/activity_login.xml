@@ -37,19 +37,19 @@
         <EditText
             style="@style/editText_style"
             android:hint="Email"
-            android:id="@+id/editText"
+            android:id="@+id/input_email"
             android:drawableLeft="@drawable/ic_action_user"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/input_password"
             android:hint="Password"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_login"
             style="@style/button_style"
             android:text="LOGIN" />
 
@@ -57,5 +57,11 @@
             android:id="@+id/textView"
             style="@style/textView_style"
             android:text="Don't have an account ? Sign up here" />
+
+        <ProgressBar
+            android:id="@+id/login_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
     </LinearLayout>
 </RelativeLayout>
