@@ -10,7 +10,7 @@
     android:paddingRight="48dp"
     android:paddingTop="100dp"
     android:background="@color/colorPrimary"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,20 +19,13 @@
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            app:srcCompat="@drawable/logo" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_margin="5dp"
-            style="@style/textView_style"
-            android:textSize="25dp"
-            android:text="TutorESI" />
+        <EditText
+            style="@style/editText_style"
+            android:hint="Nom"
+            android:id="@+id/input_name"
+            android:drawableLeft="@drawable/ic_action_person"
+            android:inputType="text" />
 
         <EditText
             style="@style/editText_style"
@@ -42,24 +35,38 @@
             android:inputType="textEmailAddress" />
 
         <EditText
+            style="@style/editText_style"
+            android:hint="Numéro de téléphone"
+            android:id="@+id/input_phone"
+            android:drawableLeft="@drawable/ic_action_phone"
+            android:inputType="phone" />
+
+        <EditText
             android:id="@+id/input_password"
             android:hint="Mots de passe"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
             android:inputType="textPassword" />
 
+        <EditText
+            android:id="@+id/input_confirmPassword"
+            android:hint="Confirmer le mots de passe"
+            android:drawableLeft="@drawable/ic_action_password"
+            style="@style/editText_style"
+            android:inputType="textPassword" />
+
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_register"
             style="@style/button_style"
-            android:text="@string/login_msg" />
+            android:text="@string/register_msg" />
 
         <TextView
-            android:id="@+id/create_account"
+            android:id="@+id/goToLogin_text"
             style="@style/textView_style"
-            android:text="@string/create_account" />
+            android:text="@string/goToLogin_text" />
 
         <ProgressBar
-            android:id="@+id/login_progressBar"
+            android:id="@+id/register_progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible" />

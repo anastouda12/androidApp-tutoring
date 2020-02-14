@@ -40,6 +40,11 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() != null) {
+            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            //finish();
+        }
+
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,17 +52,14 @@ public class LoginActivity extends AppCompatActivity {
                 String password = mUserPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
-                    mUserEmail.setError("Email is required.");
+                    mUserEmail.setError("Email est requis.");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mUserPassword.setError("Password is required.");
+                    mUserPassword.setError("Le mots de passe est requis.");
                     return;
                 }
-                if(password.length() < 6){
-                    mUserPassword.setError("Password must be >= 6 characters");
-                    return;
-                }
+
 
                 mProgressBar.setVisibility(View.VISIBLE);
 
@@ -67,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         }else{
                             Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
                             mProgressBar.setVisibility(View.GONE);
@@ -81,8 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         mCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                Toast.makeText(LoginActivity.this,"calmos",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
             }
         });
 

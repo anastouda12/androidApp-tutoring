@@ -3,5 +3,10 @@
     <string name="login_failed">L\'email ou le mots de passe est incorrect.</string>
     <string name="login_success">Connecté avec succés</string>
     <string name="create_account">Créer un compte</string>
+    <string name="goToLogin_text">Déjà un compte ? Cliquez ici</string>
     <string name="login_msg">Se connecter</string>
+    <string name="register_title">Inscription</string>
+    <string name="register_msg">S\'inscrire</string>
+    <string name="register_success">Bienvenue !</string>
+    <string name="register_failed">Erreur lors de la création du compte</string>
 </resources>
