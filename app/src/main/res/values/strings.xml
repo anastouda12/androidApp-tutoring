@@ -9,4 +9,9 @@
     <string name="register_msg">S\'inscrire</string>
     <string name="register_success">Bienvenue !</string>
     <string name="register_failed">Erreur lors de la création du compte</string>
+    <string name="menu">Tableau de bord</string>
+    <string name="Cours">Cours</string>
+    <string name="reminder">Rappel</string>
+    <string name="signout">Se déconnecter</string>
+    <string name="myaccount">Mon compte</string>
 </resources>

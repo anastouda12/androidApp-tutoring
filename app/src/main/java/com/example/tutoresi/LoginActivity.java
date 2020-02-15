@@ -32,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mUserEmail = (EditText) findViewById(R.id.input_email);
-        mUserPassword = (EditText) findViewById(R.id.input_password);
+        mUserEmail = (EditText) findViewById(R.id.input_email_login);
+        mUserPassword = (EditText) findViewById(R.id.input_password_login);
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
         mCreateAccount = (TextView) findViewById(R.id.create_account);
@@ -41,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
-            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            //finish();
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
         }
 
         mBtnLogin.setOnClickListener(new View.OnClickListener() {

@@ -37,12 +37,12 @@
         <EditText
             style="@style/editText_style"
             android:hint="Email"
-            android:id="@+id/input_email"
+            android:id="@+id/input_email_login"
             android:drawableLeft="@drawable/ic_action_user"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/input_password"
+            android:id="@+id/input_password_login"
             android:hint="Mots de passe"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
