@@ -14,4 +14,6 @@
     <string name="reminder">Rappel</string>
     <string name="signout">Se déconnecter</string>
     <string name="myaccount">Mon compte</string>
+    <string name="location">Lieu</string>
+    <string name="Date">Date</string>
 </resources>

@@ -20,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            finish();
+        }
+
         mBtnCourse = (Button) findViewById(R.id.btn_course);
         mBtnMyAccount = (Button) findViewById(R.id.btn_myaccount);
         mBtnReminder = (Button) findViewById(R.id.btn_reminder);
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                finish();
             }
         });
 

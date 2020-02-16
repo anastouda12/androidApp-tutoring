@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            finish();
                         }else{
                             Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
                             mProgressBar.setVisibility(View.GONE);

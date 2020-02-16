@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tutoresi.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -62,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            finish();
         }
     });
 
@@ -121,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         writeNewUser(fAuth.getCurrentUser().getUid(),name,email,phone);
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        finish();
                     }else{
                         Toast.makeText(RegisterActivity.this,R.string.register_failed,Toast.LENGTH_LONG).show();
                         mProgressBar.setVisibility(View.GONE);
