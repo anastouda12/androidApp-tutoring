@@ -19,8 +19,8 @@
             <ImageView
                 android:id="@+id/user_avatar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars[14]" />
+                android:layout_height="120dp"
+                app:srcCompat="@drawable/icon" />
 
             <TextView
                 android:id="@+id/textView"
