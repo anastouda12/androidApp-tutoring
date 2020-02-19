@@ -14,18 +14,25 @@ import android.view.ViewGroup;
 import com.example.tutoresi.Model.Reminder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ReminderActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerReminder;
+    private FloatingActionButton mBtnAddReminder;
     private ArrayList<Reminder> reminders;
     private FirebaseRecyclerOptions<Reminder> options;
     private FirebaseRecyclerAdapter<Reminder,ReminderViewHolder> adapter;
     private DatabaseReference databaseReference;
+
 
     @Override
     protected void onStart() {
@@ -47,10 +54,19 @@ public class ReminderActivity extends AppCompatActivity {
         reminders = new ArrayList<>();
 
         mRecyclerReminder = (RecyclerView) findViewById(R.id.recycler_reminder);
+        mBtnAddReminder = (FloatingActionButton) findViewById(R.id.btn_addReminder);
         mRecyclerReminder.setHasFixedSize(true);
         mRecyclerReminder.setLayoutManager(new LinearLayoutManager(this));
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("reminder");
+        mBtnAddReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeNewReminder();
+            }
+        });
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("reminders").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        databaseReference.keepSynced(true);
 
         options = new FirebaseRecyclerOptions.Builder<Reminder>().setQuery(databaseReference,Reminder.class).build();
 
@@ -60,12 +76,12 @@ public class ReminderActivity extends AppCompatActivity {
 
                 holder.mCourse.setText(model.getCourse());
                 holder.mLocation.setText(model.getLocation());
-                holder.mDate.setText(model.getDate().toString());
+                holder.mDate.setText(model.getDate());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ReminderActivity.this,MainActivity.class);
+                        // Intent intent = new Intent(ReminderActivity.this,MainActivity.class);
                         // intent.putExtra("course",model.getCourse()); on va donner en extra vers l'autre activité ici
                         // startactivity ici
                     }
@@ -80,9 +96,19 @@ public class ReminderActivity extends AppCompatActivity {
         };
 
 
-
-
         mRecyclerReminder.setAdapter(adapter);
 
+    }
+
+    /**
+     * Write new reminder on DB
+     *
+     */
+    private void writeNewReminder() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date d = new Date();
+        String date = dateFormat.format(d).toString();
+        Reminder reminder = new Reminder("DEV",date, "Bruxelles");
+        databaseReference.push().setValue(reminder);
     }
 }

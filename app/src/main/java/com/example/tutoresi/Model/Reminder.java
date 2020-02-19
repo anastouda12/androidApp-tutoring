@@ -8,11 +8,11 @@ import java.util.Date;
 public class Reminder {
 
     private String course;
-    private Date date;
+    private String date;
     private String location;
 
 
-    public Reminder(String course, Date date, String location){
+    public Reminder(String course, String date, String location){
         this.course = course;
         this.date  = date;
         this.location = location;
@@ -23,7 +23,7 @@ public class Reminder {
     }
 
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -36,7 +36,7 @@ public class Reminder {
         return location;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
