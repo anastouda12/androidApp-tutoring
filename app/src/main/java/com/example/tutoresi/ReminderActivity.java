@@ -61,7 +61,8 @@ public class ReminderActivity extends AppCompatActivity {
         mBtnAddReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeNewReminder();
+                Intent intent = new Intent(ReminderActivity.this,DetailReminderActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -100,15 +101,4 @@ public class ReminderActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Write new reminder on DB
-     *
-     */
-    private void writeNewReminder() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date d = new Date();
-        String date = dateFormat.format(d).toString();
-        Reminder reminder = new Reminder("DEV",date, "Bruxelles");
-        databaseReference.push().setValue(reminder);
-    }
 }

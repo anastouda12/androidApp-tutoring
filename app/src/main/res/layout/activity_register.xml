@@ -32,18 +32,21 @@
             android:hint="Email"
             android:id="@+id/input_email_register"
             android:drawableLeft="@drawable/ic_action_user"
+            android:paddingLeft="10dp"
             android:inputType="textEmailAddress" />
 
         <EditText
             style="@style/editText_style"
             android:hint="Numéro de téléphone"
             android:id="@+id/input_phone"
+            android:paddingLeft="10dp"
             android:drawableLeft="@drawable/ic_action_phone"
             android:inputType="phone" />
 
         <EditText
             android:id="@+id/input_password_register"
             android:hint="Mots de passe"
+            android:paddingLeft="10dp"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
             android:inputType="textPassword" />
@@ -52,6 +55,7 @@
             android:id="@+id/input_confirmPassword"
             android:hint="Confirmer le mots de passe"
             android:drawableLeft="@drawable/ic_action_password"
+            android:paddingLeft="10dp"
             style="@style/editText_style"
             android:inputType="textPassword" />
 

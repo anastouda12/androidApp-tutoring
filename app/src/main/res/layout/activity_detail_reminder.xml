@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_formReminder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="100dp"
+    android:paddingLeft="48dp"
+    android:paddingRight="48dp"
+    android:paddingTop="100dp"
+    android:background="@color/colorPrimary"
+    tools:context=".RegisterActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+
+        <EditText
+            style="@style/editText_style"
+            android:hint="@string/Cours"
+            android:id="@+id/input_reminder_course_"
+            android:drawableLeft="@drawable/ic_action_person"
+            android:inputType="text" />
+
+        <EditText
+            style="@style/editText_style"
+            android:hint="@string/location"
+            android:id="@+id/input_reminder_location"
+            android:drawableLeft="@drawable/ic_loc"
+            android:inputType="text" />
+
+        <EditText
+            style="@style/editText_style"
+            android:hint="@string/Date"
+            android:id="@+id/input_reminder_date"
+            android:drawableLeft="@drawable/ic_date"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="datetime" />
+
+        <Button
+            android:id="@+id/btn_reminder_register"
+            style="@style/button_style"
+            android:text="@string/Add" />
+
+        <ProgressBar
+            android:id="@+id/progress_reminder_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+    </LinearLayout>
+</RelativeLayout>

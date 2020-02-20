@@ -5,6 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="115dp"
+    android:layout_margin="15dp"
     >
 
     <LinearLayout
@@ -12,7 +13,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
         android:orientation="vertical"
-        android:layout_margin="5dp">
+        >
 
 
         <TextView
@@ -22,7 +23,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_marginTop="2dp"
             android:drawableLeft="@drawable/ic_action_alert"
             android:text="@string/Cours"
-            android:textAlignment="center"
+            android:paddingLeft="15dp"
             android:textColor="#FFFFFF"
             android:textSize="25dp" />
 
@@ -32,6 +33,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_height="wrap_content"
             android:inputType="datetime"
             android:text="@string/Date"
+            android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
@@ -40,6 +42,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/location"
+            android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 

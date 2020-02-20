@@ -36,6 +36,7 @@
             <Button
                 android:id="@+id/btn_course"
                 android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_book"
                 style="@style/button_style"
                 android:text="@string/Cours" />
@@ -43,6 +44,7 @@
             <Button
                 android:id="@+id/btn_reminder"
                 android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_reminder"
                 style="@style/button_style"
                 android:text="@string/reminder" />
@@ -50,6 +52,7 @@
             <Button
                 android:id="@+id/btn_myaccount"
                 android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_account"
                 style="@style/button_style"
                 android:text="@string/myaccount" />
@@ -57,6 +60,7 @@
             <Button
                 android:id="@+id/btn_signout"
                 android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
                 style="@style/button_style"
                 android:drawableLeft="@drawable/ic_action_signout"
                 android:text="@string/signout" />
