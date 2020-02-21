@@ -4,8 +4,8 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
-    android:layout_margin="15dp"
+    android:layout_height="100dp"
+    android:layout_margin="6dp"
     >
 
     <LinearLayout
@@ -24,6 +24,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:drawableLeft="@drawable/ic_action_alert"
             android:text="@string/Cours"
             android:paddingLeft="15dp"
+            android:drawablePadding="15dp"
             android:textColor="#FFFFFF"
             android:textSize="25dp" />
 

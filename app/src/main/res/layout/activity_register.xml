@@ -23,6 +23,7 @@
         <EditText
             style="@style/editText_style"
             android:hint="Nom"
+            android:paddingLeft="10dp"
             android:id="@+id/input_name"
             android:drawableLeft="@drawable/ic_action_person"
             android:inputType="text" />

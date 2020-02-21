@@ -34,7 +34,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_reminder);
 
-        mCourse = (EditText) findViewById(R.id.input_reminder_course_);
+        mCourse = (EditText) findViewById(R.id.input_reminder_course);
         mDate = (EditText) findViewById(R.id.input_reminder_date);
         mLocation = (EditText) findViewById(R.id.input_reminder_location);
         mBtnAdd = (Button) findViewById(R.id.btn_reminder_register);
