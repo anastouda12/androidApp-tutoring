@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tutoresi.Model.Reminder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,6 +88,7 @@ public class DetailReminderActivity extends AppCompatActivity {
                     return;
                 }
                 writeNewReminder(course,date,location);
+                Toast.makeText(DetailReminderActivity.this,R.string.reminder_added,Toast.LENGTH_LONG).show();
                 finish();
 
             }

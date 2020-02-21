@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,13 +20,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
 public class ReminderActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerReminder;
     private FloatingActionButton mBtnAddReminder;
-    private ArrayList<Reminder> reminders;
     private FirebaseRecyclerOptions<Reminder> options;
     private FirebaseRecyclerAdapter<Reminder,ReminderViewHolder> adapter;
     private DatabaseReference databaseReference;
@@ -49,8 +45,6 @@ public class ReminderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
-
-        reminders = new ArrayList<>();
 
         mRecyclerReminder = (RecyclerView) findViewById(R.id.recycler_reminder);
         mBtnAddReminder = (FloatingActionButton) findViewById(R.id.btn_addReminder);
@@ -103,7 +97,7 @@ public class ReminderActivity extends AppCompatActivity {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+                return true;
             }
 
             @Override

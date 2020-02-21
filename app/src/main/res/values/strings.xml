@@ -17,4 +17,7 @@
     <string name="location">Lieu</string>
     <string name="Date">Date</string>
     <string name="Add">Ajouter</string>
+    <string name="Save">Sauvegarder</string>
+    <string name="infos_saved">Informations du compte sauvegardées</string>
+    <string name="reminder_added">Rappel ajouté avec succés</string>
 </resources>

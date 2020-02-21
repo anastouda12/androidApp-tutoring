@@ -48,5 +48,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mBtnMyAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MyAccountActivity.class));
+            }
+        });
+
     }
 }
