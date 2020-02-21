@@ -8,7 +8,7 @@
     android:paddingBottom="100dp"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
-    android:paddingTop="100dp"
+    android:paddingTop="80dp"
     android:background="@color/colorPrimary"
     tools:context=".LoginActivity">
 
@@ -60,6 +60,13 @@
             android:id="@+id/create_account"
             style="@style/textView_style"
             android:text="@string/create_account" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"/>
 
         <ProgressBar
             android:id="@+id/login_progressBar"
