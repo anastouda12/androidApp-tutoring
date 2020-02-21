@@ -40,11 +40,15 @@ public class MyAccountActivity extends AppCompatActivity {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mName.setText(dataSnapshot.child("name").getValue().toString());
-                mPhone.setText(dataSnapshot.child("phone").getValue().toString());
-                mEmail.setText(dataSnapshot.child("email").getValue().toString());
+                if(dataSnapshot.exists()) {
+                    mName.setText(dataSnapshot.child("name").getValue().toString());
+                    mPhone.setText(dataSnapshot.child("phone").getValue().toString());
+                    mEmail.setText(dataSnapshot.child("email").getValue().toString());
+                }else{
+                    finish();
+                    Toast.makeText(MyAccountActivity.this,R.string.user_undefined,Toast.LENGTH_LONG).show();
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
