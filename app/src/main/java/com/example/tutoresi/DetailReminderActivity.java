@@ -39,7 +39,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         mBtnAdd = (Button) findViewById(R.id.btn_reminder_register);
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("reminders").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         date = new DatePickerDialog.OnDateSetListener() {
 
@@ -100,7 +100,7 @@ public class DetailReminderActivity extends AppCompatActivity {
      */
     private void writeNewReminder(String course, String date, String location) {
         Reminder reminder = new Reminder(course,date,location);
-        databaseReference.push().setValue(reminder);
+        databaseReference.child("reminders").push().setValue(reminder);
     }
 
 

@@ -48,14 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     SignInButton signInButton;
     GoogleSignInClient mGoogleSignInClient;
-    int RC_SIGN_IN = 0;
+    int RC_SIGN_IN = 1;
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        // Partie google
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -170,26 +163,26 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
+        mProgressBar.setVisibility(View.VISIBLE);
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            // Sign in success,
                             writeNewUser(); // optional
+                            Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                            mProgressBar.setVisibility(View.GONE);
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            mProgressBar.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
                     }
                 });
     }
