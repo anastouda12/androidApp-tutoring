@@ -11,28 +11,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import com.example.tutoresi.Model.User;
+import com.example.tutoresi.data.AuthViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,11 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mCreateAccount;
     private Button mBtnLogin;
     private ProgressBar mProgressBar;
-    private FirebaseAuth mAuth;
     private static final String  TAG = "LOGIN_ACTIVITY";
-    private DatabaseReference mDatabase;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
-
+    private AuthViewModel authViewModel;
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -52,22 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 1;
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mAuth.addAuthStateListener(firebaseAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (firebaseAuthListener != null) {
-            mAuth.removeAuthStateListener(firebaseAuthListener);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,26 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
         mCreateAccount = (TextView) findViewById(R.id.create_account);
+        authViewModel = new AuthViewModel();
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    mProgressBar.setVisibility(View.GONE);
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                    finish();
-                }
-            }
-        };
-
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            finish();
-        }
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -136,27 +89,9 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-
-                mProgressBar.setVisibility(View.VISIBLE);
-
-                // Authentication user here
-                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                            finish();
-                        }else{
-                            Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
+                regularLogIn(email, password);
             }
         });
-
         mCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +99,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void regularLogIn(String email, String password){
+        authViewModel.login(email,password);
+        authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                mProgressBar.setVisibility(View.GONE);
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                finish();
+            }
+        });
+    }
+
+    private void signInWithGoogle(GoogleSignInAccount acct){
+        mProgressBar.setVisibility(View.VISIBLE);
+        authViewModel.signInWithGoogle(acct);
+        authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                finish();
+            }
+        });
     }
 
     private void signIn() {
@@ -181,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                signInWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -191,46 +154,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        mProgressBar.setVisibility(View.VISIBLE);
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success,
-                            writeNewUser(); // optional
-                            Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            mProgressBar.setVisibility(View.GONE);
-                            Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-    }
-
-    /**
-     * Write new struct user on DB if exist not yet (in the case of Sign in with Google account)
-     */
-    private void writeNewUser() {
-        // user.getPhotoUrl() pour avoir photo !
-        mDatabase.child("users").child(mAuth.getCurrentUser().getUid());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // existe déjà
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // existe pas donc on crée
-                mDatabase.setValue(new User(mAuth.getCurrentUser().getDisplayName(),mAuth.getCurrentUser().getEmail(),""));
-            }
-        });
-    }
 }

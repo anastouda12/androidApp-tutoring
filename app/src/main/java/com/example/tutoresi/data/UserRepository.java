@@ -15,8 +15,8 @@ public class UserRepository {
         firebaseSource = new FirebaseSource();
     }
 
-    public void login(String email, String password){
-        firebaseSource.login(email,password);
+    public MutableLiveData<User> login(String email, String password){
+        return firebaseSource.login(email,password);
     }
 
     /**
@@ -42,8 +42,8 @@ public class UserRepository {
      * Sign in with google account
      * @param googleSignInAccount google account
      */
-    public void loginWithGoogle(GoogleSignInAccount googleSignInAccount){
-        firebaseSource.firebaseAuthWithGoogle(googleSignInAccount);
+    public MutableLiveData<User> loginWithGoogle(GoogleSignInAccount googleSignInAccount){
+        return firebaseSource.firebaseAuthWithGoogle(googleSignInAccount);
     }
 
 }

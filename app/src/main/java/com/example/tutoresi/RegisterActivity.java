@@ -117,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(User user) {
                 mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 finish();
             }

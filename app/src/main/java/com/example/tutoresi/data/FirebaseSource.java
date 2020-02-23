@@ -1,15 +1,11 @@
 package com.example.tutoresi.data;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.tutoresi.LoginActivity;
 import com.example.tutoresi.Model.User;
-import com.example.tutoresi.R;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,17 +33,23 @@ public class FirebaseSource {
     }
 
 
-    public void login(String email, String password) {
+    public MutableLiveData<User> login(String email, String password) {
+        final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "signInWithEmail:success");
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    if (firebaseUser != null) {
+                        User user = new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), "");
+                        authenticatedUserMutableLiveData.setValue(user);
                 } else {
                     Log.d(TAG, "signInWithEmail:failed");
                 }
             }
-        });
+        }});
+        return  authenticatedUserMutableLiveData;
     }
 
     public MutableLiveData<User> register(final String email, final String password, final String name, final String phone) {
@@ -81,16 +83,20 @@ public class FirebaseSource {
     }
 
 
-    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    public MutableLiveData<User> firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success,
-                            createUser(); // optional
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            if (firebaseUser != null) {
+                                createUser(); // optional
+                                authenticatedUserMutableLiveData.setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
+                            }
                         } else {
                             // sign in fails
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -98,6 +104,7 @@ public class FirebaseSource {
 
                     }
                 });
+        return authenticatedUserMutableLiveData;
     }
 
     /**
