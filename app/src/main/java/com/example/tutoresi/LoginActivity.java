@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String  TAG = "LOGIN_ACTIVITY";
     private DatabaseReference mDatabase;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -50,6 +52,22 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 1;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (firebaseAuthListener != null) {
+            mAuth.removeAuthStateListener(firebaseAuthListener);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +82,18 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    mProgressBar.setVisibility(View.GONE);
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
+                }
+            }
+        };
 
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -173,9 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success,
                             writeNewUser(); // optional
                             Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                            mProgressBar.setVisibility(View.GONE);
-                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
