@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.tutoresi.Model.Reminder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -25,7 +26,7 @@ public class ReminderActivity extends AppCompatActivity {
     private RecyclerView mRecyclerReminder;
     private FloatingActionButton mBtnAddReminder;
     private FirebaseRecyclerOptions<Reminder> options;
-    private FirebaseRecyclerAdapter<Reminder,ReminderViewHolder> adapter;
+    private FirebaseRecyclerAdapter<Reminder, ReminderViewHolder> adapter;
     private DatabaseReference databaseReference;
 
 
@@ -54,7 +55,7 @@ public class ReminderActivity extends AppCompatActivity {
         mBtnAddReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReminderActivity.this,DetailReminderActivity.class);
+                Intent intent = new Intent(ReminderActivity.this, DetailReminderActivity.class);
                 startActivity(intent);
             }
         });
@@ -62,15 +63,15 @@ public class ReminderActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("reminders");
         databaseReference.keepSynced(true);
 
-        options = new FirebaseRecyclerOptions.Builder<Reminder>().setQuery(databaseReference,Reminder.class).build();
+        options = new FirebaseRecyclerOptions.Builder<Reminder>().setQuery(databaseReference, Reminder.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Reminder, ReminderViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ReminderViewHolder holder, int position, @NonNull Reminder model) {
 
-                holder.mCourse.setText(model.getCourse());
-                holder.mLocation.setText(model.getLocation());
-                holder.mDate.setText(model.getDate());
+                holder.setmCourse(model.getCourse());
+                holder.setmLocation(model.getLocation());
+                holder.setmDate(model.getDate());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -85,7 +86,7 @@ public class ReminderActivity extends AppCompatActivity {
             @NonNull
             @Override
             public ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new ReminderViewHolder(LayoutInflater.from(ReminderActivity.this).inflate(R.layout.reminder_view,parent,false));
+                return new ReminderViewHolder(LayoutInflater.from(ReminderActivity.this).inflate(R.layout.reminder_view, parent, false));
             }
         };
 
@@ -116,5 +117,34 @@ public class ReminderActivity extends AppCompatActivity {
 
     }
 
+
+    public class ReminderViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView mCourse, mDate, mLocation;
+
+
+        public ReminderViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            mCourse = (TextView) itemView.findViewById(R.id.course_card_reminder);
+            mDate = (TextView) itemView.findViewById(R.id.date_card_reminder);
+            mLocation = (TextView) itemView.findViewById(R.id.location_card_reminder);
+
+        }
+
+        public void setmCourse(String course) {
+            this.mCourse.setText(course);
+        }
+
+        public void setmDate(String date) {
+            this.mDate.setText(date);
+        }
+
+        public void setmLocation(String location) {
+            this.mLocation.setText(location);
+        }
+
     }
+
+}
 

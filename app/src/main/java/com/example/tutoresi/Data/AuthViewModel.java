@@ -1,4 +1,4 @@
-package com.example.tutoresi.data;
+package com.example.tutoresi.Data;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

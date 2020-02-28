@@ -21,4 +21,5 @@
     <string name="infos_saved">Informations du compte sauvegardées</string>
     <string name="reminder_added">Rappel ajouté avec succés</string>
     <string name="user_undefined">Informations utilisateur inaccesibles</string>
+    <string name="connexion_loading">Connexion...</string>
 </resources>

@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.example.tutoresi.Model.User;
-import com.example.tutoresi.data.AuthViewModel;
+import com.example.tutoresi.Data.AuthViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private static final String  TAG = "LOGIN_ACTIVITY";
     private AuthViewModel authViewModel;
+    private boolean isLog;
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void regularLogIn(String email, String password){
+        Toast.makeText(LoginActivity.this,R.string.connexion_loading,Toast.LENGTH_LONG).show();
         authViewModel.login(email,password);
         authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
             @Override
@@ -109,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
                 Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
                 mProgressBar.setVisibility(View.GONE);
+                isLog = true;
                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 finish();
             }

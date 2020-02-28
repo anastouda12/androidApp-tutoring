@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tutoresi.Data.ReminderViewModel;
 import com.example.tutoresi.Model.Reminder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -25,8 +26,8 @@ public class DetailReminderActivity extends AppCompatActivity {
     private EditText mCourse, mDate, mLocation;
     private Button mBtnAdd;
     private final Calendar myCalendar = Calendar.getInstance();
-    private DatabaseReference databaseReference;
     private DatePickerDialog.OnDateSetListener date;
+    private ReminderViewModel reminderViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         mBtnAdd = (Button) findViewById(R.id.btn_reminder_register);
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
+        reminderViewModel = new ReminderViewModel();
         date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -85,22 +85,13 @@ public class DetailReminderActivity extends AppCompatActivity {
                     mLocation.setError("Location requise.");
                     return;
                 }
-                writeNewReminder(course,date,location);
+                reminderViewModel.addReminder(new Reminder(course,date,location));
                 Toast.makeText(DetailReminderActivity.this,R.string.reminder_added,Toast.LENGTH_LONG).show();
                 finish();
 
             }
         });
 
-    }
-
-    /**
-     * Write new reminder on DB
-     *
-     */
-    private void writeNewReminder(String course, String date, String location) {
-        Reminder reminder = new Reminder(course,date,location);
-        databaseReference.child("reminders").push().setValue(reminder);
     }
 
 

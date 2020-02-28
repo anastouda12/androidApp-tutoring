@@ -1,6 +1,5 @@
 package com.example.tutoresi;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,14 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutoresi.Model.User;
-import com.example.tutoresi.data.AuthViewModel;
-import com.example.tutoresi.data.UserRepository;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.tutoresi.Data.AuthViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 

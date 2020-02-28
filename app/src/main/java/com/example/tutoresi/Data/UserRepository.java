@@ -1,4 +1,4 @@
-package com.example.tutoresi.data;
+package com.example.tutoresi.Data;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -37,6 +37,7 @@ public class UserRepository {
     public void logout(){
         firebaseSource.logout();
     }
+
 
     /**
      * Sign in with google account
