@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tutoresi.Model.Reminder;
@@ -79,6 +80,7 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ReminderViewHolder holder, int position, @NonNull Reminder model) {
 
+                if(position % 2 != 0) holder.setBackgroundColorGreen();
                 holder.setMCourse(model.getCourse());
                 holder.setMLocation(model.getLocation());
                 holder.setMDate(model.getDate());
@@ -138,6 +140,7 @@ public class ReminderActivity extends AppCompatActivity {
     public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mCourse, mDate, mLocation;
+        private LinearLayout mLinear;
 
 
         public ReminderViewHolder(@NonNull View itemView) {
@@ -146,6 +149,7 @@ public class ReminderActivity extends AppCompatActivity {
             mCourse = (TextView) itemView.findViewById(R.id.course_card_reminder);
             mDate = (TextView) itemView.findViewById(R.id.date_card_reminder);
             mLocation = (TextView) itemView.findViewById(R.id.location_card_reminder);
+            mLinear = (LinearLayout) itemView.findViewById(R.id.background_reminder);
 
         }
 
@@ -160,6 +164,14 @@ public class ReminderActivity extends AppCompatActivity {
         public void setMLocation(String location) {
             this.mLocation.setText(location);
         }
+
+        /**
+         * Set other color background
+         */
+        public void setBackgroundColorGreen(){
+            mLinear.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+
 
     }
 

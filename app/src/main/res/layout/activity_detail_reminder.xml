@@ -43,7 +43,17 @@
             android:focusable="false"
             android:clickable="true"
             android:paddingLeft="10dp"
-            android:inputType="datetime" />
+            android:inputType="date" />
+
+        <EditText
+            style="@style/editText_style"
+            android:hint="@string/Time"
+            android:id="@+id/input_reminder_time"
+            android:drawableLeft="@drawable/ic_action_time"
+            android:focusable="false"
+            android:clickable="true"
+            android:paddingLeft="10dp"
+            android:inputType="time" />
 
         <Button
             android:id="@+id/btn_reminder_register"
