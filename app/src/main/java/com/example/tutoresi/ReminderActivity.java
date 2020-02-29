@@ -60,6 +60,16 @@ public class ReminderActivity extends AppCompatActivity {
             }
         });
 
+        initRecycler();
+        initSwipeItemListener();
+
+    }
+
+    /**
+     * Initialize recycler of reminders
+     */
+    private void initRecycler(){
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("reminders");
         databaseReference.keepSynced(true);
 
@@ -69,9 +79,9 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ReminderViewHolder holder, int position, @NonNull Reminder model) {
 
-                holder.setmCourse(model.getCourse());
-                holder.setmLocation(model.getLocation());
-                holder.setmDate(model.getDate());
+                holder.setMCourse(model.getCourse());
+                holder.setMLocation(model.getLocation());
+                holder.setMDate(model.getDate());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -90,10 +100,14 @@ public class ReminderActivity extends AppCompatActivity {
             }
         };
 
-
         mRecyclerReminder.setAdapter(adapter);
 
+    }
 
+    /**
+     * Initialize listener of item on swipe
+     */
+    private void initSwipeItemListener(){
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
 
             @Override
@@ -118,6 +132,9 @@ public class ReminderActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Class ViewHolder of recycler reminders
+     */
     public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mCourse, mDate, mLocation;
@@ -132,15 +149,15 @@ public class ReminderActivity extends AppCompatActivity {
 
         }
 
-        public void setmCourse(String course) {
+        public void setMCourse(String course) {
             this.mCourse.setText(course);
         }
 
-        public void setmDate(String date) {
+        public void setMDate(String date) {
             this.mDate.setText(date);
         }
 
-        public void setmLocation(String location) {
+        public void setMLocation(String location) {
             this.mLocation.setText(location);
         }
 
