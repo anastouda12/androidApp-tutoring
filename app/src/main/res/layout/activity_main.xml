@@ -34,12 +34,20 @@
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/btn_course"
+                android:id="@+id/btn_findTutoring"
                 android:background="@color/colorAccent"
                 android:paddingLeft="10dp"
-                android:drawableLeft="@drawable/ic_action_book"
+                android:drawableLeft="@drawable/ic_action_search"
                 style="@style/button_style"
-                android:text="@string/Cours" />
+                android:text="@string/find_tutoring" />
+
+            <Button
+                android:id="@+id/btn_becomeTutor"
+                android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@drawable/ic_action_tutoring"
+                style="@style/button_style"
+                android:text="@string/become_tutor" />
 
             <Button
                 android:id="@+id/btn_reminder"

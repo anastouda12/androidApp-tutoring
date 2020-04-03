@@ -15,7 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mBtnCourse, mBtnMyAccount, mBtnReminder, mBtnSignOut;
+    private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut, mBtnBecomeTutor;
     private ImageView mAvatarUser;
     private AuthViewModel mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBtnCourse = (Button) findViewById(R.id.btn_course);
+        mBtnFindTutoring = (Button) findViewById(R.id.btn_findTutoring);
+        mBtnBecomeTutor = (Button) findViewById(R.id.btn_becomeTutor);
         mBtnMyAccount = (Button) findViewById(R.id.btn_myaccount);
         mBtnReminder = (Button) findViewById(R.id.btn_reminder);
         mBtnSignOut = (Button) findViewById(R.id.btn_signout);

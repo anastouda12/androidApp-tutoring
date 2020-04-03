@@ -11,6 +11,8 @@
     <string name="register_failed">Erreur lors de la création du compte</string>
     <string name="menu">Tableau de bord</string>
     <string name="Cours">Cours</string>
+    <string name="find_tutoring">Chercher un tuteur</string>
+    <string name="become_tutor">Devenir tuteur</string>
     <string name="reminder">Rappel</string>
     <string name="signout">Se déconnecter</string>
     <string name="myaccount">Mon compte</string>
