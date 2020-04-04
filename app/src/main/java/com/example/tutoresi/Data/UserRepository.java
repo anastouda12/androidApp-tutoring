@@ -1,5 +1,7 @@
 package com.example.tutoresi.Data;
 
+import android.net.Uri;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tutoresi.Model.User;
@@ -36,6 +38,12 @@ public class UserRepository {
 
     public void logout(){
         firebaseSource.logout();
+    }
+
+    public void uploadImageProfile(Uri uri){firebaseSource.uploadProfilImageCurrentUser(uri);}
+
+    public MutableLiveData<Uri> getProfileImage(){
+        return firebaseSource.getAvatarProfileCurrentUser();
     }
 
 

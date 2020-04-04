@@ -1,13 +1,17 @@
 package com.example.tutoresi;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,12 +20,17 @@ import android.widget.Toast;
 
 import com.example.tutoresi.Model.User;
 import com.example.tutoresi.Data.AuthViewModel;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegisterActivity extends AppCompatActivity {
 
     final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    private Uri uploadedImg;
 
     private EditText mName, mEmail, mPassword, mConfirmPassword, mPhone;
+    private CircleImageView mPhoto;
     private Button mBtnRegister;
     private TextView mLoginText;
     private ProgressBar mProgressBar;
@@ -42,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         mBtnRegister = (Button) findViewById(R.id.btn_register);
         mLoginText = (TextView) findViewById(R.id.goToLogin_text);
         mProgressBar = (ProgressBar) findViewById(R.id.register_progressBar);
+        mPhoto = (CircleImageView) findViewById(R.id.user_avatar);
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         mLoginText.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +110,33 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        mPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageChooser();
+            }
+        });
+
+    }
+
+    private void imageChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,1);
+    }
+
+    private void imageUploader(){
+        authViewModel.uploadImageProfile(uploadedImg);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            uploadedImg = data.getData();
+            Picasso.get().load(uploadedImg).fit().centerCrop().into(mPhoto);
+        }
     }
 
     private void registerNewUser(String email, String password, String name, String phone) {
@@ -108,6 +145,10 @@ public class RegisterActivity extends AppCompatActivity {
         authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                // If an image is uploaded by the user we store in the db storage.
+                if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
+                    imageUploader();
+                }
                 mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));

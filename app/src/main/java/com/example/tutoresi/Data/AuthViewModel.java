@@ -1,6 +1,12 @@
 package com.example.tutoresi.Data;
 
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.tutoresi.Model.User;
@@ -15,6 +21,12 @@ public class AuthViewModel extends ViewModel {
 
     public AuthViewModel(){
         userRepository = new UserRepository();
+        authenticatedUserLiveData = new LiveData<User>() {
+            @Override
+            public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super User> observer) {
+                super.observe(owner, observer);
+            }
+        };
     }
 
     public void register(String email, String password, String name, String phone){
@@ -40,4 +52,13 @@ public class AuthViewModel extends ViewModel {
     public LiveData<User> getAuthenticatedUserLiveData() {
         return authenticatedUserLiveData;
     }
+
+    public void uploadImageProfile(Uri uri){
+         userRepository.uploadImageProfile(uri);
+    }
+
+    public MutableLiveData<Uri> getProfileImage(){
+        return userRepository.getProfileImage();
+    }
+
 }

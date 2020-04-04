@@ -1,8 +1,11 @@
 package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,9 @@ import com.example.tutoresi.Data.AuthViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,14 +38,14 @@ public class MainActivity extends AppCompatActivity {
         mBtnSignOut = (Button) findViewById(R.id.btn_signout);
 
         mAvatarUser = (ImageView) findViewById(R.id.user_avatar);
-        mAuth = new AuthViewModel();
+        mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
 
         mBtnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 mGoogleSignInClient.signOut();
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
             }
         });
@@ -47,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
         mBtnReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ReminderActivity.class));
+                startActivity(new Intent(getApplicationContext(), ReminderActivity.class));
             }
         });
 
         mBtnMyAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MyAccountActivity.class));
+                startActivity(new Intent(getApplicationContext(), MyAccountActivity.class));
             }
         });
 
@@ -69,4 +75,18 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         super.onStart();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAuth.getProfileImage().observe(this, new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                Picasso.get().invalidate(uri);
+                Picasso.get().load(uri).memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE).fit().centerCrop().into(mAvatarUser);
+            }
+        });
+    }
+
 }

@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void signInWithGoogle(GoogleSignInAccount acct){
+    private void signInWithGoogle(final GoogleSignInAccount acct){
         mProgressBar.setVisibility(View.VISIBLE);
         authViewModel.signInWithGoogle(acct);
         authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {

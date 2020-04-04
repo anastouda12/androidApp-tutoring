@@ -29,6 +29,14 @@
             android:textSize="30dp"
             android:paddingBottom="10dp"/>
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/default_img_user"
+            android:paddingBottom="10dp"/>
+
         <EditText
             style="@style/editText_style"
             android:hint="Email"

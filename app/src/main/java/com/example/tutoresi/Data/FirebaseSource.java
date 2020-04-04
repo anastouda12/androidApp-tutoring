@@ -1,5 +1,6 @@
 package com.example.tutoresi.Data;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,8 @@ import com.example.tutoresi.Model.Reminder;
 import com.example.tutoresi.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -20,6 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +34,47 @@ public class FirebaseSource {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDB;
+    private StorageReference mStore;
     private static final String TAG = "FIREBASE_SOURCE";
 
     public FirebaseSource() {
         mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseStorage.getInstance().getReference("Images");
         mDB = FirebaseDatabase.getInstance().getReference();
         mDB = mDB.child("users");
+    }
+
+
+    public void uploadProfilImageCurrentUser(Uri uri){
+        StorageReference ref = mStore.child(currentUser().getUid()).child("profileImage");
+        ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+               // Uri downloadUrl = taskSnapshot.getUploadSessionUri(); url of the upload content
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // handle failure here
+            }
+        });
+    }
+
+    public MutableLiveData<Uri> getAvatarProfileCurrentUser(){
+        final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
+        StorageReference ref = mStore.child(currentUser().getUid()).child("profileImage");
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                imageUri.setValue(uri);
+           }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //
+            }
+        });
+        return imageUri;
     }
 
 
