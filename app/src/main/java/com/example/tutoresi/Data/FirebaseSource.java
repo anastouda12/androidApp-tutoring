@@ -41,12 +41,11 @@ public class FirebaseSource {
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseStorage.getInstance().getReference("Images");
         mDB = FirebaseDatabase.getInstance().getReference();
-        mDB = mDB.child("users");
     }
 
 
     public void uploadProfilImageCurrentUser(Uri uri){
-        StorageReference ref = mStore.child(currentUser().getUid()).child("profileImage");
+        StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
         ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -62,7 +61,7 @@ public class FirebaseSource {
 
     public MutableLiveData<Uri> getAvatarProfileCurrentUser(){
         final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
-        StorageReference ref = mStore.child(currentUser().getUid()).child("profileImage");
+        StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -107,7 +106,7 @@ public class FirebaseSource {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     if (firebaseUser != null) {
                         User user = new User(name, email, phone);
-                        mDB.child(mAuth.getCurrentUser().getUid()).setValue(user);
+                        mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
                         authenticatedUserMutableLiveData.setValue(user);
                     }
                 } else {
@@ -123,8 +122,26 @@ public class FirebaseSource {
             mAuth.signOut();
     }
 
-    public FirebaseUser currentUser() {
-        return mAuth.getCurrentUser();
+    public MutableLiveData<User> currentUser() {
+        final MutableLiveData<User> user = new MutableLiveData<>();
+        DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user.setValue(new User(dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("email").getValue().toString(),dataSnapshot.child("phone").getValue().toString()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return user;
+    }
+
+    public void updateDataUser(String name, String phone){
+        mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("name").setValue(name);
+        mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("phone").setValue(phone);
     }
 
 
@@ -157,13 +174,13 @@ public class FirebaseSource {
      */
     private void createUser() {
         if (mAuth.getCurrentUser() != null) {
-            DatabaseReference ref = mDB.child(mAuth.getCurrentUser().getUid());
+            DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){
                         // not exit yet
-                       mDB.child(mAuth.getCurrentUser().getUid()).setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
+                       mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
                     }
                 }
 
@@ -182,7 +199,7 @@ public class FirebaseSource {
         final MutableLiveData<List<Reminder>> rem = new MutableLiveData<>();
         List<Reminder> list = new ArrayList<>();
         rem.setValue(list);
-        DatabaseReference refReminders = mDB.child(mAuth.getCurrentUser().getUid()).child("reminders");
+        DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
         refReminders.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -202,7 +219,7 @@ public class FirebaseSource {
      * @param reminder
      */
     public void addReminder(Reminder reminder){
-        DatabaseReference refReminders = mDB.child(mAuth.getCurrentUser().getUid()).child("reminders");
+        DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
         refReminders.push().setValue(reminder);
     }
 }

@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="100dp"
-    android:background="@drawable/dash_background"
+    android:paddingTop="40dp"
+    android:background="@drawable/main_background"
     tools:context=".MainActivity">
 
         <LinearLayout
@@ -29,15 +29,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:fontFamily="casual"
+                android:paddingTop="60dp"
+                android:paddingBottom="15dp"
                 android:text="@string/menu"
                 android:gravity="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="36sp" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/btn_findTutoring"
-                android:background="@color/colorAccent"
+                android:background="@color/colorMauve"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_search"
                 style="@style/button_style"
@@ -45,7 +46,7 @@
 
             <Button
                 android:id="@+id/btn_becomeTutor"
-                android:background="@color/colorAccent"
+                android:background="@color/colorBlue"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_tutoring"
                 style="@style/button_style"
@@ -53,7 +54,7 @@
 
             <Button
                 android:id="@+id/btn_reminder"
-                android:background="@color/colorAccent"
+                android:background="@color/colorYellow"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_reminder"
                 style="@style/button_style"
@@ -61,7 +62,7 @@
 
             <Button
                 android:id="@+id/btn_myaccount"
-                android:background="@color/colorAccent"
+                android:background="@color/colorGreen"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_account"
                 style="@style/button_style"

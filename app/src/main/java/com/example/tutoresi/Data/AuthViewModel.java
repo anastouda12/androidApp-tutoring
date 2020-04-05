@@ -45,7 +45,7 @@ public class AuthViewModel extends ViewModel {
         userRepository.logout();
     }
 
-    public FirebaseUser currentUser(){
+    public MutableLiveData<User> currentUser(){
         return userRepository.currentUser();
     }
 
@@ -59,6 +59,10 @@ public class AuthViewModel extends ViewModel {
 
     public MutableLiveData<Uri> getProfileImage(){
         return userRepository.getProfileImage();
+    }
+
+    public void updateDataUser(String name, String phone){
+        userRepository.updateDataUser(name,phone);
     }
 
 }

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_my_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="100dp"
+    android:paddingBottom="70dp"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
-    android:paddingTop="100dp"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/myaccount_background"
     tools:context=".MyAccountActivity">
 
     <LinearLayout
@@ -23,7 +21,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
             android:text="@string/myaccount"
             style="@style/textView_style"
             android:textSize="30dp"
@@ -45,7 +43,7 @@
             android:focusable="false"
             android:clickable="false"
             android:drawableLeft="@drawable/ic_action_user"
-            android:inputType="none" />
+            android:inputType="none"/>
 
         <EditText
             style="@style/editText_style"

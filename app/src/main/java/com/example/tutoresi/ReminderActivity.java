@@ -80,7 +80,7 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ReminderViewHolder holder, int position, @NonNull Reminder model) {
 
-                if(position % 2 != 0) holder.setBackgroundColorGreen();
+                holder.setBackgroundColorByPosition(position);
                 holder.setMCourse(model.getCourse());
                 holder.setMLocation(model.getLocation());
                 holder.setMDate(model.getDate());
@@ -168,8 +168,16 @@ public class ReminderActivity extends AppCompatActivity {
         /**
          * Set other color background
          */
-        public void setBackgroundColorGreen(){
-            mLinear.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        public void setBackgroundColorByPosition(int position){
+            if(position % 2 == 0){
+                mLinear.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+
+            }else if (position % 3 == 0){
+                mLinear.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+            }else{
+                mLinear.setBackgroundColor(getResources().getColor(R.color.colorMauve));
+
+            }
         }
 
 

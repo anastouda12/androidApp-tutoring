@@ -8,7 +8,7 @@
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
     android:paddingTop="80dp"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/login_background"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -23,7 +23,8 @@
             android:id="@+id/textView2"
             android:layout_margin="5dp"
             style="@style/textView_style"
-            android:textSize="25dp"
+            android:textSize="40dp"
+            android:paddingBottom="10dp"
             android:text="TutorESI" />
 
         <EditText
@@ -50,6 +51,7 @@
         <TextView
             android:id="@+id/create_account"
             style="@style/textView_style"
+            android:textSize="16dp"
             android:text="@string/create_account" />
 
         <com.google.android.gms.common.SignInButton
@@ -57,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"/>
+            android:paddingTop="35dp"/>
     </LinearLayout>
 
     <ProgressBar

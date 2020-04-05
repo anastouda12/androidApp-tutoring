@@ -32,7 +32,7 @@ public class UserRepository {
         return firebaseSource.register(email, password,name, phone);
     }
 
-    public FirebaseUser currentUser(){
+    public MutableLiveData<User> currentUser(){
         return firebaseSource.currentUser();
     }
 
@@ -44,6 +44,10 @@ public class UserRepository {
 
     public MutableLiveData<Uri> getProfileImage(){
         return firebaseSource.getAvatarProfileCurrentUser();
+    }
+
+    public void updateDataUser(String name, String phone){
+        firebaseSource.updateDataUser(name,phone);
     }
 
 

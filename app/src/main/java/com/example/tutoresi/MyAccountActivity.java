@@ -51,26 +51,18 @@ public class MyAccountActivity extends AppCompatActivity {
 
         mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mAuth.currentUser().observe(this, new Observer<User>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    mName.setText(dataSnapshot.child("name").getValue().toString());
-                    mPhone.setText(dataSnapshot.child("phone").getValue().toString());
-                    mEmail.setText(dataSnapshot.child("email").getValue().toString());
-                }else{
-                    finish();
-                    Toast.makeText(MyAccountActivity.this,R.string.user_undefined,Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onChanged(User user) {
+                mName.setText(user.getName());
+                mPhone.setText(user.getPhone());
+                mEmail.setText(user.getEmail());
             }
         });
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
 
         mAuth.getProfileImage().observe(this, new Observer<Uri>() {
             @Override
@@ -101,11 +93,8 @@ public class MyAccountActivity extends AppCompatActivity {
                 if(imgHasChanged){
                     imageUploader();
                 }
-                // TODO UPDATE
-                mDatabase.child("name").setValue(mName.getText().toString().trim());
-                mDatabase.child("phone").setValue(mPhone.getText().toString().trim());
+                mAuth.updateDataUser(mName.getText().toString().trim(),mPhone.getText().toString().trim());
                 finish();
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 Toast.makeText(MyAccountActivity.this,R.string.infos_saved,Toast.LENGTH_LONG).show();
             }
         });
