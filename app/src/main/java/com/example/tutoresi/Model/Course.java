@@ -26,4 +26,16 @@ public class Course {
     public String getDescription() {
         return description;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

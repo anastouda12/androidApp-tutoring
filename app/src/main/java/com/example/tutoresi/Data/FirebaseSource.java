@@ -6,7 +6,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tutoresi.Model.Course;
 import com.example.tutoresi.Model.Reminder;
+import com.example.tutoresi.Model.Tutoring;
 import com.example.tutoresi.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -215,6 +217,29 @@ public class FirebaseSource {
     }
 
     /**
+     * Get reminder of the current User connected
+     * @return
+     */
+    public MutableLiveData<List<Course>> getMyCourses(){
+        final MutableLiveData<List<Course>> rem = new MutableLiveData<>();
+        List<Course> list = new ArrayList<>();
+        rem.setValue(list);
+        DatabaseReference refCourses = mDB.child("courses");
+        refCourses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                rem.getValue().add(dataSnapshot.getValue(Course.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return rem;
+    }
+
+    /**
      * Add reminder to the currentUser
      * @param reminder
      */
@@ -222,5 +247,80 @@ public class FirebaseSource {
         DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
         refReminders.push().setValue(reminder);
     }
+
+    /**
+     * Add new course of tutoring
+     * @param course course of tutoring
+     */
+    public void addCourse(final Course course){
+        DatabaseReference refCourses = mDB.child("courses").child(course.getId());
+        refCourses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    // not exist yet
+                    mDB.child("courses").child(course.getId()).setValue(course);
+                }else{
+                    // course already exist
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void addTutoring(final Course course, final String descriptionTutoring){
+        DatabaseReference refCourses = mDB.child("courses").child(course.getId()).child("tutoring");
+        refCourses.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        mDB.child("courses").child(course.getId()).child("tutoring").child(mAuth.getCurrentUser().getUid()).setValue(new Tutoring
+                                (new User(dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("email").getValue().toString(),dataSnapshot.child("phone").getValue().toString())
+                                        ,descriptionTutoring));
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public MutableLiveData<Boolean> checksAvailabilityTutoringCourse(Course course){
+        final MutableLiveData<Boolean> avail = new MutableLiveData<>();
+        DatabaseReference ref = mDB.child("courses").child(course.getId()).child("tutoring");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    //no tutoring
+                    avail.setValue(false);
+                }else{
+                    avail.setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return avail;
+    }
 }
+
+
 

@@ -64,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mBtnFindTutoring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), CourseActivity.class));
+            }
+        });
+
+        mBtnBecomeTutor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), BecomeTutorActivity.class));
+            }
+        });
+
     }
 
     @Override

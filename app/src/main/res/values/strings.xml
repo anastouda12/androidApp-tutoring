@@ -25,4 +25,10 @@
     <string name="user_undefined">Informations utilisateur inaccesibles</string>
     <string name="connexion_loading">Connexion...</string>
     <string name="Time">Heure</string>
+    <string name="description">Description</string>
+    <string name="description_course">Description du cours</string>
+    <string name="description_tutoring">Description du tutorat</string>
+    <string name="course_id">ID du cours</string>
+    <string name="separator">|</string>
+    <string name="course_libelle">Libelle</string>
 </resources>

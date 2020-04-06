@@ -65,4 +65,5 @@ public class AuthViewModel extends ViewModel {
         userRepository.updateDataUser(name,phone);
     }
 
+
 }

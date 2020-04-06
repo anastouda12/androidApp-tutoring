@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tutoresi.Model.Reminder;
@@ -140,7 +141,7 @@ public class ReminderActivity extends AppCompatActivity {
     public class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mCourse, mDate, mLocation;
-        private LinearLayout mLinear;
+        private RelativeLayout mLinear;
 
 
         public ReminderViewHolder(@NonNull View itemView) {
@@ -149,7 +150,7 @@ public class ReminderActivity extends AppCompatActivity {
             mCourse = (TextView) itemView.findViewById(R.id.course_card_reminder);
             mDate = (TextView) itemView.findViewById(R.id.date_card_reminder);
             mLocation = (TextView) itemView.findViewById(R.id.location_card_reminder);
-            mLinear = (LinearLayout) itemView.findViewById(R.id.background_reminder);
+            mLinear = (RelativeLayout) itemView.findViewById(R.id.background_reminder);
 
         }
 
