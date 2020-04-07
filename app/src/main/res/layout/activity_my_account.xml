@@ -7,7 +7,7 @@
     android:paddingBottom="70dp"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
-    android:background="@drawable/myaccount_background"
+    android:background="@color/colorPrimary"
     tools:context=".MyAccountActivity">
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:text="@string/myaccount"
             style="@style/textView_style"
             android:textSize="30dp"
-            android:paddingBottom="10dp"/>
+            android:layout_marginBottom="50dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_profile"
@@ -33,7 +33,7 @@
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:src="@drawable/default_img_user"
-            android:paddingBottom="10dp"/>
+            android:layout_marginBottom="20dp"/>
 
         <EditText
             style="@style/editText_style"

@@ -2,26 +2,21 @@ package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Course;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CourseActivity extends AppCompatActivity {
 
@@ -67,7 +62,7 @@ public class CourseActivity extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Course, CourseViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull CourseViewHolder holder, int position, @NonNull Course model) {
+            protected void onBindViewHolder(@NonNull final CourseViewHolder holder, int position, @NonNull Course model) {
 
                 holder.setBackgroundColorByPosition(position);
                 holder.setMCourse(model.getId());
@@ -77,9 +72,9 @@ public class CourseActivity extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Intent intent = new Intent(ReminderActivity.this,MainActivity.class);
-                        // intent.putExtra("course",model.getCourse()); on va donner en extra vers l'autre activité ici
-                        // startactivity ici
+                        Intent intent = new Intent(getApplicationContext(),TutoringActivity.class);
+                        intent.putExtra("course_id",holder.getmCourse().getText().toString());
+                        startActivity(intent);
                     }
                 });
             }
@@ -126,7 +121,17 @@ public class CourseActivity extends AppCompatActivity {
             this.mLibelle.setText(libelle);
         }
 
+        public TextView getmCourse() {
+            return mCourse;
+        }
 
+        public TextView getmDescription() {
+            return mDescription;
+        }
+
+        public TextView getmLibelle() {
+            return mLibelle;
+        }
 
         /**
          * Set other color background

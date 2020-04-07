@@ -7,10 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/reminder_background"
-    tools:context=".CourseActivity">
+    tools:context=".TutoringActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_course"
+        android:id="@+id/recycler_tutor"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

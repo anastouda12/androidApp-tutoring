@@ -32,9 +32,10 @@
                 android:paddingTop="60dp"
                 android:paddingBottom="15dp"
                 android:text="@string/menu"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="25sp" />
+                android:textSize="30sp" />
 
             <Button
                 android:id="@+id/btn_findTutoring"
