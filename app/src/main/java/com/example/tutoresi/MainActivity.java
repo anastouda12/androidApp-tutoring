@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAuth.getProfileImage().observe(this, new Observer<Uri>() {
+        mAuth.getProfileImageCurrentUser().observe(this, new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
                 Picasso.get().invalidate(uri);

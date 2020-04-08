@@ -22,6 +22,7 @@
         <TextView
             android:id="@+id/textView2"
             style="@style/textView_style"
+            android:textColor="#FFFFFF"
             android:textSize="40dp"
             android:layout_marginBottom="33dp"
             android:textStyle="bold"
@@ -53,6 +54,7 @@
             style="@style/textView_style"
             android:textSize="15dp"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:text="@string/create_account" />
 
         <com.google.android.gms.common.SignInButton

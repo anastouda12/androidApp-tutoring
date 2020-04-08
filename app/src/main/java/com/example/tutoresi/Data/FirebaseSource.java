@@ -78,6 +78,37 @@ public class FirebaseSource {
         return imageUri;
     }
 
+    public MutableLiveData<Uri> getAvatarProfileOfUser(final User user){
+        final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
+        DatabaseReference ref = mDB.child("users");
+        ref.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String key = dataSnapshot.getChildren().iterator().next().getKey();
+                    StorageReference ref = mStore.child(key).child("profileImage");
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            imageUri.setValue(uri);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("no-image");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return imageUri;
+    }
+
 
     public MutableLiveData<User> login(String email, String password) {
         final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();

@@ -32,4 +32,7 @@
     <string name="separator">|</string>
     <string name="course_libelle">Libelle</string>
     <string name="name">Nom</string>
+    <string name="profileTutor">Profile du tuteur</string>
+    <string name="call">Contacter par téléphone</string>
+    <string name="sendMail">Contacter par mail</string>
 </resources>

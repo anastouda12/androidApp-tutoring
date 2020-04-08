@@ -40,10 +40,14 @@ public class UserRepository {
         firebaseSource.logout();
     }
 
-    public void uploadImageProfile(Uri uri){firebaseSource.uploadProfilImageCurrentUser(uri);}
+    public void uploadeImageProfileCurrentUser(Uri uri){firebaseSource.uploadProfilImageCurrentUser(uri);}
 
-    public MutableLiveData<Uri> getProfileImage(){
+    public MutableLiveData<Uri> getProfileImageCurrentUser(){
         return firebaseSource.getAvatarProfileCurrentUser();
+    }
+
+    public MutableLiveData<Uri> getProfileImageOfUser(User user){
+        return firebaseSource.getAvatarProfileOfUser(user);
     }
 
     public void updateDataUser(String name, String phone){

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,15 +63,21 @@ public class TutoringActivity extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Tutoring, TutoringViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull final TutoringViewHolder holder, int position, @NonNull Tutoring model) {
+            protected void onBindViewHolder(@NonNull final TutoringViewHolder holder, int position, @NonNull final Tutoring model) {
 
                 holder.setBackgroundColorByPosition(position);
-                holder.setMName(model.getAuthor().getName());
-                holder.setMDescription(model.getDescriptionTutoring());
+                holder.setMName("Tuteur : "+model.getAuthor().getName());
+                holder.setMDescription("Description : "+model.getDescriptionTutoring());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // go to detail tutoring
+                        Intent intent = new Intent(getApplicationContext(),ProfileTutorActivity.class);
+                        intent.putExtra("tutor_name",model.getAuthor().getName());
+                        intent.putExtra("description_tutoring",model.getDescriptionTutoring());
+                        intent.putExtra("tutor_email",model.getAuthor().getEmail());
+                        intent.putExtra("tutor_phone",model.getAuthor().getPhone());
+                        intent.putExtra("course_id",course_id);
+                        startActivity(intent);
                     }
                 });
             }
@@ -106,6 +113,13 @@ public class TutoringActivity extends AppCompatActivity {
             this.mDescription.setText(description);
         }
 
+        public TextView getmName() {
+            return mName;
+        }
+
+        public TextView getmDescription() {
+            return mDescription;
+        }
 
         /**
          * Set other color background

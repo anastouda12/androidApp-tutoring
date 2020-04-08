@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TutoringActivity"></activity>
+        <activity android:name=".ProfileTutorActivity"></activity>
+        <activity android:name=".TutoringActivity" />
         <activity android:name=".BecomeTutorActivity" />
         <activity android:name=".CourseActivity" />
         <activity android:name=".MyAccountActivity" />

@@ -1,6 +1,5 @@
 package com.example.tutoresi;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -19,11 +18,8 @@ import android.widget.Toast;
 import com.example.tutoresi.Data.AuthViewModel;
 import com.example.tutoresi.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class MyAccountActivity extends AppCompatActivity {
@@ -64,7 +60,7 @@ public class MyAccountActivity extends AppCompatActivity {
 
 
 
-        mAuth.getProfileImage().observe(this, new Observer<Uri>() {
+        mAuth.getProfileImageCurrentUser().observe(this, new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
                 Picasso.get().load(uri).fit().centerCrop().into(mProfile);
@@ -119,7 +115,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     private void imageUploader(){
-        mAuth.uploadImageProfile(uploadedImg);
+        mAuth.uploadImageProfileCurrentUser(uploadedImg);
     }
 
 

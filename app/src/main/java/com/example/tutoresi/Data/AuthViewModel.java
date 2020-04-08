@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tutoresi.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class AuthViewModel extends ViewModel {
@@ -53,12 +52,16 @@ public class AuthViewModel extends ViewModel {
         return authenticatedUserLiveData;
     }
 
-    public void uploadImageProfile(Uri uri){
-         userRepository.uploadImageProfile(uri);
+    public void uploadImageProfileCurrentUser(Uri uri){
+         userRepository.uploadeImageProfileCurrentUser(uri);
     }
 
-    public MutableLiveData<Uri> getProfileImage(){
-        return userRepository.getProfileImage();
+    public MutableLiveData<Uri> getProfileImageCurrentUser(){
+        return userRepository.getProfileImageCurrentUser();
+    }
+
+    public MutableLiveData<Uri> getProfileImageOfUser(User user){
+        return userRepository.getProfileImageOfUser(user);
     }
 
     public void updateDataUser(String name, String phone){

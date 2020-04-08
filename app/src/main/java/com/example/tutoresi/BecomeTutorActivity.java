@@ -58,6 +58,12 @@ public class BecomeTutorActivity extends AppCompatActivity {
                     mDescriptionTutoring.setError("Une description de tutorat est requise.");
                     return;
                 }
+
+                if (descriptionTutoring.length() < 4 || descriptionTutoring.length() > 25) {
+                    mDescriptionTutoring.setError("Une description de tutorat est requise entre 4 est 25 caractères.");
+                    return;
+                }
+
                 if (TextUtils.isEmpty(courseLibelle)) {
                     mCourseLibelle.setError("Un libelle de cours est requis.");
                     return;

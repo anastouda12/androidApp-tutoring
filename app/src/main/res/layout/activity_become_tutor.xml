@@ -18,6 +18,15 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/become_tutor"
+            style="@style/textView_style"
+            android:textSize="30dp"
+            android:layout_marginBottom="20dp"/>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="120dp"
             android:layout_height="120dp"

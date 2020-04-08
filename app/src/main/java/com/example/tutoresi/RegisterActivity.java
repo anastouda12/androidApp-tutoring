@@ -5,13 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -127,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void imageUploader(){
-        authViewModel.uploadImageProfile(uploadedImg);
+        authViewModel.uploadImageProfileCurrentUser(uploadedImg);
     }
 
     @Override
