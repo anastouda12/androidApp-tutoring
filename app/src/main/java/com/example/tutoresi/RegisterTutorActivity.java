@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,13 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.tutoresi.Data.CourseViewModel;
 
 public class RegisterTutorActivity extends AppCompatActivity {
 
     private Button mBtnRegister;
     private EditText mDescriptionTutoring;
     private TextView mTitle;
-    private String courseTutoring;
+    private String course_id;
+    private CourseViewModel courseViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +30,10 @@ public class RegisterTutorActivity extends AppCompatActivity {
         mBtnRegister = (Button) findViewById(R.id.btn_registerTutor);
         mDescriptionTutoring = (EditText) findViewById(R.id.input_description_tutoring);
         mTitle = (TextView) findViewById(R.id.course_title_tutoring);
-        courseTutoring = getIntent().getStringExtra("course_id");
+        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
 
-        mTitle.setText(getResources().getText(R.string.become_tutor)+" "+courseTutoring);
+        course_id = getIntent().getStringExtra("course_id");
+        mTitle.setText(getResources().getText(R.string.become_tutor)+" "+course_id);
 
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,9 +43,15 @@ public class RegisterTutorActivity extends AppCompatActivity {
                     mDescriptionTutoring.setError("Une description de tutorat est requise.");
                     return;
                 }
-                // S'inscrire dans le tutorat
+                registerTutoring(course_id,description);
             }
         });
 
+    }
+
+    private void registerTutoring(String courseId, String descriptionTutoring){
+        courseViewModel.addTutoring(courseId,descriptionTutoring);
+        Toast.makeText(RegisterTutorActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)+" dans "+course_id,Toast.LENGTH_LONG).show();
+        finish();
     }
 }

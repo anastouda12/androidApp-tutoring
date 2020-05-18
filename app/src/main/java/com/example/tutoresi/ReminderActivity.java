@@ -171,13 +171,10 @@ public class ReminderActivity extends AppCompatActivity {
          */
         public void setBackgroundColorByPosition(int position){
             if(position % 2 == 0){
-                mLinear.setBackgroundColor(getResources().getColor(R.color.colorMauve));
-
-            }else if (position % 3 == 0){
-                mLinear.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            }else{
                 mLinear.setBackgroundColor(getResources().getColor(R.color.colorBlue));
 
+            }else{
+                mLinear.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             }
         }
 

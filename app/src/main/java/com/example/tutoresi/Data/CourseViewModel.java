@@ -25,8 +25,8 @@ public class CourseViewModel extends ViewModel {
         courseRepository.addCourse(course);
     }
 
-    public void addTutoring(Course course, String description){
-        courseRepository.addTutoring(course, description);
+    public void addTutoring(String courseId, String description){
+        courseRepository.addTutoring(courseId, description);
     }
 
     public MutableLiveData<Boolean> checksAvailabilityCourseTutoring(Course course){

@@ -10,7 +10,7 @@ public class Course {
     }
 
     public Course(String id, String libelle, String description) {
-        this.id = id;
+        this.id = id.toUpperCase();
         this.libelle = libelle;
         this.description = description;
     }

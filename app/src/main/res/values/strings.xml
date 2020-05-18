@@ -35,4 +35,11 @@
     <string name="profileTutor">Profile du tuteur</string>
     <string name="call">Contacter par téléphone</string>
     <string name="sendMail">Contacter par mail</string>
+    <string name="chooseYourPhoto">Choisit ta photo de profil</string>
+    <string name="takePhoto">Prendre une photo</string>
+    <string name="chooseInGalerie">Choisir dans ma galerie</string>
+    <string name="cancel">Annuler</string>
+    <string name="nameRequired">Nom requis</string>
+    <string name="phonoDigitError">Le numéro doit être composé de 10 chiffres</string>
+    <string name="tutoringCreateSuccessfull">Tu as été inscris comme tuteur</string>
 </resources>

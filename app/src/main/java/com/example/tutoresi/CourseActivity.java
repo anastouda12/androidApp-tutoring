@@ -148,13 +148,10 @@ public class CourseActivity extends AppCompatActivity {
          */
         public void setBackgroundColorByPosition(int position) {
             if (position % 2 == 0) {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                mRelative.setBackgroundColor(getResources().getColor(R.color.colorBeige));
 
-            } else if (position % 3 == 0) {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-            } else {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-
+            } else{
+                mRelative.setBackgroundColor(getResources().getColor(R.color.colorTaupe));
             }
         }
 

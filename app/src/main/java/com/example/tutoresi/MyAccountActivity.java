@@ -1,13 +1,17 @@
 package com.example.tutoresi;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.net.URI;
 
 public class MyAccountActivity extends AppCompatActivity {
 
@@ -79,11 +86,11 @@ public class MyAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(TextUtils.isEmpty(mName.getText().toString().trim())){
-                    mEmail.setError("Nom requis");
+                    mEmail.setError(getResources().getString(R.string.nameRequired));
                     return;
                 }
                 if(!TextUtils.isEmpty(mPhone.getText().toString().trim()) && mPhone.getText().toString().trim().length() != 10){
-                    mPhone.setError("Le numéro doit être composé de 10 chiffres");
+                    mPhone.setError(getResources().getString(R.string.phonoDigitError));
                     return;
                 }
                 if(imgHasChanged){
@@ -100,18 +107,52 @@ public class MyAccountActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
-            uploadedImg = data.getData();
-            mProfile.setImageURI(uploadedImg);
+        switch (requestCode) {
+            case 0://actionCode camera
+                if (resultCode == RESULT_OK) {
+                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                    mProfile.setImageBitmap(selectedImage);
+                    String imgeUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
+                    uploadedImg = Uri.parse(imgeUrl);
+                    return;
+                }
+            case 1://actionCode gallery
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    uploadedImg = data.getData();
+                    mProfile.setImageURI(uploadedImg);
+                    return;
+                }
+
         }
-    }
+
+        }
+
 
     private void imageChooser(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        imgHasChanged = true;
-        startActivityForResult(intent,1);
+        final CharSequence[] options = { getResources().getString(R.string.takePhoto),
+                getResources().getString(R.string.chooseInGalerie),
+                getResources().getString(R.string.cancel) };
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.chooseYourPhoto))
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       if(options[which].equals(getResources().getString(R.string.takePhoto))){
+                           Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                           imgHasChanged = true;
+                           startActivityForResult(takePicture, 0);
+                       }else if(options[which].equals(getResources().getString(R.string.chooseInGalerie))){
+                           Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                   android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                           imgHasChanged = true;
+                           startActivityForResult(pickPhoto , 1);
+                       }else if(options[which].equals(getResources().getString(R.string.cancel))){
+                           dialog.dismiss();
+                       }
+                    }
+                })
+                .setIcon(android.R.drawable.ic_menu_camera)
+                .show();
     }
 
     private void imageUploader(){

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Course;
@@ -75,8 +76,9 @@ public class BecomeTutorActivity extends AppCompatActivity {
 
     private void addCourseTutoring(String courseTitle,String libelle, String descCourse, String descTutoring){
         Course course = new Course(courseTitle,libelle, descCourse);
-        courseViewModel.addCourse(course);
-        courseViewModel.addTutoring(course,descTutoring);
+        courseViewModel.addCourse(course); // If the course dont exist already
+        courseViewModel.addTutoring(course.getId(),descTutoring);
+        Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)+" dans "+course.getId(),Toast.LENGTH_LONG).show();
         finish();
     }
 }

@@ -304,8 +304,8 @@ public class FirebaseSource {
 
     }
 
-    public void addTutoring(final Course course, final String descriptionTutoring){
-        DatabaseReference refCourses = mDB.child("courses").child(course.getId()).child("tutoring");
+    public void addTutoring(final String courseId, final String descriptionTutoring){
+        DatabaseReference refCourses = mDB.child("courses").child(courseId).child("tutoring");
         refCourses.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -313,7 +313,7 @@ public class FirebaseSource {
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        mDB.child("courses").child(course.getId()).child("tutoring").child(mAuth.getCurrentUser().getUid()).setValue(new Tutoring
+                        mDB.child("courses").child(courseId).child("tutoring").child(mAuth.getCurrentUser().getUid()).setValue(new Tutoring
                                 (new User(dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("email").getValue().toString(),dataSnapshot.child("phone").getValue().toString())
                                         ,descriptionTutoring));
                     }

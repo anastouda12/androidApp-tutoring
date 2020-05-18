@@ -6,7 +6,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/reminder_background"
+    android:background="@drawable/login_background"
     tools:context=".CourseActivity">
 
     <androidx.recyclerview.widget.RecyclerView

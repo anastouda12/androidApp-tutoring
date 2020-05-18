@@ -24,8 +24,8 @@ public class CourseRepository {
         firebaseSource.addCourse(course);
     }
 
-    public void addTutoring(Course course, String description){
-        firebaseSource.addTutoring(course,description);
+    public void addTutoring(String courseId, String description){
+        firebaseSource.addTutoring(courseId,description);
     }
     public MutableLiveData<Boolean> checksAvailabilityCourseTutoring(Course course){
         return firebaseSource.checksAvailabilityTutoringCourse(course);

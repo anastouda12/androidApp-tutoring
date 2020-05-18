@@ -138,12 +138,9 @@ public class TutoringActivity extends AppCompatActivity {
          */
         public void setBackgroundColorByPosition(int position) {
             if (position % 2 == 0) {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorMauve));
-
-            } else if (position % 3 == 0) {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+                mRelative.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             } else {
-                mRelative.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                mRelative.setBackgroundColor(getResources().getColor(R.color.colorBlue));
 
             }
         }
