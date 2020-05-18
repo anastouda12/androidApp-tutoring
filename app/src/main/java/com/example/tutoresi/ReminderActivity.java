@@ -1,11 +1,13 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tutoresi.Model.Reminder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -111,7 +114,7 @@ public class ReminderActivity extends AppCompatActivity {
      * Initialize listener of item on swipe
      */
     private void initSwipeItemListener(){
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -121,10 +124,31 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 //Remove swiped item from list and notify the RecyclerView
-                int position = viewHolder.getAdapterPosition();
-                DatabaseReference ref = adapter.getRef(position);
-                ref.removeValue();
-                adapter.notifyDataSetChanged();
+                final int position = viewHolder.getAdapterPosition();
+                final DatabaseReference ref = adapter.getRef(position);
+                new AlertDialog.Builder(ReminderActivity.this)
+                        .setMessage("Tu es sûr de vouloir supprimer ce rappel ?")
+                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ref.removeValue();
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(ReminderActivity.this,"Rappel supprimé",Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                adapter.notifyItemChanged(position);
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                adapter.notifyItemChanged(position);
+                            }
+                        })
+                        .create().show();
 
             }
         };

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
-        if(mAuth.currentUser() == null){
+        if(mAuth.getCurrentFirebaseUser() == null){
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
         mBtnFindTutoring.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), CourseActivity.class));
+                Intent intent = new Intent(getApplicationContext(),CourseActivity.class);
+                intent.putExtra("current_user",mAuth.getCurrentFirebaseUser().getEmail());
+                startActivity(intent);
             }
         });
 

@@ -36,6 +36,11 @@ public class UserRepository {
         return firebaseSource.currentUser();
     }
 
+    public FirebaseUser getCurrentFirebaseUser(){
+        return firebaseSource.getCurrentFirebaseUser();
+    }
+
+
     public void logout(){
         firebaseSource.logout();
     }

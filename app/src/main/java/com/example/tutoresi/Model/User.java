@@ -2,11 +2,13 @@ package com.example.tutoresi.Model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 @IgnoreExtraProperties
 /**
  * Class of an user of the app
  */
-public class User {
+public class User implements Serializable {
 
     private String name, email, phone;
 

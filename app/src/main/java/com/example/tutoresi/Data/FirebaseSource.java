@@ -45,6 +45,9 @@ public class FirebaseSource {
         mDB = FirebaseDatabase.getInstance().getReference();
     }
 
+    public FirebaseUser getCurrentFirebaseUser(){
+        return mAuth.getCurrentUser();
+    }
 
     public void uploadProfilImageCurrentUser(Uri uri){
         StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");

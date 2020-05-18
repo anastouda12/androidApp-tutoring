@@ -1,10 +1,13 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tutoresi.Model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -28,6 +32,7 @@ public class TutoringActivity extends AppCompatActivity {
     private FirebaseRecyclerAdapter<Tutoring, TutoringViewHolder> adapter;
     private DatabaseReference databaseReference;
     private String course_id;
+    private String currentUser;
 
 
     @Override
@@ -62,7 +67,9 @@ public class TutoringActivity extends AppCompatActivity {
         mRecyclerTutoring = (RecyclerView) findViewById(R.id.recycler_tutor);
         mRecyclerTutoring.setHasFixedSize(true);
         mRecyclerTutoring.setLayoutManager(new LinearLayoutManager(this));
+        currentUser = getIntent().getStringExtra("current_user"); // current user
         initRecycler();
+        initSwipeItemListener();
 
     }
 
@@ -102,6 +109,59 @@ public class TutoringActivity extends AppCompatActivity {
         };
 
         mRecyclerTutoring.setAdapter(adapter);
+    }
+
+
+    /**
+     * Initialize listener of item on swipe
+     */
+    private void initSwipeItemListener(){
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                final int position = viewHolder.getAdapterPosition();
+                String author = adapter.getItem(position).getAuthor().getEmail();
+                if(currentUser.equals(author)){ // checks if currentuser is the author of tutoring
+                    final DatabaseReference ref = adapter.getRef(position);
+                    new AlertDialog.Builder(TutoringActivity.this)
+                            .setMessage("Tu es sûr de ne plus vouloir être tuteur dans ce cours ?")
+                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ref.removeValue();
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(TutoringActivity.this,"Tutoring supprimé",Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    adapter.notifyItemChanged(position);
+                                }
+                            })
+                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialogInterface) {
+                                            adapter.notifyItemChanged(position);
+                                        }
+                                    })
+                                    .create().show();
+                }else {
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerTutoring);
+
     }
 
     public class TutoringViewHolder extends RecyclerView.ViewHolder {

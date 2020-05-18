@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.tutoresi.Model.Course;
+import com.example.tutoresi.Model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +27,7 @@ public class CourseActivity extends AppCompatActivity {
     private FirebaseRecyclerOptions<Course> options;
     private FirebaseRecyclerAdapter<Course, CourseViewHolder> adapter;
     private DatabaseReference databaseReference;
+    private String currentUser;
 
     @Override
     protected void onStart() {
@@ -55,6 +57,7 @@ public class CourseActivity extends AppCompatActivity {
         mRecyclerCourse = (RecyclerView) findViewById(R.id.recycler_course);
         mRecyclerCourse.setHasFixedSize(true);
         mRecyclerCourse.setLayoutManager(new LinearLayoutManager(this));
+        currentUser = getIntent().getStringExtra("current_user"); // current user
         initRecycler();
 
     }
@@ -84,6 +87,7 @@ public class CourseActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(),TutoringActivity.class);
                         intent.putExtra("course_id",holder.getmCourse().getText().toString());
+                        intent.putExtra("current_user",currentUser);
                         startActivity(intent);
                     }
                 });

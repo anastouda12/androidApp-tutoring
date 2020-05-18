@@ -47,7 +47,7 @@ public class ProfileTutorActivity extends AppCompatActivity {
         courseTutoring = getIntent().getStringExtra("course_id");
 
         mCourse.setText(courseTutoring);
-        mTutorName.setText("@"+getIntent().getStringExtra("tutor_name"));
+        mTutorName.setText(getIntent().getStringExtra("tutor_name"));
         mDescriptionTutoring.setText(getIntent().getStringExtra("description_tutoring"));
 
         mAuth.getProfileImageOfUser(new User(mTutorName.getText().toString(),mTutorEmail,mTutorPhone)).observe(this, new Observer<Uri>() {
