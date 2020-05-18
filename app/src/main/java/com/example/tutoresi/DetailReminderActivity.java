@@ -2,8 +2,14 @@ package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -42,6 +48,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         reminderViewModel = new ReminderViewModel();
         initDatePicker();
         initTimePicker();
+        createNotificationChannel();
 
         mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,8 +74,10 @@ public class DetailReminderActivity extends AppCompatActivity {
                     mTime.setError("Heure requise.");
                     return;
                 }
+                System.out.println(myCalendar.getTime());
                 reminderViewModel.addReminder(new Reminder(course,getDateTimeString(),location));
                 Toast.makeText(DetailReminderActivity.this,R.string.reminder_added,Toast.LENGTH_LONG).show();
+                setAlarm();
                 finish();
 
             }
@@ -84,8 +93,9 @@ public class DetailReminderActivity extends AppCompatActivity {
         time = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                myCalendar.set(Calendar.MINUTE,minute);
+                    myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    myCalendar.set(Calendar.MINUTE, minute);
+                    mTime.setText(hourOfDay+":"+minute); // update label time
             }
         };
 
@@ -96,14 +106,8 @@ public class DetailReminderActivity extends AppCompatActivity {
                 int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = myCalendar.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailReminderActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mTime.setText(hourOfDay+":"+minute);
-                    }
-                },hour,minute,true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailReminderActivity.this,time,hour,minute,true);
                 timePickerDialog.show();
-
             }
         });
     }
@@ -120,7 +124,10 @@ public class DetailReminderActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabelDate();
+                // Update label date
+                String myFormat = "dd/MM/yy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
+                mDate.setText(sdf.format(myCalendar.getTime()));
             }
 
         };
@@ -129,22 +136,36 @@ public class DetailReminderActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(DetailReminderActivity.this, date, myCalendar
+                DatePickerDialog dialog = new DatePickerDialog(DetailReminderActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                dialog.show();
             }
         });
 
     }
 
-    /**
-     * Update label date
-     */
-    private void updateLabelDate() {
-        String myFormat = "dd/MM/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
-        mDate.setText(sdf.format(myCalendar.getTime()));
+    private void createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "TutorESI Reminder channel";
+            String description = "Channel for TutorESI reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyTutorEsi",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
+
+    private void setAlarm(){
+        Intent intent = new Intent(DetailReminderActivity.this,ReminderBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(DetailReminderActivity.this,0, intent,0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,myCalendar.getTimeInMillis(),pendingIntent);
+    }
+
 
     /**
      * Get time format dd/MM/yy HH:mm in string

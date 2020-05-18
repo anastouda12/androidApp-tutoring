@@ -46,16 +46,8 @@
                 android:text="@string/find_tutoring" />
 
             <Button
-                android:id="@+id/btn_becomeTutor"
-                android:background="@color/colorBlue"
-                android:paddingLeft="10dp"
-                android:drawableLeft="@drawable/ic_action_tutoring"
-                style="@style/button_style"
-                android:text="@string/become_tutor" />
-
-            <Button
                 android:id="@+id/btn_reminder"
-                android:background="@color/colorYellow"
+                android:background="@color/colorBlue"
                 android:paddingLeft="10dp"
                 android:drawableLeft="@drawable/ic_action_reminder"
                 style="@style/button_style"

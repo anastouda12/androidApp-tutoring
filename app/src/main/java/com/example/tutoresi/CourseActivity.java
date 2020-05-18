@@ -15,12 +15,14 @@ import android.widget.TextView;
 import com.example.tutoresi.Model.Course;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CourseActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerCourse;
+    private FloatingActionButton mbtnAddCourse;
     private FirebaseRecyclerOptions<Course> options;
     private FirebaseRecyclerAdapter<Course, CourseViewHolder> adapter;
     private DatabaseReference databaseReference;
@@ -42,6 +44,14 @@ public class CourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
 
+        mbtnAddCourse = (FloatingActionButton) findViewById(R.id.btn_addCourse);
+        mbtnAddCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CourseActivity.this, BecomeTutorActivity.class);
+                startActivity(intent);
+            }
+        });
         mRecyclerCourse = (RecyclerView) findViewById(R.id.recycler_course);
         mRecyclerCourse.setHasFixedSize(true);
         mRecyclerCourse.setLayoutManager(new LinearLayoutManager(this));

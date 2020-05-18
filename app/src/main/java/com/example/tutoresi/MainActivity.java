@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut, mBtnBecomeTutor;
+    private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut;
     private ImageView mAvatarUser;
     private AuthViewModel mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -30,15 +30,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
+        if(mAuth.currentUser() == null){
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
         mBtnFindTutoring = (Button) findViewById(R.id.btn_findTutoring);
-        mBtnBecomeTutor = (Button) findViewById(R.id.btn_becomeTutor);
         mBtnMyAccount = (Button) findViewById(R.id.btn_myaccount);
         mBtnReminder = (Button) findViewById(R.id.btn_reminder);
         mBtnSignOut = (Button) findViewById(R.id.btn_signout);
-
         mAvatarUser = (ImageView) findViewById(R.id.user_avatar);
-        mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
 
         mBtnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,13 +69,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), CourseActivity.class));
-            }
-        });
-
-        mBtnBecomeTutor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), BecomeTutorActivity.class));
             }
         });
 

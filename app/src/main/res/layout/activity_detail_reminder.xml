@@ -19,6 +19,15 @@
         android:orientation="vertical">
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/reminder"
+            style="@style/textView_style"
+            android:textSize="30dp"
+            android:layout_marginBottom="50dp"/>
+
         <EditText
             style="@style/editText_style"
             android:hint="@string/Cours"
@@ -58,7 +67,7 @@
         <Button
             android:id="@+id/btn_reminder_register"
             style="@style/button_style"
-            android:text="@string/Add" />
-        
+            android:text="@string/Add"/>
+
     </LinearLayout>
 </RelativeLayout>

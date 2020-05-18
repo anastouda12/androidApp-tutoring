@@ -16,12 +16,14 @@ import android.widget.TextView;
 import com.example.tutoresi.Model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class TutoringActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerTutoring;
+    private FloatingActionButton mBtnRegisterTutor;
     private FirebaseRecyclerOptions<Tutoring> options;
     private FirebaseRecyclerAdapter<Tutoring, TutoringViewHolder> adapter;
     private DatabaseReference databaseReference;
@@ -47,6 +49,16 @@ public class TutoringActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tutoring);
 
         course_id = (String) getIntent().getStringExtra("course_id");
+        mBtnRegisterTutor = (FloatingActionButton) findViewById(R.id.btn_registerTutor);
+
+        mBtnRegisterTutor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TutoringActivity.this, RegisterTutorActivity.class);
+                intent.putExtra("course_id",course_id);
+                startActivity(intent);
+            }
+        });
         mRecyclerTutoring = (RecyclerView) findViewById(R.id.recycler_tutor);
         mRecyclerTutoring.setHasFixedSize(true);
         mRecyclerTutoring.setLayoutManager(new LinearLayoutManager(this));

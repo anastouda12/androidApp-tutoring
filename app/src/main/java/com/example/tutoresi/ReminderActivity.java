@@ -83,7 +83,7 @@ public class ReminderActivity extends AppCompatActivity {
 
                 holder.setBackgroundColorByPosition(position);
                 holder.setMCourse("Cours : " + model.getCourse());
-                holder.setMLocation("Lieu :"+model.getLocation());
+                holder.setMLocation("Lieu : "+model.getLocation());
                 holder.setMDate("Date : "+model.getDate());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
