@@ -17,28 +17,21 @@ import com.google.firebase.auth.FirebaseUser;
 public class AuthViewModel extends ViewModel {
 
     private UserRepository userRepository;
-    private LiveData<User> authenticatedUserLiveData;
 
     public AuthViewModel(){
         userRepository = new UserRepository();
-        authenticatedUserLiveData = new LiveData<User>() {
-            @Override
-            public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super User> observer) {
-                super.observe(owner, observer);
-            }
-        };
     }
 
-    public void register(String email, String password, String name, String phone){
-        authenticatedUserLiveData = userRepository.register(email,password,name,phone);
+    public MutableLiveData<Boolean> register(String email, String password, String name, String phone){
+       return userRepository.register(email,password,name,phone);
     }
 
-    public void login(String email, String password){
-        authenticatedUserLiveData = userRepository.login(email,password);
+    public MutableLiveData<Boolean> login(String email, String password){
+        return userRepository.login(email,password);
     }
 
-    public void signInWithGoogle(GoogleSignInAccount acct){
-        authenticatedUserLiveData = userRepository.loginWithGoogle(acct);
+    public MutableLiveData<Boolean> signInWithGoogle(GoogleSignInAccount acct){
+        return userRepository.loginWithGoogle(acct);
     }
 
     public void signOut(){
@@ -51,10 +44,6 @@ public class AuthViewModel extends ViewModel {
 
     public FirebaseUser getCurrentFirebaseUser(){
         return userRepository.getCurrentFirebaseUser();
-    }
-
-    public LiveData<User> getAuthenticatedUserLiveData() {
-        return authenticatedUserLiveData;
     }
 
     public void uploadImageProfileCurrentUser(Uri uri){

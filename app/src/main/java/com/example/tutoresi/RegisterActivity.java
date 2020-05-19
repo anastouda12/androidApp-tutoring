@@ -139,18 +139,22 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerNewUser(String email, String password, String name, String phone) {
         mProgressBar.setVisibility(View.VISIBLE);
-        authViewModel.register(email, password, name, phone);
-        authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
+        authViewModel.register(email, password, name, phone).observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(User user) {
-                // If an image is uploaded by the user we store in the db storage.
-                if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
-                    imageUploader();
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){ // register ok
+                    // If an image is uploaded by the user we store in the db storage.
+                    if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
+                        imageUploader();
+                    }
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    finish();
+                }else{ // register failed
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this,R.string.register_failed,Toast.LENGTH_LONG).show();
                 }
-                mProgressBar.setVisibility(View.GONE);
-                Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
-                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                finish();
             }
         });
     }

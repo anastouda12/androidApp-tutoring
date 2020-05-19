@@ -113,43 +113,40 @@ public class FirebaseSource {
     }
 
 
-    public MutableLiveData<User> login(String email, String password) {
-        final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Boolean> login(String email, String password) {
+        final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "signInWithEmail:success");
-                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    if (firebaseUser != null) {
-                        User user = new User(firebaseUser.getDisplayName(), firebaseUser.getEmail(), "");
-                        authenticatedUserMutableLiveData.setValue(user);
+                        authenticatedUserMutableLiveData.setValue(true);
                 } else {
                     Log.d(TAG, "signInWithEmail:failed");
-                }
+                        authenticatedUserMutableLiveData.setValue(false);
+                    }
             }
-        }});
+        });
         return  authenticatedUserMutableLiveData;
     }
 
-    public MutableLiveData<User> register(final String email, final String password, final String name, final String phone) {
-        final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Boolean> register(final String email, final String password, final String name, final String phone) {
+        final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "RegisterWithEmailPassword:success");
-                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    if (firebaseUser != null) {
                         User user = new User(name, email, phone);
-                        mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-                        authenticatedUserMutableLiveData.setValue(user);
-                    }
+                        mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user); // create user in DB
+                        authenticatedUserMutableLiveData.setValue(true);
+
                 } else {
                     Log.d(TAG, "RegisterWithEmailPassword:failed");
+                    authenticatedUserMutableLiveData.setValue(false);
                 }
-            }
-        });
+
+        }});
 
         return authenticatedUserMutableLiveData;
     }
@@ -181,23 +178,21 @@ public class FirebaseSource {
     }
 
 
-    public MutableLiveData<User> firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    public MutableLiveData<Boolean> firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        final MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
+        final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            if (firebaseUser != null) {
-                                createUser(); // optional
-                                authenticatedUserMutableLiveData.setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
-                            }
+                                createUserIfNotExistInDB(); // optional
+                                authenticatedUserMutableLiveData.setValue(true);
                         } else {
                             // sign in fails
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            authenticatedUserMutableLiveData.setValue(false);
                         }
 
                     }
@@ -208,7 +203,7 @@ public class FirebaseSource {
     /**
      * Create structure User of the currentUser connected if not exist (in the case of google sign in)
      */
-    private void createUser() {
+    private void createUserIfNotExistInDB() {
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
             ref.addValueEventListener(new ValueEventListener() {

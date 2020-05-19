@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tutoresi.Model.User;
 import com.example.tutoresi.Data.AuthViewModel;
@@ -32,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private static final String  TAG = "LOGIN_ACTIVITY";
     private AuthViewModel authViewModel;
-    private boolean isLog;
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -51,8 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
         mCreateAccount = (TextView) findViewById(R.id.create_account);
-        authViewModel = new AuthViewModel();
-
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -103,31 +102,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void regularLogIn(String email, String password){
+        mProgressBar.setVisibility(View.VISIBLE);
         Toast.makeText(LoginActivity.this,R.string.connexion_loading,Toast.LENGTH_LONG).show();
-        authViewModel.login(email,password);
-        authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
+        authViewModel.login(email,password).observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(User user) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                mProgressBar.setVisibility(View.GONE);
-                isLog = true;
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                finish();
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                    mProgressBar.setVisibility(View.GONE);
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
+                }else{
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
     private void signInWithGoogle(final GoogleSignInAccount acct){
         mProgressBar.setVisibility(View.VISIBLE);
-        authViewModel.signInWithGoogle(acct);
-        authViewModel.getAuthenticatedUserLiveData().observe(this, new Observer<User>() {
+        authViewModel.signInWithGoogle(acct).observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(User user) {
-                mProgressBar.setVisibility(View.GONE);
-                Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                finish();
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){ // Sign in ok
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this,R.string.login_success,Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
+                }else { // Sign in ko
+                    Toast.makeText(LoginActivity.this,R.string.login_failed,Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
