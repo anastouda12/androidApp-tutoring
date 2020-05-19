@@ -31,4 +31,12 @@ public class CourseRepository {
         return firebaseSource.checksAvailabilityTutoringCourse(course);
     }
 
+    public MutableLiveData<Boolean> courseHasTutors(String courseId){
+        return firebaseSource.courseHasTutors(courseId);
+    }
+
+    public void removeCourse(String courseId){
+        firebaseSource.removeCourse(courseId);
+    }
+
 }

@@ -3,6 +3,8 @@ package com.example.tutoresi;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -33,6 +36,7 @@ public class TutoringActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String course_id;
     private String currentUser;
+    private CourseViewModel courseViewModel;
 
 
     @Override
@@ -64,6 +68,7 @@ public class TutoringActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
         mRecyclerTutoring = (RecyclerView) findViewById(R.id.recycler_tutor);
         mRecyclerTutoring.setHasFixedSize(true);
         mRecyclerTutoring.setLayoutManager(new LinearLayoutManager(this));
@@ -138,6 +143,7 @@ public class TutoringActivity extends AppCompatActivity {
                                     ref.removeValue();
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(TutoringActivity.this,"Tutoring supprimé",Toast.LENGTH_LONG).show();
+                                    checksEmptyCourse();
                                 }
                             })
                             .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -162,6 +168,22 @@ public class TutoringActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerTutoring);
 
+    }
+
+    /**
+     * Checks if the course has a tutor yet, if not delete the course
+     */
+    private void checksEmptyCourse(){
+        courseViewModel.courseHasTutors(course_id).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(!aBoolean){
+                    // delete course no tutoring anymore
+                    courseViewModel.removeCourse(course_id);
+                    Toast.makeText(TutoringActivity.this,"Cours de tutoring "+course_id+" supprimé, plus aucun tuteur",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public class TutoringViewHolder extends RecyclerView.ViewHolder {

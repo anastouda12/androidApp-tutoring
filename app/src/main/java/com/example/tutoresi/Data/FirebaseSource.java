@@ -354,6 +354,32 @@ public class FirebaseSource {
         });
         return avail;
     }
+
+    public MutableLiveData<Boolean> courseHasTutors(String courseId){
+        DatabaseReference ref = mDB.child("courses").child(courseId);
+        final MutableLiveData<Boolean> hasChild = new MutableLiveData<>();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("tutors")){
+                    // has tutors
+                    hasChild.setValue(true);
+                }else{
+                    hasChild.setValue(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return hasChild;
+    }
+
+    public void removeCourse(String courseId){
+         mDB.child("courses").child(courseId).removeValue();
+    }
 }
 
 

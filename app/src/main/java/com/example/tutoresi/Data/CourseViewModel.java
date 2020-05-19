@@ -32,4 +32,12 @@ public class CourseViewModel extends ViewModel {
     public MutableLiveData<Boolean> checksAvailabilityCourseTutoring(Course course){
         return courseRepository.checksAvailabilityCourseTutoring(course);
     }
+
+    public  MutableLiveData<Boolean> courseHasTutors(String courseId){
+        return courseRepository.courseHasTutors(courseId);
+    }
+
+    public void removeCourse(String courseId){
+        courseRepository.removeCourse(courseId);
+    }
 }
