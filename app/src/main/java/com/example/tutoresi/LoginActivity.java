@@ -80,11 +80,11 @@ public class LoginActivity extends AppCompatActivity {
                 String password = mUserPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
-                    mUserEmail.setError("Email est requis.");
+                    mUserEmail.setError(getApplicationContext().getString(R.string.mailRequired));
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mUserPassword.setError("Le mots de passe est requis.");
+                    mUserPassword.setError(getApplicationContext().getString(R.string.passwordRequired));
                     return;
                 }
 

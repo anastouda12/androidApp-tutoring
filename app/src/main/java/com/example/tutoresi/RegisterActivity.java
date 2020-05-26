@@ -70,35 +70,35 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("Email est requis.");
+                    mEmail.setError(getApplicationContext().getString(R.string.mailRequired));
                     return;
                 }
                 if (TextUtils.isEmpty(name)) {
-                    mEmail.setError("Un nom est requis.");
+                    mEmail.setError(getApplicationContext().getString(R.string.nameRequired));
                     return;
                 }
                 if (TextUtils.isEmpty(phone)) {
-                    mEmail.setError("Un numéro de contact est requis.");
+                    mEmail.setError(getApplicationContext().getString(R.string.phoneRequired));
                     return;
                 }
                 if (phone.length() != 10) {
-                    mPhone.setError("Le numéro doit être composé de 10 chiffres");
+                    mPhone.setError(getApplicationContext().getString(R.string.phoneNoValid));
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    mPassword.setError("Le mots de passe est requis.");
+                    mPassword.setError(getApplicationContext().getString(R.string.passwordRequired));
                     return;
                 }
                 if (password.length() < 6) {
-                    mPassword.setError("Le mots de passe doit contenir au moins 6 caractères");
+                    mPassword.setError(getApplicationContext().getString(R.string.passwordPattern));
                     return;
                 }
                 if (!confirmPassword.equals(password)) {
-                    mConfirmPassword.setError("Mots de passe différent");
+                    mConfirmPassword.setError(getApplicationContext().getString(R.string.passwordNotSame));
                     return;
                 }
                 if (!email.matches(EMAIL_PATTERN)) {
-                    mEmail.setError("Adresse email non valide");
+                    mEmail.setError(getApplicationContext().getString(R.string.mailNoValid));
                     return;
                 }
 

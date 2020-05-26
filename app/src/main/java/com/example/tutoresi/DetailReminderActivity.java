@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -45,7 +46,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         mBtnAdd = (Button) findViewById(R.id.btn_reminder_register);
         mTime = (EditText) findViewById(R.id.input_reminder_time);
 
-        reminderViewModel = new ReminderViewModel();
+        reminderViewModel = new ViewModelProvider(this).get(ReminderViewModel.class);
         initDatePicker();
         initTimePicker();
         createNotificationChannel();
@@ -59,19 +60,19 @@ public class DetailReminderActivity extends AppCompatActivity {
                 String location = mLocation.getText().toString().trim();
 
                 if(TextUtils.isEmpty(course)){
-                    mCourse.setError("Cours requis");
+                    mCourse.setError(getApplicationContext().getString(R.string.reminderCourseRequired));
                     return;
                 }
                 if(TextUtils.isEmpty(date)){
-                    mDate.setError("Date requise.");
+                    mDate.setError(getApplicationContext().getString(R.string.reminderDateRequired));
                     return;
                 }
                 if(TextUtils.isEmpty(location)){
-                    mLocation.setError("Location requise.");
+                    mLocation.setError(getApplicationContext().getString(R.string.reminderLocationRequired));
                     return;
                 }
                 if(TextUtils.isEmpty(time)){
-                    mTime.setError("Heure requise.");
+                    mTime.setError(getApplicationContext().getString(R.string.remonderTimeRequired));
                     return;
                 }
                 System.out.println(myCalendar.getTime());
@@ -148,8 +149,8 @@ public class DetailReminderActivity extends AppCompatActivity {
 
     private void createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            CharSequence name = "TutorESI Reminder channel";
-            String description = "Channel for TutorESI reminder";
+            CharSequence name = "TutorESI Rappel canal";
+            String description = getApplicationContext().getString(R.string.channelNotificationReminder);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("notifyTutorEsi",name,importance);
             channel.setDescription(description);

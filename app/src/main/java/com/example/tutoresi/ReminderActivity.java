@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,14 +88,11 @@ public class ReminderActivity extends AppCompatActivity {
                 holder.setMLocation("Lieu : "+model.getLocation());
                 holder.setMDate("Date : "+model.getDate());
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
+/*                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Intent intent = new Intent(ReminderActivity.this,MainActivity.class);
-                        // intent.putExtra("course",model.getCourse()); on va donner en extra vers l'autre activité ici
-                        // startactivity ici
                     }
-                });
+                });*/
             }
 
             @NonNull
@@ -127,16 +123,16 @@ public class ReminderActivity extends AppCompatActivity {
                 final int position = viewHolder.getAdapterPosition();
                 final DatabaseReference ref = adapter.getRef(position);
                 new AlertDialog.Builder(ReminderActivity.this)
-                        .setMessage("Tu es sûr de vouloir supprimer ce rappel ?")
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                        .setMessage(getApplicationContext().getString(R.string.askDeleteReminder))
+                        .setPositiveButton(getApplicationContext().getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ref.removeValue();
                                 adapter.notifyDataSetChanged();
-                                Toast.makeText(ReminderActivity.this,"Rappel supprimé",Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReminderActivity.this,getApplicationContext().getString(R.string.reminderDeleted),Toast.LENGTH_LONG).show();
                             }
                         })
-                        .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getApplicationContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 adapter.notifyItemChanged(position);

@@ -48,6 +48,5 @@
             android:id="@+id/btn_registerTutor"
             style="@style/button_style"
             android:text="@string/register_msg" />
-
     </LinearLayout>
 </RelativeLayout>

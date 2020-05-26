@@ -141,17 +141,17 @@ public class TutoringActivity extends AppCompatActivity {
                 if(currentUser.equals(author)){ // checks if currentuser is the author of tutoring
                     final DatabaseReference ref = adapter.getRef(position);
                     new AlertDialog.Builder(TutoringActivity.this)
-                            .setMessage("Tu es sûr de ne plus vouloir être tuteur dans ce cours ?")
-                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            .setMessage(getApplicationContext().getString(R.string.confirmTutoring))
+                            .setPositiveButton(getApplicationContext().getText(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     ref.removeValue();
                                     adapter.notifyDataSetChanged();
-                                    Toast.makeText(TutoringActivity.this,"Tutoring supprimé",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(TutoringActivity.this,getApplicationContext().getString(R.string.tutoringDeleted),Toast.LENGTH_LONG).show();
                                     checksEmptyCourse();
                                 }
                             })
-                            .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getApplicationContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     adapter.notifyItemChanged(position);
@@ -185,7 +185,9 @@ public class TutoringActivity extends AppCompatActivity {
                 if(!aBoolean){
                     // delete course no tutoring anymore
                     courseViewModel.removeCourse(course_id);
-                    Toast.makeText(TutoringActivity.this,"Cours de tutoring "+course_id+" supprimé, plus aucun tuteur",Toast.LENGTH_LONG).show();
+                    Toast.makeText(TutoringActivity.this, getApplicationContext().getString(R.string.tutoringCourse)
+                            +" "+course_id
+                            +" "+getApplicationContext().getString(R.string.tutoringDeleted),Toast.LENGTH_LONG).show();
                 }
             }
         });

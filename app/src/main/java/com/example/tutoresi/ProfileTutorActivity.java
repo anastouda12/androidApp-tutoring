@@ -4,13 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
@@ -86,7 +83,7 @@ public class ProfileTutorActivity extends AppCompatActivity {
                 try {
                     startActivity(emailIntent);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getApplicationContext(), "Error to open email app", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.errorOpeningMail), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -110,6 +107,7 @@ public class ProfileTutorActivity extends AppCompatActivity {
                     if (nbAttempt < 4) {
                         mAuth.rateUser(mTutorEmail, new Rating(rating));
                         ++nbAttempt;
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingDone), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.spam), Toast.LENGTH_SHORT).show();
                     }

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,8 +38,8 @@ public class RegisterTutorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String description =  mDescriptionTutoring.getText().toString().trim();
-                if(TextUtils.isEmpty(description)){
-                    mDescriptionTutoring.setError("Une description de tutorat est requise.");
+                if (description.length() < 4 || description.length() > 30) {
+                    mDescriptionTutoring.setError(getResources().getString(R.string.description_tutoringRequired));
                     return;
                 }
                 registerTutoring(course_id,description);

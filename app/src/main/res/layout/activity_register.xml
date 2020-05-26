@@ -4,10 +4,9 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="50dp"
+    android:paddingBottom="35dp"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
-    android:paddingTop="30dp"
     android:background="@color/colorPrimary"
     tools:context=".RegisterActivity">
 
@@ -28,7 +27,7 @@
 
         <EditText
             style="@style/editText_style"
-            android:hint="Nom"
+            android:hint="@string/name"
             android:paddingLeft="10dp"
             android:id="@+id/input_name"
             android:drawableLeft="@drawable/ic_action_person"
@@ -36,7 +35,7 @@
 
         <EditText
             style="@style/editText_style"
-            android:hint="Email"
+            android:hint="@string/mail"
             android:id="@+id/input_email_register"
             android:drawableLeft="@drawable/ic_action_user"
             android:paddingLeft="10dp"
@@ -44,7 +43,7 @@
 
         <EditText
             style="@style/editText_style"
-            android:hint="Numéro de téléphone"
+            android:hint="@string/phone"
             android:id="@+id/input_phone"
             android:paddingLeft="10dp"
             android:drawableLeft="@drawable/ic_action_phone"
@@ -52,7 +51,7 @@
 
         <EditText
             android:id="@+id/input_password_register"
-            android:hint="Mots de passe"
+            android:hint="@string/password"
             android:paddingLeft="10dp"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
@@ -60,7 +59,7 @@
 
         <EditText
             android:id="@+id/input_confirmPassword"
-            android:hint="Confirmer le mots de passe"
+            android:hint="@string/confirmPassword"
             android:drawableLeft="@drawable/ic_action_password"
             android:paddingLeft="10dp"
             style="@style/editText_style"

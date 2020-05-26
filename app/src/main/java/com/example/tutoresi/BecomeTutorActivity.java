@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,30 +42,21 @@ public class BecomeTutorActivity extends AppCompatActivity {
                 String descriptionCourse = mDescriptionCourse.getText().toString().trim();
                 String descriptionTutoring = mDescriptionTutoring.getText().toString().trim();
 
-                if (TextUtils.isEmpty(courseTitle)) {
-                    mCourseTitle.setError("ID du cours requis.");
-                    return;
-                }
                 if (courseTitle.length() < 4 || courseTitle.length() > 6) {
-                    mCourseTitle.setError("L'ID du cours doit être composé entre 4 et 6 caracteres");
+                    mCourseTitle.setError(getResources().getString(R.string.course_idRequired));
                     return;
                 }
-                if (TextUtils.isEmpty(descriptionCourse)) {
-                    mDescriptionCourse.setError("Une description du cours est requise.");
-                    return;
-                }
-                if (TextUtils.isEmpty(descriptionTutoring)) {
-                    mDescriptionTutoring.setError("Une description de tutorat est requise.");
+                if (descriptionTutoring.length() < 4 || descriptionTutoring.length() > 30) {
+                    mDescriptionTutoring.setError(getResources().getString(R.string.description_tutoringRequired));
                     return;
                 }
 
-                if (descriptionTutoring.length() < 4 || descriptionTutoring.length() > 25) {
-                    mDescriptionTutoring.setError("Une description de tutorat est requise entre 4 est 25 caractères.");
+                if(descriptionCourse.length() < 4 || descriptionCourse.length() > 20 ){
+                    mDescriptionCourse.setError(getResources().getString(R.string.description_courseRequired));
                     return;
                 }
-
-                if (TextUtils.isEmpty(courseLibelle)) {
-                    mCourseLibelle.setError("Un libelle de cours est requis.");
+                if (courseLibelle.length() < 4 || courseLibelle.length() > 20) {
+                    mCourseLibelle.setError(getResources().getString(R.string.course_libelleRequired));
                     return;
                 }
                 addCourseTutoring(courseTitle,courseLibelle, descriptionCourse, descriptionTutoring);

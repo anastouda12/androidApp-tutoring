@@ -30,7 +30,7 @@
 
         <EditText
             style="@style/editText_style"
-            android:hint="Email"
+            android:hint="@string/mail"
             android:id="@+id/input_email_login"
             android:paddingLeft="10dp"
             android:drawableLeft="@drawable/ic_action_user"
@@ -38,7 +38,7 @@
 
         <EditText
             android:id="@+id/input_password_login"
-            android:hint="Mots de passe"
+            android:hint="@string/password"
             android:drawableLeft="@drawable/ic_action_password"
             style="@style/editText_style"
             android:paddingLeft="10dp"
