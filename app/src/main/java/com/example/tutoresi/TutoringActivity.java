@@ -15,11 +15,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutoresi.Data.CourseViewModel;
+import com.example.tutoresi.Data.UserViewModel;
+import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -37,6 +40,7 @@ public class TutoringActivity extends AppCompatActivity {
     private String course_id;
     private String currentUser;
     private CourseViewModel courseViewModel;
+    private UserViewModel userViewModel;
 
 
     @Override
@@ -69,6 +73,7 @@ public class TutoringActivity extends AppCompatActivity {
             }
         });
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mRecyclerTutoring = (RecyclerView) findViewById(R.id.recycler_tutor);
         mRecyclerTutoring.setHasFixedSize(true);
         mRecyclerTutoring.setLayoutManager(new LinearLayoutManager(this));
@@ -91,7 +96,7 @@ public class TutoringActivity extends AppCompatActivity {
 
                 holder.setBackgroundColorByPosition(position);
                 holder.setMName("Tuteur : "+model.getAuthor().getName());
-                holder.setMDescription("Description : "+model.getDescriptionTutoring());
+                getRating(model.getAuthor().getEmail(),holder.getmRatingBar());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -186,33 +191,45 @@ public class TutoringActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get rating of the user given and set the value of the ratingbar with it.
+     * @param userEmail
+     * @param ratingBar
+     */
+    private void getRating(String userEmail, final RatingBar ratingBar){
+        userViewModel.getRatingOfUser(userEmail).observe(this, new Observer<Rating>() {
+            @Override
+            public void onChanged(Rating rating) {
+                ratingBar.setRating(rating.getRate());
+            }
+        });
+    }
     public class TutoringViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mName, mDescription;
+        private TextView mName;
         private RelativeLayout mRelative;
+        private RatingBar mRatingBar;
 
         public TutoringViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mName = (TextView) itemView.findViewById(R.id.tutor_name);
-            mDescription = (TextView) itemView.findViewById(R.id.tutoring_description);
             mRelative = (RelativeLayout) itemView.findViewById(R.id.background_tutor);
+            mRatingBar = (RatingBar) itemView.findViewById(R.id.rating_bar);
+            mRatingBar.setFocusable(false);
         }
 
         public void setMName(String name) {
             this.mName.setText(name);
         }
 
-        public void setMDescription(String description) {
-            this.mDescription.setText(description);
-        }
 
         public TextView getmName() {
             return mName;
         }
 
-        public TextView getmDescription() {
-            return mDescription;
+        public RatingBar getmRatingBar() {
+            return mRatingBar;
         }
 
         /**

@@ -19,22 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.AuthViewModel;
+import com.example.tutoresi.Data.UserViewModel;
 import com.example.tutoresi.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URI;
-
 public class MyAccountActivity extends AppCompatActivity {
 
     private EditText mName, mEmail, mPhone;
     private ImageView mProfile;
     private Button mBtnSave;
-    private AuthViewModel mAuth;
+    private UserViewModel mAuth;
     private DatabaseReference mDatabase;
     private boolean imgHasChanged;
     private Uri uploadedImg;
@@ -52,7 +49,7 @@ public class MyAccountActivity extends AppCompatActivity {
         mEmail = (EditText) findViewById(R.id.input_email_myaccount);
         mProfile = (ImageView) findViewById(R.id.user_profile);
 
-        mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
+        mAuth = new ViewModelProvider(this).get(UserViewModel.class);
 
         mAuth.currentUser().observe(this, new Observer<User>() {
             @Override

@@ -1,24 +1,20 @@
 package com.example.tutoresi.Data;
 
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class AuthViewModel extends ViewModel {
+public class UserViewModel extends ViewModel {
 
     private UserRepository userRepository;
 
-    public AuthViewModel(){
+    public UserViewModel(){
         userRepository = new UserRepository();
     }
 
@@ -62,5 +58,12 @@ public class AuthViewModel extends ViewModel {
         userRepository.updateDataUser(name,phone);
     }
 
+    public void rateUser(String userEmail, Rating rate){
+        userRepository.rateUser(userEmail,rate);
+    }
+
+    public MutableLiveData<Rating> getRatingOfUser(String userEmail){
+        return userRepository.getRatingOfUser(userEmail);
+    }
 
 }

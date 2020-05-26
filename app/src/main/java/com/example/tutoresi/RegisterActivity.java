@@ -16,8 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Model.User;
-import com.example.tutoresi.Data.AuthViewModel;
+import com.example.tutoresi.Data.UserViewModel;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView mLoginText;
     private ProgressBar mProgressBar;
 
-    private AuthViewModel authViewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.register_progressBar);
         mPhoto = (CircleImageView) findViewById(R.id.user_avatar);
 
-        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mLoginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void imageUploader(){
-        authViewModel.uploadImageProfileCurrentUser(uploadedImg);
+        userViewModel.uploadImageProfileCurrentUser(uploadedImg);
     }
 
     @Override
@@ -139,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerNewUser(String email, String password, String name, String phone) {
         mProgressBar.setVisibility(View.VISIBLE);
-        authViewModel.register(email, password, name, phone).observe(this, new Observer<Boolean>() {
+        userViewModel.register(email, password, name, phone).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean){ // register ok

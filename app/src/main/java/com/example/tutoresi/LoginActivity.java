@@ -15,8 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tutoresi.Model.User;
-import com.example.tutoresi.Data.AuthViewModel;
+import com.example.tutoresi.Data.UserViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mBtnLogin;
     private ProgressBar mProgressBar;
     private static final String  TAG = "LOGIN_ACTIVITY";
-    private AuthViewModel authViewModel;
+    private UserViewModel userViewModel;
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -51,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
         mCreateAccount = (TextView) findViewById(R.id.create_account);
-        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
     private void regularLogIn(String email, String password){
         mProgressBar.setVisibility(View.VISIBLE);
         Toast.makeText(LoginActivity.this,R.string.connexion_loading,Toast.LENGTH_LONG).show();
-        authViewModel.login(email,password).observe(this, new Observer<Boolean>() {
+        userViewModel.login(email,password).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean){
@@ -122,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signInWithGoogle(final GoogleSignInAccount acct){
         mProgressBar.setVisibility(View.VISIBLE);
-        authViewModel.signInWithGoogle(acct).observe(this, new Observer<Boolean>() {
+        userViewModel.signInWithGoogle(acct).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean){ // Sign in ok

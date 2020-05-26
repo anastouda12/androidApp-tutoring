@@ -42,4 +42,6 @@
     <string name="nameRequired">Nom requis</string>
     <string name="phonoDigitError">Le numéro doit être composé de 10 chiffres</string>
     <string name="tutoringCreateSuccessfull">Tu as été inscris comme tuteur</string>
+    <string name="spam">Spam,\n notation non prise en compte !</string>
+    <string name="ratingOneself">Notation non prise en compte,\n on ne peut pas se noter soi même ;)</string>
 </resources>

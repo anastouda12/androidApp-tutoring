@@ -39,17 +39,23 @@
             android:textStyle="bold"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/tutoring_description"
-            android:layout_width="match_parent"
+
+
+        <RatingBar
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/rating_bar"
+            android:layout_marginLeft="70dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:isIndicator="true"
             android:layout_below="@+id/tutor_name"
-            android:text="@string/description_tutoring"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="10dp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="15dp" />
+            android:layout_gravity="center"
+            android:theme="@style/RatingBar"
+            android:numStars="5"
+            android:stepSize="0.5"/>
+
+
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -4,7 +4,7 @@
     android:id="@+id/activity_my_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="70dp"
+    android:paddingBottom="20dp"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
     android:background="@drawable/login_background"
@@ -40,16 +40,22 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="@string/name"
-            android:hint="Nom"
-            android:paddingLeft="10dp"
             android:id="@+id/tutor_name"
             android:gravity="center"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/colorBlue"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorWhite"
             android:textStyle="bold"
             android:textSize="20dp"
             android:inputType="text" />
 
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating_bar"
+            android:layout_gravity="center"
+            android:theme="@style/RatingBar"
+            android:numStars="5"
+            android:stepSize="0.5"/>
 
         <TextView
             style="@style/editText_style"

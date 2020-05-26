@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tutoresi.Model.Course;
+import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.Reminder;
 import com.example.tutoresi.Model.Tutoring;
 import com.example.tutoresi.Model.User;
@@ -106,6 +107,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,databaseError.getMessage());
 
             }
         });
@@ -166,7 +168,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
         return user;
@@ -217,6 +219,7 @@ public class FirebaseSource {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG,databaseError.getMessage());
                 }
             });
         }
@@ -239,7 +242,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
         return rem;
@@ -262,7 +265,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
         return rem;
@@ -296,7 +299,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
 
@@ -317,13 +320,13 @@ public class FirebaseSource {
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.d(TAG,databaseError.getMessage());
                     }
                 });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
     }
@@ -344,7 +347,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
         return avail;
@@ -366,7 +369,7 @@ public class FirebaseSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG,databaseError.getMessage());
             }
         });
         return hasChild;
@@ -374,6 +377,61 @@ public class FirebaseSource {
 
     public void removeCourse(String courseId){
          mDB.child("courses").child(courseId).removeValue();
+    }
+
+    public void rateUser(String userEmail, final Rating rate){
+            final DatabaseReference ref = mDB.child("users");
+            ref.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        final String key = dataSnapshot.getChildren().iterator().next().getKey();
+                        ref.child(key).child("ratings").child(mAuth.getCurrentUser().getUid()).setValue(rate);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, databaseError.getMessage());
+                }
+            });
+
+    }
+
+    public MutableLiveData<Rating> getRatingOfUser(String userEmail){
+        final MutableLiveData<Rating> rating = new MutableLiveData<>();
+        final DatabaseReference ref = mDB.child("users");
+        ref.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    final String key = dataSnapshot.getChildren().iterator().next().getKey();
+                    ref.child(key).child("ratings").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            float total = 0;
+                            int nbRatings = 0;
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                total += ds.getValue(Rating.class).getRate();
+                                nbRatings++;
+                            }
+                            rating.setValue(new Rating(total/nbRatings));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d(TAG,databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,databaseError.getMessage());
+            }
+        });
+        return rating;
     }
 }
 

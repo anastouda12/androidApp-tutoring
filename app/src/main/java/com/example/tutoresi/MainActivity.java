@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.tutoresi.Data.AuthViewModel;
+import com.example.tutoresi.Data.UserViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut;
     private ImageView mAvatarUser;
-    private AuthViewModel mAuth;
+    private UserViewModel mAuth;
     GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = new ViewModelProvider(this).get(AuthViewModel.class);
+        mAuth = new ViewModelProvider(this).get(UserViewModel.class);
         if(mAuth.getCurrentFirebaseUser() == null){
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();

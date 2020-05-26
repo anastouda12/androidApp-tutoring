@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,6 +58,14 @@ public class UserRepository {
 
     public void updateDataUser(String name, String phone){
         firebaseSource.updateDataUser(name,phone);
+    }
+
+    public void rateUser(String userEmail, Rating rate){
+        firebaseSource.rateUser(userEmail,rate);
+    }
+
+    public  MutableLiveData<Rating> getRatingOfUser(String userEmail){
+        return firebaseSource.getRatingOfUser(userEmail);
     }
 
 
