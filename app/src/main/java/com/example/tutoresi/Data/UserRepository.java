@@ -29,7 +29,7 @@ public class UserRepository {
      * @param name name
      * @param phone phone
      */
-    public MutableLiveData<Boolean> register(String email, String password, String name, String phone){
+    public MutableLiveData<Integer> register(String email, String password, String name, String phone){
         return firebaseSource.register(email, password,name, phone);
     }
 
@@ -46,14 +46,14 @@ public class UserRepository {
         firebaseSource.logout();
     }
 
-    public void uploadeImageProfileCurrentUser(Uri uri){firebaseSource.uploadProfilImageCurrentUser(uri);}
+    public void uploadProfileImageCurrentUser(Uri uri){firebaseSource.uploadProfileImageCurrentUser(uri);}
 
     public MutableLiveData<Uri> getProfileImageCurrentUser(){
         return firebaseSource.getAvatarProfileCurrentUser();
     }
 
-    public MutableLiveData<Uri> getProfileImageOfUser(User user){
-        return firebaseSource.getAvatarProfileOfUser(user);
+    public MutableLiveData<Uri> getProfileImageOfUser(String email){
+        return firebaseSource.getAvatarProfileOfUser(email);
     }
 
     public void updateDataUser(String name, String phone){
@@ -67,7 +67,6 @@ public class UserRepository {
     public  MutableLiveData<Rating> getRatingOfUser(String userEmail){
         return firebaseSource.getRatingOfUser(userEmail);
     }
-
 
     /**
      * Sign in with google account

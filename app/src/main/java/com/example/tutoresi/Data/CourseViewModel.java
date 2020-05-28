@@ -10,15 +10,9 @@ import java.util.List;
 public class CourseViewModel extends ViewModel {
 
     private CourseRepository courseRepository;
-    private MutableLiveData<List<Course>> mCourses;
 
     public CourseViewModel(){
         courseRepository = new CourseRepository();
-        mCourses = courseRepository.getMyCourses();
-    }
-
-    public MutableLiveData<List<Course>> getMyCourses() {
-        return courseRepository.getMyCourses();
     }
 
     public void addCourse(Course course){
@@ -27,10 +21,6 @@ public class CourseViewModel extends ViewModel {
 
     public void addTutoring(String courseId, String description){
         courseRepository.addTutoring(courseId, description);
-    }
-
-    public MutableLiveData<Boolean> checksAvailabilityCourseTutoring(Course course){
-        return courseRepository.checksAvailabilityCourseTutoring(course);
     }
 
     public  MutableLiveData<Boolean> courseHasTutors(String courseId){

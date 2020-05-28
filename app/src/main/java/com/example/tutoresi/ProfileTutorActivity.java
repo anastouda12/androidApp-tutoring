@@ -1,5 +1,6 @@
 package com.example.tutoresi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.tutoresi.Data.UserViewModel;
 import com.example.tutoresi.Model.Rating;
-import com.example.tutoresi.Model.User;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,12 +31,25 @@ public class ProfileTutorActivity extends AppCompatActivity {
     private RatingBar mRatingBar;
     private String courseTutoring;
     private int nbAttempt;
+    private final String KEY_NB_ATTEMPT = "attempt"; // when change orientation to save the number of attempt ratings
+    private boolean isUserProfile; // true si c'est le profile de l'user connecté
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_NB_ATTEMPT,nbAttempt);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_tutor);
-
+        if(savedInstanceState != null) { //null si on vient de démarrer l’activity
+            nbAttempt = savedInstanceState.getInt(KEY_NB_ATTEMPT);
+            System.out.println(nbAttempt);
+        }else{
+            nbAttempt = 0;
+        }
         mTutorName = (TextView) findViewById(R.id.tutor_name);
         mDescriptionTutoring = (TextView) findViewById(R.id.tutoring_description);
         mContactMail = (Button) findViewById(R.id.btn_mail_tutor);
@@ -51,11 +64,13 @@ public class ProfileTutorActivity extends AppCompatActivity {
         mTutorPhone = getIntent().getStringExtra("tutor_phone");
         courseTutoring = getIntent().getStringExtra("course_id");
 
+        isUserProfile = mAuth.getCurrentFirebaseUser().getEmail().equals(mTutorEmail);
+
         mCourse.setText(courseTutoring);
         mTutorName.setText(getIntent().getStringExtra("tutor_name"));
         mDescriptionTutoring.setText(getIntent().getStringExtra("description_tutoring"));
 
-        mAuth.getProfileImageOfUser(new User(mTutorName.getText().toString(), mTutorEmail, mTutorPhone)).observe(this, new Observer<Uri>() {
+        mAuth.getProfileImageOfUser(mTutorEmail).observe(this, new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
                 Picasso.get().load(uri).fit().centerCrop().into(mTutorAvatar);
@@ -95,18 +110,17 @@ public class ProfileTutorActivity extends AppCompatActivity {
             }
         });
 
-        nbAttempt = 0;
         mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 if (fromUser) {
-                    if(mAuth.getCurrentFirebaseUser().getEmail().equals(mTutorEmail)){
+                    if(isUserProfile){
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingOneself), Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (nbAttempt < 4) {
+                    if (nbAttempt < 2) {
                         mAuth.rateUser(mTutorEmail, new Rating(rating));
-                        ++nbAttempt;
+                        nbAttempt++;
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingDone), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.spam), Toast.LENGTH_SHORT).show();

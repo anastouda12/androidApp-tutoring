@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="addReminder_margin">16dp</dimen>
+    <dimen name="floatingBtn_margin">16dp</dimen>
+    <dimen name="paddingSides_landscape">100dp</dimen>
+    <dimen name="paddingSides_portrait">48dp</dimen>
 </resources>

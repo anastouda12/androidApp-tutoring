@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/addReminder_margin"
+        android:layout_margin="@dimen/floatingBtn_margin"
         android:clickable="true"
         android:src="@drawable/ic_action_reminder"
         app:layout_constraintRight_toRightOf="parent"

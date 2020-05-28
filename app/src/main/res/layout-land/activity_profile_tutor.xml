@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="20dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@drawable/login_background"
     tools:context=".ProfileTutorActivity">
     <LinearLayout
@@ -91,4 +90,4 @@
             android:text="@string/sendMail" />
 
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

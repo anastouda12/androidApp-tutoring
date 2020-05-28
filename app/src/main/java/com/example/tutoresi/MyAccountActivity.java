@@ -153,7 +153,7 @@ public class MyAccountActivity extends AppCompatActivity {
     }
 
     private void imageUploader(){
-        mAuth.uploadImageProfileCurrentUser(uploadedImg);
+        mAuth.uploadProfileImageCurrentUser(uploadedImg);
     }
 
 

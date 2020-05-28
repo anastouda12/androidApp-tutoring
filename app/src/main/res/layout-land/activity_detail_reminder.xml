@@ -1,11 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="100dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
-    android:paddingTop="100dp"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@color/colorPrimary"
     tools:context=".RegisterActivity">
 
@@ -24,7 +22,7 @@
             android:text="@string/reminder"
             style="@style/textView_style"
             android:textSize="30dp"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="20dp"/>
 
         <EditText
             style="@style/editText_style"
@@ -68,4 +66,4 @@
             android:text="@string/Add"/>
 
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

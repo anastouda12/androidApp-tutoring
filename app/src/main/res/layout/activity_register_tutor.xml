@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="50dp"
-    android:paddingLeft="48dp"
-    android:paddingRight="48dp"
+    android:paddingLeft="@dimen/paddingSides_portrait"
+    android:paddingRight="@dimen/paddingSides_portrait"
     android:paddingTop="30dp"
     android:background="@color/colorPrimary"
     tools:context=".RegisterTutorActivity">

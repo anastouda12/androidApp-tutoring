@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="50dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
-    android:paddingTop="30dp"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@color/colorPrimary"
     tools:context=".BecomeTutorActivity">
 
@@ -28,11 +26,11 @@
             android:layout_marginBottom="20dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@drawable/owl_tutor"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             style="@style/editText_style"
@@ -73,4 +71,4 @@
             style="@style/button_style"
             android:text="@string/Add" />
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

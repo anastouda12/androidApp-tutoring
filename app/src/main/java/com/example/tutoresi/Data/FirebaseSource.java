@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tutoresi.Config.ErrorsCode;
 import com.example.tutoresi.Model.Course;
 import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.Reminder;
@@ -19,6 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
@@ -30,8 +34,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class FirebaseSource {
 
@@ -39,6 +41,7 @@ public class FirebaseSource {
     private DatabaseReference mDB;
     private StorageReference mStore;
     private static final String TAG = "FIREBASE_SOURCE";
+
 
     public FirebaseSource() {
         mAuth = FirebaseAuth.getInstance();
@@ -50,7 +53,7 @@ public class FirebaseSource {
         return mAuth.getCurrentUser();
     }
 
-    public void uploadProfilImageCurrentUser(Uri uri){
+    public void uploadProfileImageCurrentUser(Uri uri){
         StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
         ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -82,10 +85,10 @@ public class FirebaseSource {
         return imageUri;
     }
 
-    public MutableLiveData<Uri> getAvatarProfileOfUser(final User user){
+    public MutableLiveData<Uri> getAvatarProfileOfUser(String email){
         final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
         DatabaseReference ref = mDB.child("users");
-        ref.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -108,7 +111,6 @@ public class FirebaseSource {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
-
             }
         });
         return imageUri;
@@ -132,8 +134,8 @@ public class FirebaseSource {
         return  authenticatedUserMutableLiveData;
     }
 
-    public MutableLiveData<Boolean> register(final String email, final String password, final String name, final String phone) {
-        final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Integer> register(final String email, final String password, final String name, final String phone) {
+        final MutableLiveData<Integer> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -141,15 +143,22 @@ public class FirebaseSource {
                     Log.d(TAG, "RegisterWithEmailPassword:success");
                         User user = new User(name, email, phone);
                         mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user); // create user in DB
-                        authenticatedUserMutableLiveData.setValue(true);
-
+                        authenticatedUserMutableLiveData.setValue(ErrorsCode.SUCCESS_REGISTER);
                 } else {
-                    Log.d(TAG, "RegisterWithEmailPassword:failed");
-                    authenticatedUserMutableLiveData.setValue(false);
+                    // sign in fails
+                    try {
+                        throw task.getException();
+                    } catch(FirebaseAuthWeakPasswordException e) {
+                        authenticatedUserMutableLiveData.setValue(ErrorsCode.ERROR_WEAK_PASSWORD);
+                    } catch(FirebaseAuthInvalidCredentialsException e) {
+                        authenticatedUserMutableLiveData.setValue(ErrorsCode.ERROR_INVALID_EMAIL);
+                    } catch(FirebaseAuthUserCollisionException e) {
+                        authenticatedUserMutableLiveData.setValue(ErrorsCode.ERROR_USER_EXISTS);
+                    } catch(Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
                 }
-
         }});
-
         return authenticatedUserMutableLiveData;
     }
 
@@ -226,52 +235,6 @@ public class FirebaseSource {
     }
 
     /**
-     * Get reminder of the current User connected
-     * @return
-     */
-    public MutableLiveData<List<Reminder>> getMyReminders(){
-        final MutableLiveData<List<Reminder>> rem = new MutableLiveData<>();
-        List<Reminder> list = new ArrayList<>();
-        rem.setValue(list);
-        DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
-        refReminders.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rem.getValue().add(dataSnapshot.getValue(Reminder.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,databaseError.getMessage());
-            }
-        });
-        return rem;
-    }
-
-    /**
-     * Get reminder of the current User connected
-     * @return
-     */
-    public MutableLiveData<List<Course>> getMyCourses(){
-        final MutableLiveData<List<Course>> rem = new MutableLiveData<>();
-        List<Course> list = new ArrayList<>();
-        rem.setValue(list);
-        DatabaseReference refCourses = mDB.child("courses");
-        refCourses.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rem.getValue().add(dataSnapshot.getValue(Course.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,databaseError.getMessage());
-            }
-        });
-        return rem;
-    }
-
-    /**
      * Add reminder to the currentUser
      * @param reminder
      */
@@ -329,28 +292,6 @@ public class FirebaseSource {
                 Log.d(TAG,databaseError.getMessage());
             }
         });
-    }
-
-    public MutableLiveData<Boolean> checksAvailabilityTutoringCourse(Course course){
-        final MutableLiveData<Boolean> avail = new MutableLiveData<>();
-        DatabaseReference ref = mDB.child("courses").child(course.getId()).child("tutoring");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    //no tutoring
-                    avail.setValue(false);
-                }else{
-                    avail.setValue(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,databaseError.getMessage());
-            }
-        });
-        return avail;
     }
 
     public MutableLiveData<Boolean> courseHasTutors(String courseId){

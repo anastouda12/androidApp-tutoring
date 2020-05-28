@@ -10,15 +10,9 @@ import java.util.List;
 public class ReminderViewModel extends ViewModel {
 
     private ReminderRepository reminderRepository;
-    private MutableLiveData<List<Reminder>> reminders;
 
     public ReminderViewModel(){
         reminderRepository = new ReminderRepository();
-        reminders = reminderRepository.getMyReminders();
-    }
-
-    public MutableLiveData<List<Reminder>> getReminders() {
-        return reminders;
     }
 
     public void addReminder(Reminder reminder){

@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="50dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
-    android:paddingTop="30dp"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@color/colorPrimary"
-    tools:context=".BecomeTutorActivity">
+    tools:context=".RegisterTutorActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
@@ -25,6 +22,7 @@
             android:text="@string/become_tutor"
             style="@style/textView_style"
             android:textSize="30dp"
+            android:id="@+id/course_title_tutoring"
             android:layout_marginBottom="20dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -34,30 +32,6 @@
             android:src="@drawable/owl_tutor"
             android:layout_marginBottom="50dp"/>
 
-        <EditText
-            style="@style/editText_style"
-            android:hint="@string/course_id"
-            android:paddingLeft="10dp"
-            android:id="@+id/input_course"
-            android:drawableLeft="@drawable/ic_action_key"
-            android:inputType="text" />
-
-        <EditText
-            style="@style/editText_style"
-            android:hint="@string/course_libelle"
-            android:paddingLeft="10dp"
-            android:id="@+id/input_libelle"
-            android:drawableLeft="@drawable/ic_action_course"
-            android:inputType="text" />
-
-        <EditText
-            style="@style/editText_style"
-            android:hint="@string/description_course"
-            android:id="@+id/input_description_course"
-            android:drawableLeft="@drawable/ic_action_course"
-            android:inputType="textMultiLine"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp" />
 
         <EditText
             style="@style/editText_style"
@@ -69,8 +43,8 @@
             android:drawableLeft="@drawable/ic_action_course" />
 
         <Button
-            android:id="@+id/btn_addCourse"
+            android:id="@+id/btn_registerTutor"
             style="@style/button_style"
-            android:text="@string/Add" />
+            android:text="@string/register_msg" />
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

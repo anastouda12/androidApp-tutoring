@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tutoresi.Config.ErrorsCode;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -124,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void imageUploader(){
-        userViewModel.uploadImageProfileCurrentUser(uploadedImg);
+        userViewModel.uploadProfileImageCurrentUser(uploadedImg);
     }
 
     @Override
@@ -138,21 +139,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerNewUser(String email, String password, String name, String phone) {
         mProgressBar.setVisibility(View.VISIBLE);
-        userViewModel.register(email, password, name, phone).observe(this, new Observer<Boolean>() {
+        userViewModel.register(email, password, name, phone).observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean){ // register ok
-                    // If an image is uploaded by the user we store in the db storage.
-                    if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
-                        imageUploader();
-                    }
-                    mProgressBar.setVisibility(View.GONE);
-                    Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                    finish();
-                }else{ // register failed
-                    mProgressBar.setVisibility(View.GONE);
-                    Toast.makeText(RegisterActivity.this,R.string.register_failed,Toast.LENGTH_LONG).show();
+            public void onChanged(Integer code) {
+                mProgressBar.setVisibility(View.GONE);
+                switch (code){
+                    case ErrorsCode.SUCCESS_REGISTER :
+                        // If an image is uploaded by the user we store in the db storage.
+                        if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
+                            imageUploader();
+                        }
+                        Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        finish();
+                        break;
+                    case ErrorsCode.ERROR_INVALID_EMAIL :
+                        Toast.makeText(RegisterActivity.this,R.string.register_failed_emailInvalid,Toast.LENGTH_LONG).show();
+                        break;
+                    case ErrorsCode.ERROR_WEAK_PASSWORD :
+                        Toast.makeText(RegisterActivity.this,R.string.register_failed_weakPassword,Toast.LENGTH_LONG).show();
+                        break;
+                    case ErrorsCode.ERROR_USER_EXISTS:
+                        Toast.makeText(RegisterActivity.this,R.string.register_failed_userAlreadyExists,Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(RegisterActivity.this,R.string.register_failed,Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="35dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@color/colorPrimary"
     tools:context=".RegisterActivity">
 
@@ -74,11 +73,11 @@
             style="@style/textView_style"
             android:text="@string/goToLogin_text" />
 
+        <ProgressBar
+            android:id="@+id/register_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_alignParentBottom="true"/>
     </LinearLayout>
-    <ProgressBar
-        android:id="@+id/register_progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_alignParentBottom="true"/>
-</RelativeLayout>
+</ScrollView>

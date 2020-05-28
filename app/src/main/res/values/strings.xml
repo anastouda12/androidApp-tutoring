@@ -19,6 +19,9 @@
     <string name="register_msg">S\'inscrire</string>
     <string name="register_success">Bienvenue !</string>
     <string name="register_failed">Erreur lors de la création du compte</string>
+    <string name="register_failed_userAlreadyExists">Erreur création du compte : Email déjà utilisé</string>
+    <string name="register_failed_weakPassword">Erreur création du compte : Mots de passe faible</string>
+    <string name="register_failed_emailInvalid">Erreur création du compte : Email invalide</string>
     <string name="menu">Tableau de bord</string>
     <string name="Cours">Cours</string>
     <string name="find_tutoring">Chercher un tuteur</string>

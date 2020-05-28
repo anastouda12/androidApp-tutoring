@@ -3,10 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="70dp"
-    android:paddingLeft="@dimen/paddingSides_portrait"
-    android:paddingRight="@dimen/paddingSides_portrait"
-    android:paddingTop="80dp"
+    android:paddingLeft="@dimen/paddingSides_landscape"
+    android:paddingRight="@dimen/paddingSides_landscape"
     android:background="@drawable/login_background"
     tools:context=".LoginActivity">
 
@@ -22,8 +20,8 @@
             android:id="@+id/textView2"
             style="@style/textView_style"
             android:textColor="@color/colorWhite"
-            android:textSize="40dp"
-            android:layout_marginBottom="33dp"
+            android:textSize="30dp"
+            android:layout_marginBottom="5dp"
             android:textStyle="bold"
             android:text="TutorESI" />
 
@@ -61,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"/>
+            android:layout_marginTop="8dp"/>
     </LinearLayout>
 
     <ProgressBar

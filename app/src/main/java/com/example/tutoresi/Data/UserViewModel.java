@@ -18,7 +18,7 @@ public class UserViewModel extends ViewModel {
         userRepository = new UserRepository();
     }
 
-    public MutableLiveData<Boolean> register(String email, String password, String name, String phone){
+    public MutableLiveData<Integer> register(String email, String password, String name, String phone){
        return userRepository.register(email,password,name,phone);
     }
 
@@ -42,16 +42,16 @@ public class UserViewModel extends ViewModel {
         return userRepository.getCurrentFirebaseUser();
     }
 
-    public void uploadImageProfileCurrentUser(Uri uri){
-         userRepository.uploadeImageProfileCurrentUser(uri);
+    public void uploadProfileImageCurrentUser(Uri uri){
+         userRepository.uploadProfileImageCurrentUser(uri);
     }
 
     public MutableLiveData<Uri> getProfileImageCurrentUser(){
         return userRepository.getProfileImageCurrentUser();
     }
 
-    public MutableLiveData<Uri> getProfileImageOfUser(User user){
-        return userRepository.getProfileImageOfUser(user);
+    public MutableLiveData<Uri> getProfileImageOfUser(String email){
+        return userRepository.getProfileImageOfUser(email);
     }
 
     public void updateDataUser(String name, String phone){
