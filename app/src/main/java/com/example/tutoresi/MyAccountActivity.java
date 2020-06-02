@@ -90,12 +90,7 @@ public class MyAccountActivity extends AppCompatActivity {
                     mPhone.setError(getResources().getString(R.string.phonoDigitError));
                     return;
                 }
-                if(imgHasChanged){
-                    imageUploader();
-                }
-                mAuth.updateDataUser(mName.getText().toString().trim(),mPhone.getText().toString().trim());
-                finish();
-                Toast.makeText(MyAccountActivity.this,R.string.infos_saved,Toast.LENGTH_LONG).show();
+                updateDataUser();
             }
         });
 
@@ -125,6 +120,9 @@ public class MyAccountActivity extends AppCompatActivity {
         }
 
 
+    /**
+     * Image chooser (CAMERA - GALERY)
+     */
     private void imageChooser(){
         final CharSequence[] options = { getResources().getString(R.string.takePhoto),
                 getResources().getString(R.string.chooseInGalerie),
@@ -152,8 +150,39 @@ public class MyAccountActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Upload the new image profile in DB.
+     */
     private void imageUploader(){
-        mAuth.uploadProfileImageCurrentUser(uploadedImg);
+        mAuth.uploadProfileImageCurrentUser(uploadedImg).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean) {
+                    Toast.makeText(MyAccountActivity.this, R.string.infos_saved, Toast.LENGTH_LONG).show();
+                    finish();
+                }else{
+                    Toast.makeText(MyAccountActivity.this, R.string.uploadAvatarFailed, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Update the data of the user with the new (Phone, name, image profile)
+     */
+    private void updateDataUser(){
+        mAuth.updateDataUser(mName.getText().toString().trim(),mPhone.getText().toString().trim()).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    if(imgHasChanged) {
+                        imageUploader();
+                    }
+                }else{
+                    Toast.makeText(MyAccountActivity.this, R.string.updateInfosFailed, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 

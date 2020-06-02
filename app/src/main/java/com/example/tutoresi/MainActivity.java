@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
         mBtnSignOut = (Button) findViewById(R.id.btn_signout);
         mAvatarUser = (ImageView) findViewById(R.id.user_avatar);
 
+        mAuth.getProfileImageCurrentUser().observe(this, new Observer<Uri>() {
+            @Override
+            public void onChanged(Uri uri) {
+                Picasso.get().invalidate(uri);
+                Picasso.get().load(uri).memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE).fit().centerCrop().into(mAvatarUser);
+            }
+        });
         mBtnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

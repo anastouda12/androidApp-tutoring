@@ -1,11 +1,8 @@
 package com.example.tutoresi.Data;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.tutoresi.Model.Course;
-
-import java.util.List;
 
 public class CourseViewModel extends ViewModel {
 
@@ -15,19 +12,19 @@ public class CourseViewModel extends ViewModel {
         courseRepository = new CourseRepository();
     }
 
-    public void addCourse(Course course){
-        courseRepository.addCourse(course);
+    public LiveData<Integer> addCourse(Course course){
+        return courseRepository.addCourse(course);
     }
 
-    public void addTutoring(String courseId, String description){
-        courseRepository.addTutoring(courseId, description);
+    public LiveData<Boolean> addTutoring(String courseId, String description){
+        return courseRepository.addTutoring(courseId, description);
     }
 
-    public  MutableLiveData<Boolean> courseHasTutors(String courseId){
+    public  LiveData<Boolean> courseHasTutors(String courseId){
         return courseRepository.courseHasTutors(courseId);
     }
 
-    public void removeCourse(String courseId){
-        courseRepository.removeCourse(courseId);
+    public LiveData<Boolean> removeCourse(String courseId){
+        return courseRepository.removeCourse(courseId);
     }
 }

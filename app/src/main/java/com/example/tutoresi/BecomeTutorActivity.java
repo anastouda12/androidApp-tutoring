@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tutoresi.Config.ErrorsCode;
 import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Course;
 
@@ -65,10 +67,35 @@ public class BecomeTutorActivity extends AppCompatActivity {
     }
 
     private void addCourseTutoring(String courseTitle,String libelle, String descCourse, String descTutoring){
-        Course course = new Course(courseTitle,libelle, descCourse);
-        courseViewModel.addCourse(course); // If the course dont exist already
-        courseViewModel.addTutoring(course.getId(),descTutoring);
-        Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)+" dans "+course.getId(),Toast.LENGTH_LONG).show();
+        final Course course = new Course(courseTitle,libelle, descCourse);
+        courseViewModel.addCourse(course).observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(integer == ErrorsCode.COURSEADDED_SUCCES){
+                    Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.courseAddedSucces)
+                            ,Toast.LENGTH_SHORT).show();
+                }else if(integer == ErrorsCode.COURSE_ALREADYEXIST){
+                    Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.courseAlreadyExist)
+                            ,Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.courseAddedFailed)
+                            ,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        courseViewModel.addTutoring(course.getId(),descTutoring).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)
+                            +" dans "+course.getId(),Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(BecomeTutorActivity.this,getApplicationContext().getString(R.string.tutoringCreateFailed)
+                            +" dans "+course.getId(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         finish();
     }
 }

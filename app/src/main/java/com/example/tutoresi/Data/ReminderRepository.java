@@ -14,7 +14,7 @@ public class ReminderRepository {
         firebaseSource = new FirebaseSource();
     }
 
-    public void addReminder(Reminder reminder){
-        firebaseSource.addReminder(reminder);
+    public MutableLiveData<Boolean> addReminder(Reminder reminder){
+        return firebaseSource.addReminder(reminder);
     }
 }

@@ -66,19 +66,22 @@ public class FirebaseSource {
      * Store the profile image of the currentuser connected in the application
      * @param uri the uri of the image to store.
      */
-    public void uploadProfileImageCurrentUser(Uri uri){
+    public MutableLiveData<Boolean> uploadProfileImageCurrentUser(Uri uri){
+        final MutableLiveData<Boolean> wasUpload = new MutableLiveData<>();
         StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
         ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                // Uri downloadUrl = taskSnapshot.getUploadSessionUri(); url of the upload content
+                wasUpload.setValue(true);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                // handle failure here
+                wasUpload.setValue(false);
             }
         });
+        return  wasUpload;
     }
 
     /**
@@ -236,7 +239,8 @@ public class FirebaseSource {
      * @param name name to modify
      * @param phone phone to modify
      */
-    public void updateDataUser(final String name, final String phone){
+    public MutableLiveData<Boolean> updateDataUser(final String name, final String phone){
+        final MutableLiveData<Boolean> wasUpdate = new MutableLiveData<>();
         final DatabaseReference refUser = mDB.child("users").child(mAuth.getCurrentUser().getUid());
         refUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -244,14 +248,19 @@ public class FirebaseSource {
                 if(dataSnapshot.exists()) {
                     refUser.child("name").setValue(name);
                     refUser.child("phone").setValue(phone);
+                    wasUpdate.setValue(true);
+                }else{
+                    wasUpdate.setValue(false);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
+                wasUpdate.setValue(false);
             }
         });
+        return wasUpdate;
     }
 
 
@@ -287,13 +296,13 @@ public class FirebaseSource {
      */
     private void createUserIfNotExistInDB() {
         if (mAuth.getCurrentUser() != null) {
-            DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
+            final DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){
                         // not exit yet
-                       mDB.child("users").child(mAuth.getCurrentUser().getUid()).setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
+                       ref.setValue(new User(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail(), ""));
                     }
                 }
 
@@ -309,44 +318,54 @@ public class FirebaseSource {
      * Add reminder to the currentUser
      * @param reminder reminder to add
      */
-    public void addReminder(final Reminder reminder){
+    public MutableLiveData<Boolean> addReminder(final Reminder reminder){
+        final MutableLiveData<Boolean> wasAdded = new MutableLiveData<>();
         final DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
         refReminders.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 refReminders.push().setValue(reminder);
+                wasAdded.setValue(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
+                wasAdded.setValue(false);
             }
         });
+        return wasAdded;
     }
 
     /**
      * Add new course of tutoring
      * @param course course of tutoring
+     * @return Code representing the succes or fail of the action
+     * (CODE 1 = Course added successful, CODE -4 = Course already exist, CODE -5 = course addition fail.
      */
-    public void addCourse(final Course course){
-        DatabaseReference refCourses = mDB.child("courses").child(course.getId());
+    public MutableLiveData<Integer> addCourse(final Course course){
+        final MutableLiveData<Integer> wasAdded = new MutableLiveData<>();
+        final DatabaseReference refCourses = mDB.child("courses").child(course.getId());
         refCourses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     // not exist yet
-                    mDB.child("courses").child(course.getId()).setValue(course);
-                }
-                    //else
+                    refCourses.setValue(course);
+                    wasAdded.setValue(ErrorsCode.COURSEADDED_SUCCES);
+                }else{
                     // course already exist
+                    wasAdded.setValue(ErrorsCode.COURSE_ALREADYEXIST);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
+                wasAdded.setValue(ErrorsCode.COURSEADD_FAIL);
             }
         });
-
+        return wasAdded;
     }
 
     /**
@@ -354,7 +373,8 @@ public class FirebaseSource {
      * @param courseId course to register inside the tutoring
      * @param descriptionTutoring description of the tutoring.
      */
-    public void addTutoring(final String courseId, final String descriptionTutoring){
+    public MutableLiveData<Boolean> addTutoring(final String courseId, final String descriptionTutoring){
+        final MutableLiveData<Boolean> wasAdded = new MutableLiveData<>();
         final DatabaseReference refCourses = mDB.child("courses").child(courseId).child("tutoring").child(mAuth.getCurrentUser().getUid());
         refCourses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -371,19 +391,23 @@ public class FirebaseSource {
                                                     dataSnapshot.child("email").getValue().toString(),
                                                     dataSnapshot.child("phone").getValue().toString())
                                             , descriptionTutoring));
+                            wasAdded.setValue(true);
                         }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.d(TAG,databaseError.getMessage());
+                        wasAdded.setValue(false);
                     }
                 });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
+                wasAdded.setValue(false);
             }
         });
+        return wasAdded;
     }
 
     /**
@@ -416,22 +440,30 @@ public class FirebaseSource {
     /**
      * Remove a course.
      * @param courseId course to remove.
+     * @return true if removed
      */
-    public void removeCourse(String courseId){
+    public MutableLiveData<Boolean> removeCourse(String courseId){
+        final MutableLiveData<Boolean> wasRemoved = new MutableLiveData<>();
         final DatabaseReference ref = mDB.child("courses").child(courseId);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     ref.removeValue();
+                    wasRemoved.setValue(true);
+                }else {
+                    wasRemoved.setValue(false);
                 }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, databaseError.getMessage());
+                wasRemoved.setValue(false);
             }
         });
+        return wasRemoved;
     }
 
     /**
@@ -439,7 +471,8 @@ public class FirebaseSource {
      * @param userEmail user to rate
      * @param rate rate
      */
-    public void rateUser(String userEmail, final Rating rate){
+    public MutableLiveData<Boolean> rateUser(String userEmail, final Rating rate){
+        final MutableLiveData<Boolean> wasRate = new MutableLiveData<>();
             final DatabaseReference ref = mDB.child("users");
             ref.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -447,15 +480,19 @@ public class FirebaseSource {
                     if (dataSnapshot.exists()) {
                         final String key = dataSnapshot.getChildren().iterator().next().getKey();
                         ref.child(key).child("ratings").child(mAuth.getCurrentUser().getUid()).setValue(rate);
+                        wasRate.setValue(true);
+                    }else{
+                        wasRate.setValue(false);
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.d(TAG, databaseError.getMessage());
+                    wasRate.setValue(false);
                 }
             });
-
+        return wasRate;
     }
 
     /**

@@ -14,20 +14,20 @@ public class CourseRepository {
         firebaseSource = new FirebaseSource();
     }
 
-    public void addCourse(Course course){
-        firebaseSource.addCourse(course);
+    public MutableLiveData<Integer> addCourse(Course course){
+        return firebaseSource.addCourse(course);
     }
 
-    public void addTutoring(String courseId, String description){
-        firebaseSource.addTutoring(courseId,description);
+    public MutableLiveData<Boolean> addTutoring(String courseId, String description){
+        return firebaseSource.addTutoring(courseId,description);
     }
 
     public MutableLiveData<Boolean> courseHasTutors(String courseId){
         return firebaseSource.courseHasTutors(courseId);
     }
 
-    public void removeCourse(String courseId){
-        firebaseSource.removeCourse(courseId);
+    public MutableLiveData<Boolean> removeCourse(String courseId){
+        return firebaseSource.removeCourse(courseId);
     }
 
 }

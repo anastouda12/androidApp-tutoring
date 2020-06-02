@@ -119,12 +119,28 @@ public class ProfileTutorActivity extends AppCompatActivity {
                         return;
                     }
                     if (nbAttempt < 2) {
-                        mAuth.rateUser(mTutorEmail, new Rating(rating));
-                        nbAttempt++;
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingDone), Toast.LENGTH_SHORT).show();
+                        rateUser(rating);
                     } else {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.spam), Toast.LENGTH_SHORT).show();
                     }
+                }
+            }
+        });
+    }
+
+    /**
+     * Rate the user profile
+     * @param rating the rating.
+     */
+    private void rateUser(Float rating){
+        mAuth.rateUser(mTutorEmail, new Rating(rating)).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    nbAttempt++;
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingDone), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.ratingFailed), Toast.LENGTH_SHORT).show();
                 }
             }
         });

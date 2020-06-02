@@ -37,10 +37,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // Configure Google Sign In
-    GoogleSignInOptions gso;
-    SignInButton signInButton;
-    GoogleSignInClient mGoogleSignInClient;
-    int RC_SIGN_IN = 1;
+    private GoogleSignInOptions gso;
+    private SignInButton signInButton;
+    private GoogleSignInClient mGoogleSignInClient;
+    private int RC_SIGN_IN = 1;
 
 
     @Override

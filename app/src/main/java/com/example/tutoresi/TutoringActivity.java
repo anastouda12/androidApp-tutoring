@@ -188,11 +188,27 @@ public class TutoringActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if(!aBoolean){
                     // delete course no tutoring anymore
-                    courseViewModel.removeCourse(course_id);
+                    removeCourse();
+                    finish();
+                }
+            }
+        });
+    }
+
+    /**
+     * Remove the course from the DB.
+     */
+    private void removeCourse(){
+        courseViewModel.removeCourse(course_id).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
                     Toast.makeText(TutoringActivity.this, getApplicationContext().getString(R.string.tutoringCourse)
                             +" "+course_id
                             +" "+getApplicationContext().getString(R.string.deleted),Toast.LENGTH_LONG).show();
-                    finish();
+                }else{
+                    Toast.makeText(TutoringActivity.this, getApplicationContext().getString(R.string.deletedFailed)
+                            +" "+course_id,Toast.LENGTH_LONG).show();
                 }
             }
         });

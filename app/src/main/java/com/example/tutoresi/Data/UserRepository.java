@@ -46,7 +46,7 @@ public class UserRepository {
         firebaseSource.logout();
     }
 
-    public void uploadProfileImageCurrentUser(Uri uri){firebaseSource.uploadProfileImageCurrentUser(uri);}
+    public MutableLiveData<Boolean> uploadProfileImageCurrentUser(Uri uri){return firebaseSource.uploadProfileImageCurrentUser(uri);}
 
     public MutableLiveData<Uri> getProfileImageCurrentUser(){
         return firebaseSource.getAvatarProfileCurrentUser();
@@ -56,12 +56,12 @@ public class UserRepository {
         return firebaseSource.getAvatarProfileOfUser(email);
     }
 
-    public void updateDataUser(String name, String phone){
-        firebaseSource.updateDataUser(name,phone);
+    public MutableLiveData<Boolean> updateDataUser(String name, String phone){
+        return firebaseSource.updateDataUser(name,phone);
     }
 
-    public void rateUser(String userEmail, Rating rate){
-        firebaseSource.rateUser(userEmail,rate);
+    public MutableLiveData<Boolean> rateUser(String userEmail, Rating rate){
+        return firebaseSource.rateUser(userEmail,rate);
     }
 
     public  MutableLiveData<Rating> getRatingOfUser(String userEmail){

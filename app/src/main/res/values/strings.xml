@@ -35,6 +35,8 @@
     <string name="Add">Ajouter</string>
     <string name="Save">Sauvegarder</string>
     <string name="infos_saved">Informations du compte sauvegardées</string>
+    <string name="updateInfosFailed">Le changement d•\' informations du compte à échouer</string>
+    <string name="uploadAvatarFailed">Le changement de photo de profile à échouer</string>
     <string name="reminder_added">Rappel ajouté avec succés</string>
     <string name="user_undefined">Informations utilisateur inaccesibles</string>
     <string name="connexion_loading">Connexion...</string>
@@ -63,13 +65,16 @@
     <string name="nameRequired">Nom requis</string>
     <string name="phonoDigitError">Le numéro doit être composé de 10 chiffres</string>
     <string name="tutoringCreateSuccessfull">Tu as été inscris comme tuteur</string>
+    <string name="tutoringCreateFailed">Ton inscription en tant que tuteur a échoué</string>
     <string name="spam">Spam,\n note non prise en compte !</string>
     <string name="ratingOneself">Note non prise en compte,\n on ne peut pas se noter soi même ;)</string>
     <string name="ratingDone">Note prise en compte</string>
+    <string name="ratingFailed">La note a échouer</string>
     <string name="errorOpeningMail">Erreur lors de l\'ouverture de l\'application mail</string>
     <string name="confirmTutoring">Tu es sûr de ne plus vouloir être tuteur dans ce cours ?</string>
     <string name="tutoringDeleted">Tutoring supprimé</string>
     <string name="deleted">supprimé</string>
+    <string name="deletedFailed">La suppression a échoué</string>
     <string name="reminderDeleted">Rappel supprimé</string>
     <string name="tutoringCourse">Cours de tutoring</string>
     <string name="noTutoorCourseDeleted">supprimé, plus aucun tuteur</string>
@@ -81,4 +86,7 @@
     <string name="channelNotificationReminder">Canal TutorESI Rappel</string>
     <string name="noConnectionInternetTitle">Pas de connexion internet</string>
     <string name="noConnectionInternetMsg">Veuillez vérifier votre connexion internet et réessayer</string>
+    <string name="courseAddedSucces">Le cours de tutorat a été crée</string>
+    <string name="courseAlreadyExist">Le cours existe déjà</string>
+    <string name="courseAddedFailed">La création du cours a échouer</string>
 </resources>

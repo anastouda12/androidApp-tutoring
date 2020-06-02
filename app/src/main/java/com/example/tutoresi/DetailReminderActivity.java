@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlarmManager;
@@ -77,10 +78,26 @@ public class DetailReminderActivity extends AppCompatActivity {
                 }
                 System.out.println(myCalendar.getTime());
                 reminderViewModel.addReminder(new Reminder(course,getDateTimeString(),location));
-                Toast.makeText(DetailReminderActivity.this,R.string.reminder_added,Toast.LENGTH_LONG).show();
-                setAlarm();
-                finish();
+                registerReminder(course,location);
+            }
+        });
 
+    }
+
+    /**
+     * Register the reminder in DB
+     * @param course course title
+     * @param location location title
+     */
+    private void registerReminder(String course, String location){
+        reminderViewModel.addReminder(new Reminder(course,getDateTimeString(),location)).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(DetailReminderActivity.this,R.string.reminder_added,Toast.LENGTH_LONG).show();
+                    setAlarm();
+                    finish();
+                }
             }
         });
 

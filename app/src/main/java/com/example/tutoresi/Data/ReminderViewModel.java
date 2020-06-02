@@ -1,11 +1,9 @@
 package com.example.tutoresi.Data;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.tutoresi.Model.Reminder;
-
-import java.util.List;
 
 public class ReminderViewModel extends ViewModel {
 
@@ -15,7 +13,7 @@ public class ReminderViewModel extends ViewModel {
         reminderRepository = new ReminderRepository();
     }
 
-    public void addReminder(Reminder reminder){
-        reminderRepository.addReminder(reminder);
+    public LiveData<Boolean> addReminder(Reminder reminder){
+        return reminderRepository.addReminder(reminder);
     }
 }
