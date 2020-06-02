@@ -46,16 +46,16 @@ public class BecomeTutorActivity extends AppCompatActivity {
                     mCourseTitle.setError(getResources().getString(R.string.course_idRequired));
                     return;
                 }
-                if (descriptionTutoring.length() < 4 || descriptionTutoring.length() > 30) {
+                if (descriptionTutoring.length() < 4 || descriptionTutoring.length() > 100) {
                     mDescriptionTutoring.setError(getResources().getString(R.string.description_tutoringRequired));
                     return;
                 }
 
-                if(descriptionCourse.length() < 4 || descriptionCourse.length() > 20 ){
+                if(descriptionCourse.length() < 4 || descriptionCourse.length() > 30 ){
                     mDescriptionCourse.setError(getResources().getString(R.string.description_courseRequired));
                     return;
                 }
-                if (courseLibelle.length() < 4 || courseLibelle.length() > 20) {
+                if (courseLibelle.length() < 4 || courseLibelle.length() > 25) {
                     mCourseLibelle.setError(getResources().getString(R.string.course_libelleRequired));
                     return;
                 }

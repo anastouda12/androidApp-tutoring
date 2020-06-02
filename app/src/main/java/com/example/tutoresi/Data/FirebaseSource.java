@@ -34,7 +34,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
+/**
+ * Firebase Source
+ * Manages the data with the Database
+ */
 public class FirebaseSource {
 
     private FirebaseAuth mAuth;
@@ -42,17 +45,27 @@ public class FirebaseSource {
     private StorageReference mStore;
     private static final String TAG = "FIREBASE_SOURCE";
 
-
+    /**
+     * Constructor of FirebaseSource
+     */
     public FirebaseSource() {
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseStorage.getInstance().getReference("Images");
         mDB = FirebaseDatabase.getInstance().getReference();
     }
 
+    /**
+     * Get the current firebaseUser connected in the application.
+     * @return FirebaseUser connected
+     */
     public FirebaseUser getCurrentFirebaseUser(){
         return mAuth.getCurrentUser();
     }
 
+    /**
+     * Store the profile image of the currentuser connected in the application
+     * @param uri the uri of the image to store.
+     */
     public void uploadProfileImageCurrentUser(Uri uri){
         StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
         ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -68,6 +81,10 @@ public class FirebaseSource {
         });
     }
 
+    /**
+     * Get the avatarProfile of the currentuser connected
+     * @return the URI of the image.
+     */
     public MutableLiveData<Uri> getAvatarProfileCurrentUser(){
         final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
         StorageReference ref = mStore.child(mAuth.getCurrentUser().getUid()).child("profileImage");
@@ -85,10 +102,15 @@ public class FirebaseSource {
         return imageUri;
     }
 
+    /**
+     * Get the avatarProfile of the specified email user.
+     * @param email the email of the user we want the avatar.
+     * @return the URI of the image.
+     */
     public MutableLiveData<Uri> getAvatarProfileOfUser(String email){
         final MutableLiveData<Uri> imageUri = new MutableLiveData<>();
         DatabaseReference ref = mDB.child("users");
-        ref.orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -117,6 +139,12 @@ public class FirebaseSource {
     }
 
 
+    /**
+     * Login an user with email and password.
+     * @param email email
+     * @param password password
+     * @return true if connected successful
+     */
     public MutableLiveData<Boolean> login(String email, String password) {
         final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -134,6 +162,15 @@ public class FirebaseSource {
         return  authenticatedUserMutableLiveData;
     }
 
+    /**
+     * Register an user in the application
+     * @param email email
+     * @param password password
+     * @param name name
+     * @param phone phone
+     * @return code representing the result of the registering
+     * ( CODE 0 : SUCCESS, CODE - 1 : WEAK PASSWORD, CODE -2 : INVALID MAIL, CODE -3 : USERALREADY EXiST)
+     */
     public MutableLiveData<Integer> register(final String email, final String password, final String name, final String phone) {
         final MutableLiveData<Integer> authenticatedUserMutableLiveData = new MutableLiveData<>();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -162,17 +199,28 @@ public class FirebaseSource {
         return authenticatedUserMutableLiveData;
     }
 
+    /**
+     * Logout
+     */
     public void logout() {
             mAuth.signOut();
     }
 
+    /**
+     * Get the current user on object User(Name,Email,Phone)
+     * @return object User with informations of user connected
+     */
     public MutableLiveData<User> currentUser() {
         final MutableLiveData<User> user = new MutableLiveData<>();
         DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user.setValue(new User(dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("email").getValue().toString(),dataSnapshot.child("phone").getValue().toString()));
+                if(dataSnapshot.exists()) {
+                    user.setValue(new User(dataSnapshot.child("name").getValue().toString(),
+                            dataSnapshot.child("email").getValue().toString(),
+                            dataSnapshot.child("phone").getValue().toString()));
+                }
             }
 
             @Override
@@ -183,12 +231,35 @@ public class FirebaseSource {
         return user;
     }
 
-    public void updateDataUser(String name, String phone){
-        mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("name").setValue(name);
-        mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("phone").setValue(phone);
+    /**
+     * Modify data of the user connected.
+     * @param name name to modify
+     * @param phone phone to modify
+     */
+    public void updateDataUser(final String name, final String phone){
+        final DatabaseReference refUser = mDB.child("users").child(mAuth.getCurrentUser().getUid());
+        refUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    refUser.child("name").setValue(name);
+                    refUser.child("phone").setValue(phone);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,databaseError.getMessage());
+            }
+        });
     }
 
 
+    /**
+     * Authentification with google
+     * @param acct GoogleSigninaccount
+     * @return true if the connection was successfull
+     */
     public MutableLiveData<Boolean> firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         final MutableLiveData<Boolean> authenticatedUserMutableLiveData = new MutableLiveData<>();
@@ -217,7 +288,7 @@ public class FirebaseSource {
     private void createUserIfNotExistInDB() {
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
-            ref.addValueEventListener(new ValueEventListener() {
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.exists()){
@@ -236,11 +307,21 @@ public class FirebaseSource {
 
     /**
      * Add reminder to the currentUser
-     * @param reminder
+     * @param reminder reminder to add
      */
-    public void addReminder(Reminder reminder){
-        DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
-        refReminders.push().setValue(reminder);
+    public void addReminder(final Reminder reminder){
+        final DatabaseReference refReminders = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
+        refReminders.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                refReminders.push().setValue(reminder);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,databaseError.getMessage());
+            }
+        });
     }
 
     /**
@@ -249,15 +330,15 @@ public class FirebaseSource {
      */
     public void addCourse(final Course course){
         DatabaseReference refCourses = mDB.child("courses").child(course.getId());
-        refCourses.addValueEventListener(new ValueEventListener() {
+        refCourses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     // not exist yet
                     mDB.child("courses").child(course.getId()).setValue(course);
-                }else{
-                    // course already exist
                 }
+                    //else
+                    // course already exist
             }
 
             @Override
@@ -268,18 +349,29 @@ public class FirebaseSource {
 
     }
 
+    /**
+     * Register a tutoring of the current user connected in the specified course
+     * @param courseId course to register inside the tutoring
+     * @param descriptionTutoring description of the tutoring.
+     */
     public void addTutoring(final String courseId, final String descriptionTutoring){
-        DatabaseReference refCourses = mDB.child("courses").child(courseId).child("tutoring");
-        refCourses.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference refCourses = mDB.child("courses").child(courseId).child("tutoring").child(mAuth.getCurrentUser().getUid());
+        refCourses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid());
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        mDB.child("courses").child(courseId).child("tutoring").child(mAuth.getCurrentUser().getUid()).setValue(new Tutoring
-                                (new User(dataSnapshot.child("name").getValue().toString(), dataSnapshot.child("email").getValue().toString(),dataSnapshot.child("phone").getValue().toString())
-                                        ,descriptionTutoring));
+                        if(dataSnapshot.exists()) {
+                            refCourses.setValue(
+                                    new Tutoring(
+                                            new User(
+                                                    dataSnapshot.child("name").getValue().toString(),
+                                                    dataSnapshot.child("email").getValue().toString(),
+                                                    dataSnapshot.child("phone").getValue().toString())
+                                            , descriptionTutoring));
+                        }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -294,13 +386,18 @@ public class FirebaseSource {
         });
     }
 
+    /**
+     * Checks if the course has tutors
+     * @param courseId course to checks
+     * @return true if the course has tutors
+     */
     public MutableLiveData<Boolean> courseHasTutors(String courseId){
         DatabaseReference ref = mDB.child("courses").child(courseId);
         final MutableLiveData<Boolean> hasChild = new MutableLiveData<>();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("tutors")){
+                if(dataSnapshot.hasChild("tutoring")){
                     // has tutors
                     hasChild.setValue(true);
                 }else{
@@ -316,10 +413,32 @@ public class FirebaseSource {
         return hasChild;
     }
 
+    /**
+     * Remove a course.
+     * @param courseId course to remove.
+     */
     public void removeCourse(String courseId){
-         mDB.child("courses").child(courseId).removeValue();
+        final DatabaseReference ref = mDB.child("courses").child(courseId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    ref.removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, databaseError.getMessage());
+            }
+        });
     }
 
+    /**
+     * Note an user, the current user connected make the rate (1 rate possible)
+     * @param userEmail user to rate
+     * @param rate rate
+     */
     public void rateUser(String userEmail, final Rating rate){
             final DatabaseReference ref = mDB.child("users");
             ref.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -339,10 +458,15 @@ public class FirebaseSource {
 
     }
 
+    /**
+     * Get the average rating of the user given.
+     * @param userEmail user to get the rating.
+     * @return the rating
+     */
     public MutableLiveData<Rating> getRatingOfUser(String userEmail){
         final MutableLiveData<Rating> rating = new MutableLiveData<>();
         final DatabaseReference ref = mDB.child("users");
-        ref.orderByChild("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){

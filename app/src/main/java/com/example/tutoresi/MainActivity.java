@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -24,17 +25,14 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut;
     private ImageView mAvatarUser;
     private UserViewModel mAuth;
-    GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
+    private ConnectionReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = new ViewModelProvider(this).get(UserViewModel.class);
-        if(mAuth.getCurrentFirebaseUser() == null){
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-        }
         mBtnFindTutoring = (Button) findViewById(R.id.btn_findTutoring);
         mBtnMyAccount = (Button) findViewById(R.id.btn_myaccount);
         mBtnReminder = (Button) findViewById(R.id.btn_reminder);
@@ -83,7 +81,17 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        receiver = new ConnectionReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        this.registerReceiver(receiver, filter);
         super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(receiver);
     }
 
     @Override

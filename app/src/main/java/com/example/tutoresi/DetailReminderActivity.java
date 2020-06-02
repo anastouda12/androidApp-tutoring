@@ -96,6 +96,7 @@ public class DetailReminderActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     myCalendar.set(Calendar.MINUTE, minute);
+                    myCalendar.set(Calendar.SECOND,0);
                     mTime.setText(hourOfDay+":"+minute); // update label time
             }
         };
@@ -164,7 +165,7 @@ public class DetailReminderActivity extends AppCompatActivity {
         Intent intent = new Intent(DetailReminderActivity.this,ReminderBroadcast.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(DetailReminderActivity.this,0, intent,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,myCalendar.getTimeInMillis(),pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,myCalendar.getTimeInMillis(),pendingIntent);
     }
 
 

@@ -3,10 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="50dp"
     android:paddingLeft="@dimen/paddingSides_portrait"
     android:paddingRight="@dimen/paddingSides_portrait"
-    android:paddingTop="30dp"
     android:background="@color/colorPrimary"
     tools:context=".BecomeTutorActivity">
 
@@ -25,14 +23,14 @@
             android:text="@string/become_tutor"
             style="@style/textView_style"
             android:textSize="30dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:src="@drawable/owl_tutor"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="20dp"/>
 
         <EditText
             style="@style/editText_style"
@@ -66,6 +64,7 @@
             android:paddingLeft="10dp"
             android:inputType="textMultiLine"
             android:layout_height="wrap_content"
+            android:textSize="14dp"
             android:drawableLeft="@drawable/ic_action_course" />
 
         <Button

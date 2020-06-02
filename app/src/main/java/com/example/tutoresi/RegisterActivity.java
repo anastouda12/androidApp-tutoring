@@ -1,14 +1,19 @@
 package com.example.tutoresi;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tutoresi.Config.ErrorsCode;
+
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -75,11 +80,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 if (TextUtils.isEmpty(name)) {
-                    mEmail.setError(getApplicationContext().getString(R.string.nameRequired));
+                    mName.setError(getApplicationContext().getString(R.string.nameRequired));
                     return;
                 }
                 if (TextUtils.isEmpty(phone)) {
-                    mEmail.setError(getApplicationContext().getString(R.string.phoneRequired));
+                    mPhone.setError(getApplicationContext().getString(R.string.phoneRequired));
                     return;
                 }
                 if (phone.length() != 10) {
@@ -117,24 +122,56 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void imageChooser(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,1);
+    private void imageChooser() {
+        final CharSequence[] options = {getResources().getString(R.string.takePhoto),
+                getResources().getString(R.string.chooseInGalerie),
+                getResources().getString(R.string.cancel)};
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.chooseYourPhoto))
+                .setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (options[which].equals(getResources().getString(R.string.takePhoto))) {
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(takePicture, 0);
+                        } else if (options[which].equals(getResources().getString(R.string.chooseInGalerie))) {
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, 1);
+                        } else if (options[which].equals(getResources().getString(R.string.cancel))) {
+                            dialog.dismiss();
+                        }
+                    }
+                })
+                .setIcon(android.R.drawable.ic_menu_camera)
+                .show();
     }
 
-    private void imageUploader(){
+    private void imageUploader() {
         userViewModel.uploadProfileImageCurrentUser(uploadedImg);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
-            uploadedImg = data.getData();
-            Picasso.get().load(uploadedImg).fit().centerCrop().into(mPhoto);
+        switch (requestCode) {
+            case 0://actionCode camera
+                if (resultCode == RESULT_OK) {
+                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                    mPhoto.setImageBitmap(selectedImage);
+                    String imgeUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
+                    uploadedImg = Uri.parse(imgeUrl);
+                    return;
+                }
+            case 1://actionCode gallery
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    uploadedImg = data.getData();
+                    mPhoto.setImageURI(uploadedImg);
+                    return;
+                }
+
         }
+
     }
 
     private void registerNewUser(String email, String password, String name, String phone) {
@@ -143,27 +180,27 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onChanged(Integer code) {
                 mProgressBar.setVisibility(View.GONE);
-                switch (code){
-                    case ErrorsCode.SUCCESS_REGISTER :
+                switch (code) {
+                    case ErrorsCode.SUCCESS_REGISTER:
                         // If an image is uploaded by the user we store in the db storage.
-                        if(mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()){
+                        if (mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()) {
                             imageUploader();
                         }
-                        Toast.makeText(RegisterActivity.this,R.string.register_success,Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, R.string.register_success, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         finish();
                         break;
-                    case ErrorsCode.ERROR_INVALID_EMAIL :
-                        Toast.makeText(RegisterActivity.this,R.string.register_failed_emailInvalid,Toast.LENGTH_LONG).show();
+                    case ErrorsCode.ERROR_INVALID_EMAIL:
+                        Toast.makeText(RegisterActivity.this, R.string.register_failed_emailInvalid, Toast.LENGTH_LONG).show();
                         break;
-                    case ErrorsCode.ERROR_WEAK_PASSWORD :
-                        Toast.makeText(RegisterActivity.this,R.string.register_failed_weakPassword,Toast.LENGTH_LONG).show();
+                    case ErrorsCode.ERROR_WEAK_PASSWORD:
+                        Toast.makeText(RegisterActivity.this, R.string.register_failed_weakPassword, Toast.LENGTH_LONG).show();
                         break;
                     case ErrorsCode.ERROR_USER_EXISTS:
-                        Toast.makeText(RegisterActivity.this,R.string.register_failed_userAlreadyExists,Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, R.string.register_failed_userAlreadyExists, Toast.LENGTH_LONG).show();
                         break;
                     default:
-                        Toast.makeText(RegisterActivity.this,R.string.register_failed,Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, R.string.register_failed, Toast.LENGTH_LONG).show();
                 }
             }
         });

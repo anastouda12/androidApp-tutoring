@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private static final String  TAG = "LOGIN_ACTIVITY";
     private UserViewModel userViewModel;
+    private ConnectionReceiver receiver;
+    private boolean alreadyConnected;
+
 
     // Configure Google Sign In
     GoogleSignInOptions gso;
@@ -41,17 +44,39 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if(!alreadyConnected) {
+            receiver = new ConnectionReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            this.registerReceiver(receiver, filter);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!alreadyConnected) {
+            this.unregisterReceiver(receiver);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        alreadyConnected = userViewModel.getCurrentFirebaseUser() != null;
+        if(alreadyConnected){
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
         mUserEmail = (EditText) findViewById(R.id.input_email_login);
         mUserPassword = (EditText) findViewById(R.id.input_password_login);
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         mProgressBar = (ProgressBar) findViewById(R.id.login_progressBar);
         mCreateAccount = (TextView) findViewById(R.id.create_account);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()

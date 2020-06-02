@@ -26,6 +26,7 @@ import com.example.tutoresi.Model.Rating;
 import com.example.tutoresi.Model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -145,10 +146,14 @@ public class TutoringActivity extends AppCompatActivity {
                             .setPositiveButton(getApplicationContext().getText(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ref.removeValue();
-                                    adapter.notifyDataSetChanged();
-                                    Toast.makeText(TutoringActivity.this,getApplicationContext().getString(R.string.tutoringDeleted),Toast.LENGTH_LONG).show();
-                                    checksEmptyCourse();
+                                    ref.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            adapter.notifyDataSetChanged();
+                                            Toast.makeText(TutoringActivity.this,getApplicationContext().getString(R.string.tutoringDeleted),Toast.LENGTH_LONG).show();
+                                            checksEmptyCourse();
+                                        }
+                                    });
                                 }
                             })
                             .setNegativeButton(getApplicationContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -157,19 +162,18 @@ public class TutoringActivity extends AppCompatActivity {
                                     adapter.notifyItemChanged(position);
                                 }
                             })
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                         @Override
                                         public void onCancel(DialogInterface dialogInterface) {
-                                            adapter.notifyItemChanged(position);
-                                        }
+                                            adapter.notifyItemChanged(position); }
                                     })
-                                    .create().show();
+                            .create().show();
                 }else {
                     adapter.notifyItemChanged(position);
                 }
             }
         };
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerTutoring);
 
@@ -187,7 +191,8 @@ public class TutoringActivity extends AppCompatActivity {
                     courseViewModel.removeCourse(course_id);
                     Toast.makeText(TutoringActivity.this, getApplicationContext().getString(R.string.tutoringCourse)
                             +" "+course_id
-                            +" "+getApplicationContext().getString(R.string.tutoringDeleted),Toast.LENGTH_LONG).show();
+                            +" "+getApplicationContext().getString(R.string.deleted),Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
         });

@@ -38,7 +38,7 @@ public class RegisterTutorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String description =  mDescriptionTutoring.getText().toString().trim();
-                if (description.length() < 4 || description.length() > 30) {
+                if (description.length() < 4 || description.length() > 100) {
                     mDescriptionTutoring.setError(getResources().getString(R.string.description_tutoringRequired));
                     return;
                 }

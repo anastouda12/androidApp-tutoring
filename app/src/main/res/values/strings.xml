@@ -2,6 +2,7 @@
     <string name="app_name">TutorEsi</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
     <string name="mailRequired">Adresse email requise</string>
     <string name="mailNoValid">Adresse email non valide</string>
@@ -41,13 +42,13 @@
     <string name="description">Description</string>
     <string name="description_course">Description du cours</string>
     <string name="description_tutoring">Description du tutorat</string>
-    <string name="description_courseRequired">Une description du cours est requise entre 4 et 20 caractères.</string>
-    <string name="description_tutoringRequired">Une description du tutorat est requise entre 4 et 30 caractères.</string>
+    <string name="description_courseRequired">Une description du cours est requise entre 4 et 30 caractères.</string>
+    <string name="description_tutoringRequired">Une description du tutorat est requise entre 4 et 100 caractères.</string>
     <string name="course_id">ID du cours</string>
     <string name="course_idRequired">ID du cours doit être composé entre 4 et 6 caractères</string>
     <string name="separator">|</string>
     <string name="course_libelle">Libelle</string>
-    <string name="course_libelleRequired">Un libellé de cours est requis entre 4 et 20 caractères.</string>
+    <string name="course_libelleRequired">Un libellé de cours est requis entre 4 et 25 caractères.</string>
     <string name="name">Nom</string>
     <string name="mail">Email</string>
     <string name="phone">Numéro de téléphone</string>
@@ -68,6 +69,7 @@
     <string name="errorOpeningMail">Erreur lors de l\'ouverture de l\'application mail</string>
     <string name="confirmTutoring">Tu es sûr de ne plus vouloir être tuteur dans ce cours ?</string>
     <string name="tutoringDeleted">Tutoring supprimé</string>
+    <string name="deleted">supprimé</string>
     <string name="reminderDeleted">Rappel supprimé</string>
     <string name="tutoringCourse">Cours de tutoring</string>
     <string name="noTutoorCourseDeleted">supprimé, plus aucun tuteur</string>
@@ -77,4 +79,6 @@
     <string name="reminderLocationRequired">Location requise</string>
     <string name="remonderTimeRequired">Heure requise</string>
     <string name="channelNotificationReminder">Canal TutorESI Rappel</string>
+    <string name="noConnectionInternetTitle">Pas de connexion internet</string>
+    <string name="noConnectionInternetMsg">Veuillez vérifier votre connexion internet et réessayer</string>
 </resources>

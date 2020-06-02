@@ -78,7 +78,7 @@ public class CourseActivity extends AppCompatActivity {
 
                 holder.setBackgroundColorByPosition(position);
                 holder.setMCourse(model.getId());
-                holder.setMDescription("Description : "+model.getDescription());
+                holder.setMDescription(model.getDescription());
                 holder.setmLibelle(model.getLibelle());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
