@@ -34,6 +34,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Firebase Source
  * Manages the data with the Database
@@ -546,6 +549,76 @@ public class FirebaseSource {
             }
         });
         return rating;
+    }
+
+    /**
+     * Get the list of tutoring of a course
+     * @param courseID course to get the tutorings list
+     * @return tutoring list of the course
+     */
+    public MutableLiveData<List<Tutoring>> getTutoringOfCourse(String courseID){
+        final MutableLiveData<List<Tutoring>> tutoring = new MutableLiveData<>();
+        List<Tutoring> list = new ArrayList<>();
+        tutoring.setValue(list);
+        DatabaseReference ref = mDB.child("courses").child(courseID).child("tutoring");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tutoring.getValue().add(dataSnapshot.getValue(Tutoring.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,databaseError.getMessage());
+            }
+        });
+        return  tutoring;
+    }
+
+    /**
+     * Get the list of courses
+     * @return list of courses.
+     */
+    public MutableLiveData<List<Course>> getCourses(){
+        final MutableLiveData<List<Course>> courses = new MutableLiveData<>();
+        List<Course> list = new ArrayList<>();
+        courses.setValue(list);
+        DatabaseReference ref = mDB.child("courses");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                courses.getValue().add(dataSnapshot.getValue(Course.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courses;
+    }
+
+    /**
+     * Get the list of reminders of current user connected
+     * @return the list of reminders.
+     */
+    public MutableLiveData<List<Reminder>> getReminderCurrentUser(){
+        final MutableLiveData<List<Reminder>> reminders = new MutableLiveData<>();
+        List<Reminder> list = new ArrayList<>();
+        reminders.setValue(list);
+        DatabaseReference ref = mDB.child("users").child(mAuth.getCurrentUser().getUid()).child("reminders");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                reminders.getValue().add(dataSnapshot.getValue(Reminder.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return reminders;
     }
 }
 

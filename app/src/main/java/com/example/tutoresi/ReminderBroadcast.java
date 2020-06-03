@@ -20,10 +20,10 @@ public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        NotificationCompat.Builder builder =  new NotificationCompat.Builder(context,"notifyTutorEsi")
+        NotificationCompat.Builder builder =  new NotificationCompat.Builder(context,context.getString(R.string.channelID))
                 .setSmallIcon(R.drawable.ic_action_reminder)
-                .setContentTitle("Rappel TutorESI")
-                .setContentText("Hey, il semble que tu as une séance de tutorat prévue...")
+                .setContentTitle(context.getString(R.string.notifTitle))
+                .setContentText(context.getString(R.string.notifText))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

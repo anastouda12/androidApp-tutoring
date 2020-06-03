@@ -2,7 +2,6 @@ package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,11 +24,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class ReminderActivity extends AppCompatActivity {
+public class ReminderActivity extends AbstractActivity {
 
     private RecyclerView mRecyclerReminder;
     private FloatingActionButton mBtnAddReminder;
-    private FirebaseRecyclerOptions<Reminder> options;
+    // FirebaseUI offers RecyclerView adapters for the Realtime Database:
+    // FirebaseUI make it easier to bind your data with the UI. updates data in real-time
+    // If we don't use firebaseRecycler we need to create our own custom adapter that can work with firebase database.
+    private FirebaseRecyclerOptions<Reminder> options; // First, configure the adapter by building FirebaseRecyclerOption
     private FirebaseRecyclerAdapter<Reminder, ReminderViewHolder> adapter;
     private DatabaseReference databaseReference;
 
@@ -53,7 +55,7 @@ public class ReminderActivity extends AppCompatActivity {
 
         mRecyclerReminder = (RecyclerView) findViewById(R.id.recycler_reminder);
         mBtnAddReminder = (FloatingActionButton) findViewById(R.id.btn_addReminder);
-        mRecyclerReminder.setHasFixedSize(true);
+        mRecyclerReminder.setHasFixedSize(true);//  means recycler's size is fixed and is not affected by the adapter contents
         mRecyclerReminder.setLayoutManager(new LinearLayoutManager(this));
 
         mBtnAddReminder.setOnClickListener(new View.OnClickListener() {

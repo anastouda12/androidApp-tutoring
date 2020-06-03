@@ -1,6 +1,5 @@
 package com.example.tutoresi;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,7 +13,7 @@ import com.example.tutoresi.Config.ErrorsCode;
 import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Course;
 
-public class BecomeTutorActivity extends AppCompatActivity {
+public class BecomeTutorActivity extends AbstractActivity {
 
     private EditText mCourseTitle;
     private EditText mCourseLibelle;

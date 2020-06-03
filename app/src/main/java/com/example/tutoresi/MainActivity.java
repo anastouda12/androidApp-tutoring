@@ -1,11 +1,9 @@
 package com.example.tutoresi;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -20,13 +18,12 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AbstractActivity {
 
     private Button mBtnFindTutoring, mBtnMyAccount, mBtnReminder, mBtnSignOut;
     private ImageView mAvatarUser;
     private UserViewModel mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private ConnectionReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,25 +81,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        super.onStart();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        receiver = new ConnectionReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        this.registerReceiver(receiver, filter);
-        super.onStart();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        this.unregisterReceiver(receiver);
-    }
 
-    @Override
+   /* @Override
     protected void onResume() {
         super.onResume();
         mAuth.getProfileImageCurrentUser().observe(this, new Observer<Uri>() {
@@ -113,6 +101,6 @@ public class MainActivity extends AppCompatActivity {
                         .networkPolicy(NetworkPolicy.NO_CACHE).fit().centerCrop().into(mAvatarUser);
             }
         });
-    }
+    }*/
 
 }

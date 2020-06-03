@@ -89,4 +89,8 @@
     <string name="courseAddedSucces">Le cours de tutorat a été crée</string>
     <string name="courseAlreadyExist">Le cours existe déjà</string>
     <string name="courseAddedFailed">La création du cours a échouer</string>
+    <string name="notifText">Hey, il semblerait que tu as une séance de tutorat prévue...</string>
+    <string name="notifTitle">Rappel TutorESI</string>
+    <string name="channelID">notifyTutorEsi</string>
+    <string name="tutor">Tuteur</string>
 </resources>

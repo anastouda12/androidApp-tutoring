@@ -2,7 +2,6 @@ package com.example.tutoresi;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,7 +25,7 @@ import com.example.tutoresi.Data.UserViewModel;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AbstractActivity {
 
     final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private Uri uploadedImg;

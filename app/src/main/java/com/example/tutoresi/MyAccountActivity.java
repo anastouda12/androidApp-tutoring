@@ -2,7 +2,6 @@ package com.example.tutoresi;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,7 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-public class MyAccountActivity extends AppCompatActivity {
+public class MyAccountActivity extends AbstractActivity {
 
     private EditText mName, mEmail, mPhone;
     private ImageView mProfile;

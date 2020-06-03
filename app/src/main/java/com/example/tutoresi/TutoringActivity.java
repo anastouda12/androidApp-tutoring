@@ -2,7 +2,6 @@ package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -31,11 +30,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class TutoringActivity extends AppCompatActivity {
+public class TutoringActivity extends AbstractActivity {
 
     private RecyclerView mRecyclerTutoring;
     private FloatingActionButton mBtnRegisterTutor;
-    private FirebaseRecyclerOptions<Tutoring> options;
+    // FirebaseUI offers RecyclerView adapters for the Realtime Database:
+    // FirebaseUI make it easier to bind your data with the UI. updates data in real-time
+    // If we don't use firebaseRecycler we need to create our own custom adapter that can work with firebase database.
+    private FirebaseRecyclerOptions<Tutoring> options; // First, configure the adapter by building FirebaseRecyclerOption
     private FirebaseRecyclerAdapter<Tutoring, TutoringViewHolder> adapter;
     private DatabaseReference databaseReference;
     private String course_id;
@@ -96,7 +98,7 @@ public class TutoringActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final TutoringViewHolder holder, int position, @NonNull final Tutoring model) {
 
                 holder.setBackgroundColorByPosition(position);
-                holder.setMName("Tuteur : "+model.getAuthor().getName());
+                holder.setMName(getApplicationContext().getString(R.string.tutor)+" : "+model.getAuthor().getName());
                 getRating(model.getAuthor().getEmail(),holder.getmRatingBar());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

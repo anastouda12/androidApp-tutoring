@@ -1,7 +1,6 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +18,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CourseActivity extends AppCompatActivity {
+public class CourseActivity extends AbstractActivity {
 
     private RecyclerView mRecyclerCourse;
     private FloatingActionButton mbtnAddCourse;
-    private FirebaseRecyclerOptions<Course> options;
+    // FirebaseUI offers RecyclerView adapters for the Realtime Database:
+    // FirebaseUI make it easier to bind your data with the UI. updates data in real-time
+    // If we don't use firebaseRecycler we need to create our own custom adapter that can work with firebase database.
+    private FirebaseRecyclerOptions<Course> options; // First, configure the adapter by building FirebaseRecyclerOption
     private FirebaseRecyclerAdapter<Course, CourseViewHolder> adapter;
     private DatabaseReference databaseReference;
     private String currentUser;

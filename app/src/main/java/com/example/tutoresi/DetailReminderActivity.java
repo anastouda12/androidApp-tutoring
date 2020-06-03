@@ -1,6 +1,5 @@
 package com.example.tutoresi;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DetailReminderActivity extends AppCompatActivity {
+public class DetailReminderActivity extends AbstractActivity {
 
     private EditText mCourse, mDate, mLocation, mTime;
     private Button mBtnAdd;

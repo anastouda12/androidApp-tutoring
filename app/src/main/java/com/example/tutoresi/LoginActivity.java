@@ -1,7 +1,6 @@
 package com.example.tutoresi;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,7 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AbstractActivity {
 
     private EditText mUserEmail, mUserPassword;
     private TextView mCreateAccount;
@@ -32,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private static final String  TAG = "LOGIN_ACTIVITY";
     private UserViewModel userViewModel;
-    private ConnectionReceiver receiver;
     private boolean alreadyConnected;
 
 
@@ -43,24 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 1;
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(!alreadyConnected) {
-            receiver = new ConnectionReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-            this.registerReceiver(receiver, filter);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(!alreadyConnected) {
-            this.unregisterReceiver(receiver);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

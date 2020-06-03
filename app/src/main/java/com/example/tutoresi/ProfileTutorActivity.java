@@ -1,7 +1,6 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,7 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileTutorActivity extends AppCompatActivity {
+public class ProfileTutorActivity extends AbstractActivity {
 
     private TextView mTutorName, mDescriptionTutoring, mCourse;
     private Button mContactMail, mContactPhone;

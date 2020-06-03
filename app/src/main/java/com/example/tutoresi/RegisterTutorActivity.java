@@ -1,6 +1,5 @@
 package com.example.tutoresi;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.tutoresi.Data.CourseViewModel;
 
-public class RegisterTutorActivity extends AppCompatActivity {
+public class RegisterTutorActivity extends AbstractActivity {
 
     private Button mBtnRegister;
     private EditText mDescriptionTutoring;

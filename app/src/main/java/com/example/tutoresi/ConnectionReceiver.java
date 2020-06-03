@@ -10,8 +10,8 @@ import android.net.NetworkInfo;
 import androidx.appcompat.app.AlertDialog;
 
 /**
- * Permet de vérifier la connexion internet en background.
- * BroadCastReceivers permet d'écouter les signaux du système ou d'autres applications
+ * Allows to checks connexion internet in background
+ * BroadCastReceivers Listen signal of system
  */
 public class ConnectionReceiver extends BroadcastReceiver {
 
@@ -32,11 +32,11 @@ public class ConnectionReceiver extends BroadcastReceiver {
 
 
     /**
-     * Affiche une alert dialog avec un titre et un message donné.
-     * Et termine l'activity au click du boutton.
+     * Display alert dialog with title and message given
+     * And finishActivity on click
      * @param  context context.
-     * @param title title du dialog
-     * @param message message du dialog
+     * @param title title
+     * @param message message
      */
     public void showAlertDialog(final Context context, String title, String message) {
         new AlertDialog.Builder(context)
