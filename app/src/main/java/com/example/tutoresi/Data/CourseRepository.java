@@ -4,14 +4,21 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tutoresi.Model.Course;
 
-import java.util.List;
 
 public class CourseRepository {
 
     private FirebaseSource firebaseSource;
+    private static CourseRepository instance = getInstance();;
 
-    public CourseRepository(){
-        firebaseSource = new FirebaseSource();
+    private CourseRepository(){
+        firebaseSource = FirebaseSource.getInstance();
+    }
+
+    public static CourseRepository getInstance(){
+        if(instance==null){
+            instance = new CourseRepository();
+        }
+        return instance;
     }
 
     public MutableLiveData<Integer> addCourse(Course course){

@@ -10,7 +10,7 @@ public class ReminderViewModel extends ViewModel {
     private ReminderRepository reminderRepository;
 
     public ReminderViewModel(){
-        reminderRepository = new ReminderRepository();
+        reminderRepository = ReminderRepository.getInstance();
     }
 
     public LiveData<Boolean> addReminder(Reminder reminder){

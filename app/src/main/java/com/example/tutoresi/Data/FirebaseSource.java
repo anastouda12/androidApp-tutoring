@@ -40,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
  */
 public class FirebaseSource {
 
+    private static FirebaseSource instance;
     private FirebaseAuth mAuth;
     private DatabaseReference mDB;
     private StorageReference mStore;
@@ -48,10 +49,21 @@ public class FirebaseSource {
     /**
      * Constructor of FirebaseSource
      */
-    public FirebaseSource() {
+    private FirebaseSource() {
         mAuth = FirebaseAuth.getInstance();
         mStore = FirebaseStorage.getInstance().getReference("Images");
         mDB = FirebaseDatabase.getInstance().getReference();
+    }
+
+    /**
+     * Get an instance of firebaseSource
+     * @return instance of firebaseSource.
+     */
+    public static final FirebaseSource getInstance(){
+        if(instance == null){
+            instance = new FirebaseSource();
+        }
+        return instance;
     }
 
     /**

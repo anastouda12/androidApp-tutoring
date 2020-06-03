@@ -3,15 +3,21 @@ package com.example.tutoresi.Data;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tutoresi.Model.Reminder;
-import java.util.List;
 
 public class ReminderRepository {
 
     private FirebaseSource firebaseSource;
+    private static ReminderRepository instance;
 
+    private ReminderRepository(){
+        firebaseSource = FirebaseSource.getInstance();
+    }
 
-    public ReminderRepository(){
-        firebaseSource = new FirebaseSource();
+    public static ReminderRepository getInstance() {
+        if(instance == null){
+            instance = new ReminderRepository();
+        }
+        return instance;
     }
 
     public MutableLiveData<Boolean> addReminder(Reminder reminder){

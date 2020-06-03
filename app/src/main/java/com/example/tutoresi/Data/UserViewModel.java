@@ -16,7 +16,7 @@ public class UserViewModel extends ViewModel {
     private UserRepository userRepository;
 
     public UserViewModel(){
-        userRepository = new UserRepository();
+        userRepository = UserRepository.getInstance();
     }
 
     public LiveData<Integer> register(String email, String password, String name, String phone){

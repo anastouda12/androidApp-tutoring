@@ -9,7 +9,7 @@ public class CourseViewModel extends ViewModel {
     private CourseRepository courseRepository;
 
     public CourseViewModel(){
-        courseRepository = new CourseRepository();
+        courseRepository = CourseRepository.getInstance();
     }
 
     public LiveData<Integer> addCourse(Course course){

@@ -12,10 +12,21 @@ import com.google.firebase.auth.FirebaseUser;
 public class UserRepository {
 
     private FirebaseSource firebaseSource;
+    private static UserRepository instance;
 
+    private UserRepository(){
+        firebaseSource = FirebaseSource.getInstance();
+    }
 
-    public UserRepository(){
-        firebaseSource = new FirebaseSource();
+    /**
+     * Get an instance of userRepository
+     * @return instance of userRepository
+     */
+    public static UserRepository getInstance(){
+        if(instance == null){
+            instance = new UserRepository();
+        }
+        return instance;
     }
 
     public MutableLiveData<Boolean> login(String email, String password){
