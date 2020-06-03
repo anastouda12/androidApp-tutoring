@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/paddingSides_portrait"
     android:paddingTop="30dp"
     android:background="@color/colorPrimary"
-    tools:context=".RegisterTutorActivity">
+    tools:context=".NewTutoringActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

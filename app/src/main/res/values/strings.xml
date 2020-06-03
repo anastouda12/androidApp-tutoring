@@ -35,6 +35,7 @@
     <string name="Add">Ajouter</string>
     <string name="Save">Sauvegarder</string>
     <string name="infos_saved">Informations du compte sauvegardées</string>
+    <string name="newProfileImgSaved">Nouvelle photo de profile sauvegardée</string>
     <string name="updateInfosFailed">Le changement d•\' informations du compte à échouer</string>
     <string name="uploadAvatarFailed">Le changement de photo de profile à échouer</string>
     <string name="reminder_added">Rappel ajouté avec succés</string>

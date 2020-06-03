@@ -1,5 +1,8 @@
 package com.example.tutoresi.Model;
 
+/**
+ * Represents a tutoring
+ */
 public class Tutoring {
 
     private User author;
@@ -10,6 +13,11 @@ public class Tutoring {
         // Necessary for firebase
     }
 
+    /**
+     * Constructor of a tutoring
+     * @param author author
+     * @param descriptionTutoring description
+     */
     public Tutoring(User author, String descriptionTutoring){
         this.author = author;
         this.descriptionTutoring = descriptionTutoring;

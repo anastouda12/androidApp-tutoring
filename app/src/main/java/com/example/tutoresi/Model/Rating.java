@@ -1,5 +1,8 @@
 package com.example.tutoresi.Model;
 
+/**
+ * Represents a rating
+ */
 public class Rating {
 
     private float rate;
@@ -8,6 +11,10 @@ public class Rating {
         // Default constructor required for calls to DataSnapshot.getValue(Rating.class)
     }
 
+    /**
+     * Constructor of a rating
+     * @param rate rate
+     */
     public Rating(float rate){
         if(rate > 0){
             this.rate = roundToHalf(rate);

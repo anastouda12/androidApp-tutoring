@@ -14,7 +14,7 @@ import java.util.List;
 public class CourseRepository {
 
     private FirebaseSource firebaseSource;
-    private static CourseRepository instance = getInstance();;
+    private static CourseRepository instance = null;
 
     /**
      * Constructor of course repository

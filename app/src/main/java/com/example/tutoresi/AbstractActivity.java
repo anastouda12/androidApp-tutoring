@@ -5,9 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import com.example.tutoresi.Receiver.ConnectionReceiver;
+
+/**
+ * AbstractActivity who extends AppCompatActivity
+ * It register a connectionReceiver to checks the connection changes
+ */
 public class AbstractActivity extends AppCompatActivity {
 
-    private ConnectionReceiver receiver;
+    private ConnectionReceiver receiver; // BroadCastReceiver
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

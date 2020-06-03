@@ -24,11 +24,11 @@ import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AbstractActivity {
 
+    private static final String  TAG = "LOGIN_ACTIVITY";
     private EditText mUserEmail, mUserPassword;
     private TextView mCreateAccount;
     private Button mBtnLogin;
     private ProgressBar mProgressBar;
-    private static final String  TAG = "LOGIN_ACTIVITY";
     private UserViewModel userViewModel;
     private boolean alreadyConnected;
 
@@ -98,12 +98,17 @@ public class LoginActivity extends AbstractActivity {
         mCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this, NewAccountActivity.class));
             }
         });
 
     }
 
+    /**
+     * Login with email and password
+     * @param email email
+     * @param password password
+     */
     private void regularLogIn(String email, String password){
         mProgressBar.setVisibility(View.VISIBLE);
         Toast.makeText(LoginActivity.this,R.string.connexion_loading,Toast.LENGTH_LONG).show();
@@ -123,6 +128,10 @@ public class LoginActivity extends AbstractActivity {
         });
     }
 
+    /**
+     * Login with google
+     * @param acct google account
+     */
     private void signInWithGoogle(final GoogleSignInAccount acct){
         mProgressBar.setVisibility(View.VISIBLE);
         userViewModel.signInWithGoogle(acct).observe(this, new Observer<Boolean>() {
@@ -140,6 +149,9 @@ public class LoginActivity extends AbstractActivity {
         });
     }
 
+    /**
+     * Get signInIntent with googleClient
+     */
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -157,12 +169,12 @@ public class LoginActivity extends AbstractActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 signInWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+                // Google Sign In failed
                 Log.w(TAG, "Google sign in failed", e);
                 // ...
             }
+
         }
     }
-
 
 }

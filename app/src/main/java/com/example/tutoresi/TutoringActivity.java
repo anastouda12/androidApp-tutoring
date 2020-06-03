@@ -1,6 +1,7 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +33,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class TutoringActivity extends AbstractActivity {
 
+    public static final int NEW_TUTORING_ACTIVITY_REQUEST_CODE = 1;
+
     private RecyclerView mRecyclerTutoring;
     private FloatingActionButton mBtnRegisterTutor;
     // FirebaseUI offers RecyclerView adapters for the Realtime Database:
@@ -58,21 +61,29 @@ public class TutoringActivity extends AbstractActivity {
         adapter.stopListening();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == NEW_TUTORING_ACTIVITY_REQUEST_CODE && data != null && resultCode == RESULT_OK){
+            registerTutoring(data.getStringExtra("EXTRA_TUTORING_DESC"));
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutoring);
 
-        course_id = (String) getIntent().getStringExtra("course_id");
+        course_id = getIntent().getStringExtra("EXTRA_COURSE_ID");
+        currentUser = getIntent().getStringExtra("EXTRA_CURRENT_USER");
         mBtnRegisterTutor = (FloatingActionButton) findViewById(R.id.btn_registerTutor);
 
         mBtnRegisterTutor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TutoringActivity.this, RegisterTutorActivity.class);
-                intent.putExtra("course_id",course_id);
-                startActivity(intent);
+                Intent intent = new Intent(TutoringActivity.this, NewTutoringActivity.class);
+                intent.putExtra("EXTRA_COURSE_ID",course_id);
+                startActivityForResult(intent,NEW_TUTORING_ACTIVITY_REQUEST_CODE);
             }
         });
         courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
@@ -80,14 +91,31 @@ public class TutoringActivity extends AbstractActivity {
         mRecyclerTutoring = (RecyclerView) findViewById(R.id.recycler_tutor);
         mRecyclerTutoring.setHasFixedSize(true);
         mRecyclerTutoring.setLayoutManager(new LinearLayoutManager(this));
-        currentUser = getIntent().getStringExtra("current_user"); // current user
         initRecycler();
         initSwipeItemListener();
 
     }
 
-    private void initRecycler() {
+    /**
+     * Register the current user in the current course
+     * @param descriptionTutoring description of the tutoring
+     */
+    private void registerTutoring(String descriptionTutoring){
+        courseViewModel.addTutoring(course_id,descriptionTutoring).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(TutoringActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)
+                            +" dans "+course_id,Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 
+    /**
+     * Initialize the recycler
+     */
+    private void initRecycler() {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("courses").child(course_id).child("tutoring");
         databaseReference.keepSynced(true);
 
@@ -99,16 +127,18 @@ public class TutoringActivity extends AbstractActivity {
 
                 holder.setBackgroundColorByPosition(position);
                 holder.setMName(getApplicationContext().getString(R.string.tutor)+" : "+model.getAuthor().getName());
-                getRating(model.getAuthor().getEmail(),holder.getmRatingBar());
+                getRating(model.getAuthor().getEmail(),holder.getMRatingBar());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getApplicationContext(),ProfileTutorActivity.class);
-                        intent.putExtra("tutor_name",model.getAuthor().getName());
-                        intent.putExtra("description_tutoring",model.getDescriptionTutoring());
-                        intent.putExtra("tutor_email",model.getAuthor().getEmail());
-                        intent.putExtra("tutor_phone",model.getAuthor().getPhone());
-                        intent.putExtra("course_id",course_id);
+                        intent.putExtra("EXTRA_TUTOR_NAME",model.getAuthor().getName());
+                        intent.putExtra("EXTRA_DESC_TUTORING",model.getDescriptionTutoring());
+                        intent.putExtra("EXTRA_TUTOR_EMAIL",model.getAuthor().getEmail());
+                        intent.putExtra("EXTRA_TUTOR_PHONE",model.getAuthor().getPhone());
+                        intent.putExtra("EXTRA_COURSE_ID",course_id);
+                        intent.putExtra("EXTRA_CURRENT_USER",currentUser);
+                        intent.putExtra("EXTRA_RATING_USER",holder.getMRatingBar().getRating());
                         startActivity(intent);
                     }
                 });
@@ -141,7 +171,7 @@ public class TutoringActivity extends AbstractActivity {
                 //Remove swiped item from list and notify the RecyclerView
                 final int position = viewHolder.getAdapterPosition();
                 String author = adapter.getItem(position).getAuthor().getEmail();
-                if(currentUser.equals(author)){ // checks if currentuser is the author of tutoring
+                if(currentUser.equals(author)){ // checks if currentUser is the author of tutoring
                     final DatabaseReference ref = adapter.getRef(position);
                     new AlertDialog.Builder(TutoringActivity.this)
                             .setMessage(getApplicationContext().getString(R.string.confirmTutoring))
@@ -249,11 +279,11 @@ public class TutoringActivity extends AbstractActivity {
         }
 
 
-        public TextView getmName() {
+        public TextView getMName() {
             return mName;
         }
 
-        public RatingBar getmRatingBar() {
+        public RatingBar getMRatingBar() {
             return mRatingBar;
         }
 

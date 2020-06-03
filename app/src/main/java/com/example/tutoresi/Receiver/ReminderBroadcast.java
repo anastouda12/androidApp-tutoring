@@ -1,4 +1,4 @@
-package com.example.tutoresi;
+package com.example.tutoresi.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.example.tutoresi.R;
 
 import java.util.Date;
 import java.util.Random;
@@ -19,7 +21,9 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        /**
+         * We need to set the notification's content and channel using a NotificationCompat.Builder object
+         */
         NotificationCompat.Builder builder =  new NotificationCompat.Builder(context,context.getString(R.string.channelID))
                 .setSmallIcon(R.drawable.ic_action_reminder)
                 .setContentTitle(context.getString(R.string.notifTitle))

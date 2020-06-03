@@ -22,16 +22,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileTutorActivity extends AbstractActivity {
 
+    private final String KEY_NB_ATTEMPT = ""; // when change orientation to save the number of attempt ratings
+
     private TextView mTutorName, mDescriptionTutoring, mCourse;
     private Button mContactMail, mContactPhone;
     private UserViewModel mAuth;
-    private String mTutorEmail, mTutorPhone;
     private CircleImageView mTutorAvatar;
     private RatingBar mRatingBar;
-    private String courseTutoring;
+
+    private String currentUser, courseTutoring, mTutorEmail, mTutorPhone;
     private int nbAttempt;
-    private final String KEY_NB_ATTEMPT = "attempt"; // when change orientation to save the number of attempt ratings
-    private boolean isUserProfile; // true si c'est le profile de l'user connecté
+    private boolean isUserProfile; // true if its current user connected profile
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -43,7 +44,7 @@ public class ProfileTutorActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_tutor);
-        if(savedInstanceState != null) { //null si on vient de démarrer l’activity
+        if(savedInstanceState != null) { //null if we just start the activity first time
             nbAttempt = savedInstanceState.getInt(KEY_NB_ATTEMPT);
             System.out.println(nbAttempt);
         }else{
@@ -59,15 +60,16 @@ public class ProfileTutorActivity extends AbstractActivity {
 
         mAuth = new ViewModelProvider(this).get(UserViewModel.class);
 
-        mTutorEmail = getIntent().getStringExtra("tutor_email");
-        mTutorPhone = getIntent().getStringExtra("tutor_phone");
-        courseTutoring = getIntent().getStringExtra("course_id");
+        currentUser = getIntent().getStringExtra("EXTRA_CURRENT_USER");
+        mTutorEmail = getIntent().getStringExtra("EXTRA_TUTOR_EMAIL");
+        mTutorPhone = getIntent().getStringExtra("EXTRA_TUTOR_PHONE");
+        courseTutoring = getIntent().getStringExtra("EXTRA_COURSE_ID");
 
-        isUserProfile = mAuth.getCurrentFirebaseUser().getEmail().equals(mTutorEmail);
-
+        mTutorName.setText(getIntent().getStringExtra("EXTRA_TUTOR_NAME"));
+        mRatingBar.setRating(getIntent().getFloatExtra("EXTRA_RATING_USER",0));
+        isUserProfile = currentUser.equals(mTutorEmail);
         mCourse.setText(courseTutoring);
-        mTutorName.setText(getIntent().getStringExtra("tutor_name"));
-        mDescriptionTutoring.setText(getIntent().getStringExtra("description_tutoring"));
+        mDescriptionTutoring.setText(getIntent().getStringExtra("EXTRA_DESC_TUTORING"));
 
         mAuth.getProfileImageOfUser(mTutorEmail).observe(this, new Observer<Uri>() {
             @Override
@@ -99,13 +101,6 @@ public class ProfileTutorActivity extends AbstractActivity {
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.errorOpeningMail), Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        mAuth.getRatingOfUser(mTutorEmail).observe(this, new Observer<Rating>() {
-            @Override
-            public void onChanged(Rating rating) {
-                mRatingBar.setRating(rating.getRate());
             }
         });
 

@@ -1,7 +1,5 @@
 package com.example.tutoresi.Model;
 
-import java.util.Date;
-
 /**
  * Class reminder of a tutoring
  */
@@ -11,7 +9,12 @@ public class Reminder {
     private String date;
     private String location;
 
-
+    /**
+     * Constructor of a reminder
+     * @param course
+     * @param date
+     * @param location
+     */
     public Reminder(String course, String date, String location){
         this.course = course;
         this.date  = date;
@@ -19,7 +22,7 @@ public class Reminder {
     }
 
     public Reminder(){
-
+        // Default constructor required for calls to DataSnapshot.getValue(Reminder.class)
     }
 
 

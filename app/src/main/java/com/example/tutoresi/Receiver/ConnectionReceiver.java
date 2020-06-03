@@ -1,4 +1,4 @@
-package com.example.tutoresi;
+package com.example.tutoresi.Receiver;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.tutoresi.R;
 
 /**
  * Allows to checks connexion internet in background

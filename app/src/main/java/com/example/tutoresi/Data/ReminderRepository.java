@@ -12,7 +12,7 @@ import java.util.List;
 public class ReminderRepository {
 
     private FirebaseSource firebaseSource;
-    private static ReminderRepository instance;
+    private static ReminderRepository instance = null;
 
     /**
      * Constructor of reminder repository

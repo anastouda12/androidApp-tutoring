@@ -367,17 +367,17 @@ public class FirebaseSource {
                 if(!dataSnapshot.exists()){
                     // not exist yet
                     refCourses.setValue(course);
-                    wasAdded.setValue(ErrorsCode.COURSEADDED_SUCCES);
+                    wasAdded.setValue(ErrorsCode.COURSE_ADD_SUCCESS);
                 }else{
                     // course already exist
-                    wasAdded.setValue(ErrorsCode.COURSE_ALREADYEXIST);
+                    wasAdded.setValue(ErrorsCode.COURSE_ALREADY_EXIST);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,databaseError.getMessage());
-                wasAdded.setValue(ErrorsCode.COURSEADD_FAIL);
+                wasAdded.setValue(ErrorsCode.COURSE_ADD_FAIL);
             }
         });
         return wasAdded;

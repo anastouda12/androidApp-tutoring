@@ -2,9 +2,6 @@ package com.example.tutoresi;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,13 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.example.tutoresi.Data.UserViewModel;
-import com.example.tutoresi.Model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 public class MyAccountActivity extends AbstractActivity {
@@ -30,9 +23,7 @@ public class MyAccountActivity extends AbstractActivity {
     private EditText mName, mEmail, mPhone;
     private ImageView mProfile;
     private Button mBtnSave;
-    private UserViewModel mAuth;
-    private DatabaseReference mDatabase;
-    private boolean imgHasChanged;
+    private boolean imgHasChanged = false;
     private Uri uploadedImg;
 
 
@@ -48,27 +39,16 @@ public class MyAccountActivity extends AbstractActivity {
         mEmail = (EditText) findViewById(R.id.input_email_myaccount);
         mProfile = (ImageView) findViewById(R.id.user_profile);
 
-        mAuth = new ViewModelProvider(this).get(UserViewModel.class);
+        mName.setText(getIntent().getStringExtra("EXTRA_USER_NAME"));
+        mPhone.setText(getIntent().getStringExtra("EXTRA_USER_PHONE"));
+        mEmail.setText(getIntent().getStringExtra("EXTRA_USER_EMAIL"));
+        System.out.println("kevin"+Uri.parse(getIntent().getStringExtra("EXTRA_USER_IMG")));
+        Picasso.get().load(Uri.parse(getIntent().getStringExtra("EXTRA_USER_IMG"))).memoryPolicy(MemoryPolicy.NO_CACHE)
+                .networkPolicy(NetworkPolicy.NO_CACHE).fit().centerCrop().into(mProfile);
 
-        mAuth.currentUser().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                mName.setText(user.getName());
-                mPhone.setText(user.getPhone());
-                mEmail.setText(user.getEmail());
-            }
-        });
-
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-
-
-        mAuth.getProfileImageCurrentUser().observe(this, new Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                Picasso.get().load(uri).fit().centerCrop().into(mProfile);
-            }
-        });
+        // to checks after if the data was changed;
+        final String saveName = mName.getText().toString().trim();
+        final String savePhone = mName.getText().toString().trim();
 
         mProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,19 +57,32 @@ public class MyAccountActivity extends AbstractActivity {
             }
         });
 
-
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(mName.getText().toString().trim())){
+                String name = mName.getText().toString().trim();
+                String phone = mPhone.getText().toString().trim();
+                if(TextUtils.isEmpty(name)){
                     mEmail.setError(getResources().getString(R.string.nameRequired));
                     return;
                 }
-                if(!TextUtils.isEmpty(mPhone.getText().toString().trim()) && mPhone.getText().toString().trim().length() != 10){
+                if(TextUtils.isEmpty(phone) || phone.length() != 10){
                     mPhone.setError(getResources().getString(R.string.phonoDigitError));
                     return;
                 }
-                updateDataUser();
+                boolean dataHasChanged = !saveName.equals(name) && !savePhone.equals(phone);
+                Intent replyIntent = new Intent();
+                replyIntent.putExtra("EXTRA_DATA_HAS_CHANGED",dataHasChanged);
+                replyIntent.putExtra("EXTRA_IMG_HAS_CHANGED",imgHasChanged);
+                if(dataHasChanged){
+                    replyIntent.putExtra("EXTRA_NEW_PHONE",phone);
+                    replyIntent.putExtra("EXTRA_NEW_NAME",name);
+                }
+                if(imgHasChanged) {
+                    replyIntent.putExtra("EXTRA_NEW_IMG", uploadedImg.toString());
+                }
+                setResult(RESULT_OK,replyIntent);
+                finish();
             }
         });
 
@@ -103,14 +96,16 @@ public class MyAccountActivity extends AbstractActivity {
                 if (resultCode == RESULT_OK) {
                     Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                     mProfile.setImageBitmap(selectedImage);
-                    String imgeUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
-                    uploadedImg = Uri.parse(imgeUrl);
+                    String imgUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
+                    uploadedImg = Uri.parse(imgUrl);
+                    imgHasChanged = true;
                     return;
                 }
             case 1://actionCode gallery
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     uploadedImg = data.getData();
                     mProfile.setImageURI(uploadedImg);
+                    imgHasChanged = true;
                     return;
                 }
 
@@ -118,9 +113,8 @@ public class MyAccountActivity extends AbstractActivity {
 
         }
 
-
     /**
-     * Image chooser (CAMERA - GALERY)
+     * Image chooser (CAMERA - GALLERY)
      */
     private void imageChooser(){
         final CharSequence[] options = { getResources().getString(R.string.takePhoto),
@@ -147,41 +141,6 @@ public class MyAccountActivity extends AbstractActivity {
                 })
                 .setIcon(android.R.drawable.ic_menu_camera)
                 .show();
-    }
-
-    /**
-     * Upload the new image profile in DB.
-     */
-    private void imageUploader(){
-        mAuth.uploadProfileImageCurrentUser(uploadedImg).observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean) {
-                    Toast.makeText(MyAccountActivity.this, R.string.infos_saved, Toast.LENGTH_LONG).show();
-                    finish();
-                }else{
-                    Toast.makeText(MyAccountActivity.this, R.string.uploadAvatarFailed, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * Update the data of the user with the new (Phone, name, image profile)
-     */
-    private void updateDataUser(){
-        mAuth.updateDataUser(mName.getText().toString().trim(),mPhone.getText().toString().trim()).observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
-                    if(imgHasChanged) {
-                        imageUploader();
-                    }
-                }else{
-                    Toast.makeText(MyAccountActivity.this, R.string.updateInfosFailed, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
 

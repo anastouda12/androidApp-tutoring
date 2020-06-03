@@ -1,6 +1,9 @@
 package com.example.tutoresi;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.tutoresi.Config.ErrorsCode;
+import com.example.tutoresi.Data.CourseViewModel;
 import com.example.tutoresi.Model.Course;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -20,14 +27,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CourseActivity extends AbstractActivity {
 
+    public static final int NEW_COURSE_ACTIVITY_REQUEST_CODE = 1;
+
     private RecyclerView mRecyclerCourse;
-    private FloatingActionButton mbtnAddCourse;
+    private FloatingActionButton mBtnAddCourse;
     // FirebaseUI offers RecyclerView adapters for the Realtime Database:
     // FirebaseUI make it easier to bind your data with the UI. updates data in real-time
     // If we don't use firebaseRecycler we need to create our own custom adapter that can work with firebase database.
     private FirebaseRecyclerOptions<Course> options; // First, configure the adapter by building FirebaseRecyclerOption
     private FirebaseRecyclerAdapter<Course, CourseViewHolder> adapter;
     private DatabaseReference databaseReference;
+    private CourseViewModel courseViewModel;
     private String currentUser;
 
     @Override
@@ -43,24 +53,77 @@ public class CourseActivity extends AbstractActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == NEW_COURSE_ACTIVITY_REQUEST_CODE && data != null && resultCode == RESULT_OK){
+            addCourseTutoring(
+                    data.getStringExtra("EXTRA_COURSE_TITLE"),
+                    data.getStringExtra("EXTRA_COURSE_LIBEL"),
+                    data.getStringExtra("EXTRA_COURSE_DESC"),
+                    data.getStringExtra("EXTRA_TUTORING_DESC")
+            );
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
 
-        mbtnAddCourse = (FloatingActionButton) findViewById(R.id.btn_addCourse);
-        mbtnAddCourse.setOnClickListener(new View.OnClickListener() {
+        mBtnAddCourse = (FloatingActionButton) findViewById(R.id.btn_addCourse);
+        mBtnAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CourseActivity.this, BecomeTutorActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(CourseActivity.this, NewCourseActivity.class);
+                startActivityForResult(intent,NEW_COURSE_ACTIVITY_REQUEST_CODE);
             }
         });
         mRecyclerCourse = (RecyclerView) findViewById(R.id.recycler_course);
+        courseViewModel = new ViewModelProvider(this).get(CourseViewModel.class);
         mRecyclerCourse.setHasFixedSize(true);
         mRecyclerCourse.setLayoutManager(new LinearLayoutManager(this));
-        currentUser = getIntent().getStringExtra("current_user"); // current user
+        currentUser = getIntent().getStringExtra("EXTRA_CURRENT_USER"); // current user
         initRecycler();
 
+    }
+
+    /**
+     * Create new course of tutoring and register the current user of tutor inside that course
+     * @param courseTitle course title
+     * @param libelle libelle course
+     * @param descCourse description of the course
+     * @param descTutoring description of the tutoring
+     */
+    private void addCourseTutoring(String courseTitle,String libelle, String descCourse, String descTutoring){
+        final Course course = new Course(courseTitle,libelle, descCourse);
+        courseViewModel.addCourse(course).observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(integer == ErrorsCode.COURSE_ADD_SUCCESS){
+                    Toast.makeText(CourseActivity.this,getApplicationContext().getString(R.string.courseAddedSucces)
+                            ,Toast.LENGTH_SHORT).show();
+                }else if(integer == ErrorsCode.COURSE_ALREADY_EXIST){
+                    Toast.makeText(CourseActivity.this,getApplicationContext().getString(R.string.courseAlreadyExist)
+                            ,Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(CourseActivity.this,getApplicationContext().getString(R.string.courseAddedFailed)
+                            ,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        courseViewModel.addTutoring(course.getId(),descTutoring).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    Toast.makeText(CourseActivity.this,getApplicationContext().getString(R.string.tutoringCreateSuccessfull)
+                            +" dans "+course.getId(),Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(CourseActivity.this,getApplicationContext().getString(R.string.tutoringCreateFailed)
+                            +" dans "+course.getId(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 
@@ -81,14 +144,14 @@ public class CourseActivity extends AbstractActivity {
                 holder.setBackgroundColorByPosition(position);
                 holder.setMCourse(model.getId());
                 holder.setMDescription(model.getDescription());
-                holder.setmLibelle(model.getLibelle());
+                holder.setMLib(model.getLibelle());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getApplicationContext(),TutoringActivity.class);
-                        intent.putExtra("course_id",holder.getmCourse().getText().toString());
-                        intent.putExtra("current_user",currentUser);
+                        Intent intent = new Intent(CourseActivity.this,TutoringActivity.class);
+                        intent.putExtra("EXTRA_COURSE_ID",holder.getMCourse().getText().toString());
+                        intent.putExtra("EXTRA_CURRENT_USER",currentUser);
                         startActivity(intent);
                     }
                 });
@@ -110,7 +173,7 @@ public class CourseActivity extends AbstractActivity {
      */
     public class CourseViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mCourse, mDescription, mLibelle;
+        private TextView mCourse, mDescription, mLib;
         private RelativeLayout mRelative;
 
 
@@ -119,7 +182,7 @@ public class CourseActivity extends AbstractActivity {
 
             mCourse = (TextView) itemView.findViewById(R.id.course_title);
             mDescription = (TextView) itemView.findViewById(R.id.course_description);
-            mLibelle = (TextView) itemView.findViewById(R.id.course_libelle);
+            mLib = (TextView) itemView.findViewById(R.id.course_libelle);
             mRelative = (RelativeLayout) itemView.findViewById(R.id.background_course);
 
         }
@@ -132,20 +195,20 @@ public class CourseActivity extends AbstractActivity {
             this.mDescription.setText(description);
         }
 
-        public void setmLibelle(String libelle) {
-            this.mLibelle.setText(libelle);
+        public void setMLib(String lib) {
+            this.mLib.setText(lib);
         }
 
-        public TextView getmCourse() {
+        public TextView getMCourse() {
             return mCourse;
         }
 
-        public TextView getmDescription() {
+        public TextView getMDescription() {
             return mDescription;
         }
 
-        public TextView getmLibelle() {
-            return mLibelle;
+        public TextView getMLib() {
+            return mLib;
         }
 
         /**

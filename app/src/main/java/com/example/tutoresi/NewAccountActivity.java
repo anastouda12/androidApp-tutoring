@@ -25,7 +25,7 @@ import com.example.tutoresi.Data.UserViewModel;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterActivity extends AbstractActivity {
+public class NewAccountActivity extends AbstractActivity {
 
     final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private Uri uploadedImg;
@@ -34,9 +34,8 @@ public class RegisterActivity extends AbstractActivity {
     private CircleImageView mPhoto;
     private Button mBtnRegister;
     private TextView mLoginText;
-    private ProgressBar mProgressBar;
-
     private UserViewModel userViewModel;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,6 @@ public class RegisterActivity extends AbstractActivity {
         mLoginText = (TextView) findViewById(R.id.goToLogin_text);
         mProgressBar = (ProgressBar) findViewById(R.id.register_progressBar);
         mPhoto = (CircleImageView) findViewById(R.id.user_avatar);
-
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mLoginText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +118,9 @@ public class RegisterActivity extends AbstractActivity {
 
     }
 
+    /**
+     * Manages choices of user - Photo with camera or gallery
+     */
     private void imageChooser() {
         final CharSequence[] options = {getResources().getString(R.string.takePhoto),
                 getResources().getString(R.string.chooseInGalerie),
@@ -145,9 +146,6 @@ public class RegisterActivity extends AbstractActivity {
                 .show();
     }
 
-    private void imageUploader() {
-        userViewModel.uploadProfileImageCurrentUser(uploadedImg);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -157,8 +155,8 @@ public class RegisterActivity extends AbstractActivity {
                 if (resultCode == RESULT_OK) {
                     Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                     mPhoto.setImageBitmap(selectedImage);
-                    String imgeUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
-                    uploadedImg = Uri.parse(imgeUrl);
+                    String imgUrl = MediaStore.Images.Media.insertImage(getContentResolver(), selectedImage, "", "");
+                    uploadedImg = Uri.parse(imgUrl);
                     return;
                 }
             case 1://actionCode gallery
@@ -172,6 +170,13 @@ public class RegisterActivity extends AbstractActivity {
 
     }
 
+    /**
+     * Register a new user in DB.
+     * @param email email
+     * @param password password
+     * @param name name
+     * @param phone phone
+     */
     private void registerNewUser(String email, String password, String name, String phone) {
         mProgressBar.setVisibility(View.VISIBLE);
         userViewModel.register(email, password, name, phone).observe(this, new Observer<Integer>() {
@@ -184,23 +189,31 @@ public class RegisterActivity extends AbstractActivity {
                         if (mPhoto.getDrawable().getConstantState() != getResources().getDrawable(R.drawable.default_img_user).getConstantState()) {
                             imageUploader();
                         }
-                        Toast.makeText(RegisterActivity.this, R.string.register_success, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        Toast.makeText(NewAccountActivity.this, R.string.register_success, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(NewAccountActivity.this, MainActivity.class));
                         finish();
                         break;
                     case ErrorsCode.ERROR_INVALID_EMAIL:
-                        Toast.makeText(RegisterActivity.this, R.string.register_failed_emailInvalid, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NewAccountActivity.this, R.string.register_failed_emailInvalid, Toast.LENGTH_LONG).show();
                         break;
                     case ErrorsCode.ERROR_WEAK_PASSWORD:
-                        Toast.makeText(RegisterActivity.this, R.string.register_failed_weakPassword, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NewAccountActivity.this, R.string.register_failed_weakPassword, Toast.LENGTH_LONG).show();
                         break;
                     case ErrorsCode.ERROR_USER_EXISTS:
-                        Toast.makeText(RegisterActivity.this, R.string.register_failed_userAlreadyExists, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NewAccountActivity.this, R.string.register_failed_userAlreadyExists, Toast.LENGTH_LONG).show();
                         break;
                     default:
-                        Toast.makeText(RegisterActivity.this, R.string.register_failed, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NewAccountActivity.this, R.string.register_failed, Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
+    /**
+     * Upload image of the user in storage
+     */
+    private void imageUploader() {
+        userViewModel.uploadProfileImageCurrentUser(uploadedImg);
+    }
+
 }

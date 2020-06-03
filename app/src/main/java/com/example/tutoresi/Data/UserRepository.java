@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class UserRepository {
 
     private FirebaseSource firebaseSource;
-    private static UserRepository instance;
+    private static UserRepository instance = null;
 
     /**
      * Constructor of userRepository

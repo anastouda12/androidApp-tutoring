@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/paddingSides_portrait"
     android:paddingTop="100dp"
     android:background="@color/colorPrimary"
-    tools:context=".RegisterActivity">
+    tools:context=".NewAccountActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

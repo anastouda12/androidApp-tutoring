@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/paddingSides_portrait"
     android:paddingRight="@dimen/paddingSides_portrait"
     android:background="@color/colorPrimary"
-    tools:context=".BecomeTutorActivity">
+    tools:context=".NewCourseActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
