@@ -1,4 +1,4 @@
-package com.example.tutoresi.Config;
+package com.example.tutoresi.config;
 
 public class ErrorsCode {
 

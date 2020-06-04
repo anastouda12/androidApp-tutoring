@@ -5,7 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tutoresi.Config.ErrorsCode;
+import com.example.tutoresi.config.ErrorsCode;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.UserViewModel;
+import com.example.tutoresi.data.UserViewModel;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

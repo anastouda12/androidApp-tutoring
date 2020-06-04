@@ -1,8 +1,8 @@
-package com.example.tutoresi.Data;
+package com.example.tutoresi.data;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.tutoresi.Model.Reminder;
+import com.example.tutoresi.model.Reminder;
 
 import java.util.List;
 

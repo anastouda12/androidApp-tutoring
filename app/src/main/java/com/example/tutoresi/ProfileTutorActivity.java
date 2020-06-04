@@ -14,8 +14,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.UserViewModel;
-import com.example.tutoresi.Model.Rating;
+import com.example.tutoresi.data.UserViewModel;
+import com.example.tutoresi.model.Rating;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;

@@ -1,4 +1,4 @@
-package com.example.tutoresi.Data;
+package com.example.tutoresi.data;
 
 import android.net.Uri;
 import android.util.Log;
@@ -6,12 +6,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.tutoresi.Config.ErrorsCode;
-import com.example.tutoresi.Model.Course;
-import com.example.tutoresi.Model.Rating;
-import com.example.tutoresi.Model.Reminder;
-import com.example.tutoresi.Model.Tutoring;
-import com.example.tutoresi.Model.User;
+import com.example.tutoresi.config.ErrorsCode;
+import com.example.tutoresi.model.Course;
+import com.example.tutoresi.model.Rating;
+import com.example.tutoresi.model.Reminder;
+import com.example.tutoresi.model.Tutoring;
+import com.example.tutoresi.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

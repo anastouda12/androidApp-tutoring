@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.UserViewModel;
-import com.example.tutoresi.Model.User;
+import com.example.tutoresi.data.UserViewModel;
+import com.example.tutoresi.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;

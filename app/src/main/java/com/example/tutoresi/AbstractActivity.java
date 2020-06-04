@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.example.tutoresi.Receiver.ConnectionReceiver;
+import com.example.tutoresi.receiver.ConnectionReceiver;
 
 /**
  * AbstractActivity who extends AppCompatActivity
@@ -30,7 +30,7 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {  // when user go to another activity
+    protected void onPause() {  // when user go to another activity / activity non visible
         super.onPause();
         this.unregisterReceiver(receiver);
     }

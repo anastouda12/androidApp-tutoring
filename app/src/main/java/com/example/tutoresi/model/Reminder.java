@@ -1,4 +1,4 @@
-package com.example.tutoresi.Model;
+package com.example.tutoresi.model;
 
 /**
  * Class reminder of a tutoring
@@ -11,9 +11,9 @@ public class Reminder {
 
     /**
      * Constructor of a reminder
-     * @param course
-     * @param date
-     * @param location
+     * @param course course
+     * @param date date
+     * @param location location
      */
     public Reminder(String course, String date, String location){
         this.course = course;

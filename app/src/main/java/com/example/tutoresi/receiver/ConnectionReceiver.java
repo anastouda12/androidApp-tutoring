@@ -1,4 +1,4 @@
-package com.example.tutoresi.Receiver;
+package com.example.tutoresi.receiver;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +21,7 @@ public class ConnectionReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -30,6 +31,7 @@ public class ConnectionReceiver extends BroadcastReceiver {
             showAlertDialog(context,context.getString(R.string.noConnectionInternetTitle),
                     context.getString(R.string.noConnectionInternetMsg));
         }
+    }
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.tutoresi.Model;
+package com.example.tutoresi.model;
 
 /**
  * Represents a Course

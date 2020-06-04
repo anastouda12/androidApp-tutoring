@@ -16,9 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Config.ErrorsCode;
-import com.example.tutoresi.Data.CourseViewModel;
-import com.example.tutoresi.Model.Course;
+import com.example.tutoresi.config.ErrorsCode;
+import com.example.tutoresi.data.CourseViewModel;
+import com.example.tutoresi.model.Course;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

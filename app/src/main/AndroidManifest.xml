@@ -33,8 +33,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Receiver.ReminderBroadcast" />
-        <receiver android:name=".Receiver.ConnectionReceiver">
+        <receiver android:name=".receiver.ReminderBroadcast" />
+        <receiver android:name=".receiver.ConnectionReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

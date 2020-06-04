@@ -1,12 +1,12 @@
-package com.example.tutoresi.Data;
+package com.example.tutoresi.data;
 
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.tutoresi.Model.Rating;
-import com.example.tutoresi.Model.User;
+import com.example.tutoresi.model.Rating;
+import com.example.tutoresi.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseUser;
 

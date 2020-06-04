@@ -20,10 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.CourseViewModel;
-import com.example.tutoresi.Data.UserViewModel;
-import com.example.tutoresi.Model.Rating;
-import com.example.tutoresi.Model.Tutoring;
+import com.example.tutoresi.data.CourseViewModel;
+import com.example.tutoresi.data.UserViewModel;
+import com.example.tutoresi.model.Rating;
+import com.example.tutoresi.model.Tutoring;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -248,9 +248,9 @@ public class TutoringActivity extends AbstractActivity {
     }
 
     /**
-     * Get rating of the user given and set the value of the ratingbar with it.
-     * @param userEmail
-     * @param ratingBar
+     * Get rating of the user given and set the value of the ratingBar with it.
+     * @param userEmail userEmail
+     * @param ratingBar ratingBar
      */
     private void getRating(String userEmail, final RatingBar ratingBar){
         userViewModel.getRatingOfUser(userEmail).observe(this, new Observer<Rating>() {

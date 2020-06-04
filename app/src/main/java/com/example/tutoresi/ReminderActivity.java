@@ -24,9 +24,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tutoresi.Data.ReminderViewModel;
-import com.example.tutoresi.Model.Reminder;
-import com.example.tutoresi.Receiver.ReminderBroadcast;
+import com.example.tutoresi.data.ReminderViewModel;
+import com.example.tutoresi.model.Reminder;
+import com.example.tutoresi.receiver.ReminderBroadcast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

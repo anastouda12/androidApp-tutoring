@@ -1,9 +1,9 @@
-package com.example.tutoresi.Data;
+package com.example.tutoresi.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.tutoresi.Model.Course;
-import com.example.tutoresi.Model.Tutoring;
+import com.example.tutoresi.model.Course;
+import com.example.tutoresi.model.Tutoring;
 
 import java.util.List;
 
@@ -75,6 +75,6 @@ public class CourseViewModel extends ViewModel {
      * @return list of tutoring
      */
     public LiveData<List<Tutoring>> getTutoringOfCourse(String courseID){
-        return getTutoringOfCourse(courseID);
+        return courseRepository.getTutoringOfCourse(courseID);
     }
 }
