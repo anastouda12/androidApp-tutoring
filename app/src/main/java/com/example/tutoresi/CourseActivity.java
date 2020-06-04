@@ -135,6 +135,7 @@ public class CourseActivity extends AbstractActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("courses");
         databaseReference.keepSynced(true);
 
+        // Set the Firebase query to listen to
         options = new FirebaseRecyclerOptions.Builder<Course>().setQuery(databaseReference, Course.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Course, CourseViewHolder>(options) {

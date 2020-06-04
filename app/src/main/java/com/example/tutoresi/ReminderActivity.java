@@ -166,6 +166,7 @@ public class ReminderActivity extends AbstractActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("reminders");
         databaseReference.keepSynced(true);
 
+        // Set the Firebase query to listen to
         options = new FirebaseRecyclerOptions.Builder<Reminder>().setQuery(databaseReference, Reminder.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Reminder, ReminderViewHolder>(options) {

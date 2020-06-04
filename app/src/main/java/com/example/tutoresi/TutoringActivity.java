@@ -119,6 +119,7 @@ public class TutoringActivity extends AbstractActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("courses").child(course_id).child("tutoring");
         databaseReference.keepSynced(true);
 
+        // Set the Firebase query to listen to
         options = new FirebaseRecyclerOptions.Builder<Tutoring>().setQuery(databaseReference, Tutoring.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Tutoring, TutoringViewHolder>(options) {
