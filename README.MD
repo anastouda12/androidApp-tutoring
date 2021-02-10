@@ -8,7 +8,9 @@ Students will be able to contact the tutors via the application.
 A grading system is also present which will allow students' experience with a tutor to be graded.
 It is also possible to add reminders via the Reminder menu so that you don't forget a tutoring appointment for example.
 
-## Layout
+## Mock-up
+
+Note : This is a mock-up and not the real view of the application.
 
 <img src="Maquette.png" style=" width:100px ; height:100px " />
 
