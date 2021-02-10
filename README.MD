@@ -1,14 +1,14 @@
 # TutorESI
 
-TutorESI est une application android qui permet aux étudiants de trouver des tuteurs dans différents cours.
+TutorESI is an android application that allows students to find tutors in different courses.
 
 ## Description
 
-Les étudiants pourront contacter les tuteurs via l'application.
-Un système de note est aussi présent qui va permettre de noter l'expérience des étudiants avec un tuteur.
-Il est aussi possible de rajouter des rappels via le menu Rappel afin de ne pas oublier un rendez-vous tutoring par exemple.
+Students will be able to contact the tutors via the application.
+A grading system is also present which will allow students' experience with a tutor to be graded.
+It is also possible to add reminders via the Reminder menu so that you don't forget a tutoring appointment for example.
 
-## Maquette
+## Layout
 
 <img src="Maquette.png" style=" width:100px ; height:100px " />
 
